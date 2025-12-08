@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
     "pwa:generate": "node scripts/generate-icons.js"
   },
   "dependencies": {

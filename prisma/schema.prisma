@@ -5,6 +5,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("DATABASE_URL")
 }
 
 model User {
@@ -13,22 +14,24 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Group     Group[]
 }
 
 model Group {
-  id          String   @id @default(cuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  name        String    
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String       @id @default(cuid())
+  userId     String
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name       String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  Attraction Attraction[]
 }
 
 model Attraction {
   id          String   @id @default(cuid())
   groupId     String
   group       Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  name        String    
+  name        String
   description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

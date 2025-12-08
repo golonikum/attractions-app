@@ -1,9 +1,6 @@
 "use client";
 
 import { useAuth } from "@/contexts/AuthContext";
-import { getNearestEvents } from "@/lib/contactHelpers";
-import { getAllContacts } from "@/services/contactService";
-import eventManager from "@/services/eventManager";
 import { useEffect } from "react";
 
 export default function PWALayout({ children }: { children: React.ReactNode }) {
@@ -11,21 +8,6 @@ export default function PWALayout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (user) {
-      (async () => {
-        const contacts = await getAllContacts();
-        const { allEvents } = getNearestEvents(contacts);
-
-        eventManager.resetEvents(
-          allEvents.map((item) => ({
-            date: item.eventDate,
-            title: item.eventDescription,
-            contactName: item.contactName,
-            description: item.eventDescription,
-            shortDateStr: item.shortDateStr,
-          }))
-        );
-      })();
-
       // Register service worker
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker

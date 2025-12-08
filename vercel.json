@@ -1,9 +1,3 @@
 {
-  "buildCommand": "prisma generate && next build",
-  "crons": [
-    {
-      "path": "/api/cron/nearest-events",
-      "schedule": "0 4 * * *"
-    }
-  ]
+  "buildCommand": "prisma generate && next build"
 }
