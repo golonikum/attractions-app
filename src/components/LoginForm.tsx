@@ -20,7 +20,7 @@ export default function LoginForm() {
   // Check if user is already logged in
   useEffect(() => {
     if (user) {
-      router.push("/events");
+      router.push("/");
     }
   }, [router, user]);
 
@@ -52,7 +52,7 @@ export default function LoginForm() {
       if (response.ok) {
         login(data.user);
         // Redirect to main page
-        router.push("/events");
+        router.push("/");
       } else {
         setError(data.error || "Login failed");
       }
