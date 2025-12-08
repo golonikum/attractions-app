@@ -1,4 +1,3 @@
-import { parseContact } from "@/lib/contactHelpers";
 import { getCookie } from "@/lib/clientCookies";
 
 const API_URL = "/api/contacts";
@@ -24,5 +23,5 @@ export const getAllContacts = async (): Promise<any[]> => {
   }
 
   const data = await response.json();
-  return data.contacts.map(parseContact);
+  return data.contacts;
 };
