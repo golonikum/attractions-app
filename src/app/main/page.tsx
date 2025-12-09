@@ -2,14 +2,14 @@
 
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Navigation } from "@/components/Navigation";
-// import {
-//   LOCATION,
-//   reactify,
-//   YMap,
-//   YMapDefaultFeaturesLayer,
-//   YMapDefaultSchemeLayer,
-//   YMapMarker,
-// } from "@/lib/ymaps";
+import {
+  LOCATION,
+  reactify,
+  YMap,
+  YMapDefaultFeaturesLayer,
+  YMapDefaultSchemeLayer,
+  YMapMarker,
+} from "@/lib/ymaps";
 
 export default function MainPage() {
   return (
@@ -20,7 +20,7 @@ export default function MainPage() {
         <div className="flex flex-col gap-8 justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">Достопримечательности</h1>
           <div style={{ width: "600px", height: "400px" }}>
-            {/* <YMap location={LOCATION}>
+            <YMap location={LOCATION}>
               <YMapDefaultSchemeLayer />
               <YMapDefaultFeaturesLayer />
 
@@ -29,7 +29,7 @@ export default function MainPage() {
                   <h1>You can drag this header</h1>
                 </section>
               </YMapMarker>
-            </YMap> */}
+            </YMap>
           </div>
         </div>
       </div>
