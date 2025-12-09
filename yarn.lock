@@ -1138,6 +1138,11 @@
   resolved "https://registry.yarnpkg.com/@unrs/resolver-binding-win32-x64-msvc/-/resolver-binding-win32-x64-msvc-1.11.1.tgz#538b1e103bf8d9864e7b85cc96fa8d6fb6c40777"
   integrity sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==
 
+"@yandex/ymaps3-default-ui-theme@0.0.22":
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/@yandex/ymaps3-default-ui-theme/-/ymaps3-default-ui-theme-0.0.22.tgz#dc8f2a25d60d295feef2ef0449105d5d5d0c4d81"
+  integrity sha512-TGkUnYqf1uh4UYnr1pv2FPzSt0zHHnbeGfJ00vJNvhLJ5IOBzyaSkX94uXmZDgTd5oNfwcdCAeb6puE+LAVLmw==
+
 "@yandex/ymaps3-types@^0.0.27":
   version "0.0.27"
   resolved "https://registry.yarnpkg.com/@yandex/ymaps3-types/-/ymaps3-types-0.0.27.tgz#56705d2d96e5c4bc70d70143fe988088a48d81b9"

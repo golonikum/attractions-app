@@ -20,22 +20,22 @@ export async function initYMaps() {
   try {
     // Загружаем Yandex Maps API
     ymaps3 = await (window as any).ymaps3;
-    
+
     // Инициализируем reactify
     const [ymaps3React] = await Promise.all([
       ymaps3.import("@yandex/ymaps3-reactify"),
       ymaps3.ready,
     ]);
-    
+
     // Создаем reactify и экспортируем компоненты
     reactify = ymaps3React.reactify.bindTo(React, ReactDom);
     const components = reactify.module(ymaps3);
-    
+
     YMap = components.YMap;
     YMapDefaultSchemeLayer = components.YMapDefaultSchemeLayer;
     YMapDefaultFeaturesLayer = components.YMapDefaultFeaturesLayer;
     YMapMarker = components.YMapMarker;
-    
+
     return true;
   } catch (error) {
     console.error("Ошибка при инициализации Yandex Maps:", error);
@@ -44,4 +44,10 @@ export async function initYMaps() {
 }
 
 // Экспортируем компоненты после инициализации
-export { reactify, YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker };
+export {
+  reactify,
+  YMap,
+  YMapDefaultSchemeLayer,
+  YMapDefaultFeaturesLayer,
+  YMapMarker,
+};
