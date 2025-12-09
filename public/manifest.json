@@ -1,7 +1,7 @@
 {
-  "name": "Contacts App",
-  "short_name": "Contacts",
-  "description": "Приложение для управления контактами с возможностью отслеживания событий",
+  "name": "Attractions App",
+  "short_name": "Attractions",
+  "description": "Приложение для хранения информации о достопримечательностях",
   "start_url": "/",
   "display": "standalone",
   "scope": "/",

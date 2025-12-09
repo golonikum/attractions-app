@@ -1,4 +1,9 @@
-<svg fill="#000000" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+const { writeFileSync } = require("fs");
+const { createCanvas, loadImage } = require("canvas");
+const path = require("path");
+
+// Create a simple icon using SVG
+const svgIcon = `<svg fill="#000000" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 	 viewBox="0 0 512 512" xml:space="preserve">
 <g>
 	<g>
@@ -26,4 +31,38 @@
 			L25.6,276.736v-62.891L407.714,486.4H319.548z M486.4,449.451l-117.478-83.797l59.477-83.362l58.001,41.361V449.451z"/>
 	</g>
 </g>
-</svg>
+</svg>`;
+
+// Save the SVG file
+writeFileSync("public/icon.svg", svgIcon);
+console.log("Generated icon.svg");
+
+// Try to use canvas if sharp is not available
+try {
+  // Generate PNG icons using canvas
+  const sizes = [192, 512];
+  
+  async function generateIcons() {
+    for (const size of sizes) {
+      const canvas = createCanvas(size, size);
+      const ctx = canvas.getContext('2d');
+      
+      // Load the SVG and draw it to canvas
+      const img = await loadImage(Buffer.from(svgIcon));
+      ctx.drawImage(img, 0, 0, size, size);
+      
+      // Save the PNG
+      const buffer = canvas.toBuffer('image/png');
+      writeFileSync(`public/icon-${size}x${size}.png`, buffer);
+      console.log(`Generated icon-${size}x${size}.png`);
+    }
+  }
+  
+  generateIcons().catch(err => {
+    console.error("Error generating icons with canvas:", err);
+    console.log("SVG icon was generated successfully. Please manually convert it to PNG if needed.");
+  });
+} catch (err) {
+  console.error("Canvas not available:", err);
+  console.log("SVG icon was generated successfully. Please manually convert it to PNG if needed.");
+}

@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { AuthContextProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import PWALayout from "@/components/PWALayout";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Contacts App",
+  title: "Attractions App",
   description:
     "Приложение для управления контактами с возможностью отслеживания событий",
   manifest: "/manifest.json",
@@ -62,6 +63,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" suppressHydrationWarning>
+      <head>
+        <Script
+          src={`https://api-maps.yandex.ru/v3/?apikey=${process.env.YA_MAPS_API_KEY}&lang=ru_RU`}
+          strategy="beforeInteractive"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

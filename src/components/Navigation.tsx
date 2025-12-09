@@ -6,11 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 
-const navItems = [
-  { href: "/events", label: "События" },
-  { href: "/contacts", label: "Контакты" },
-  { href: "/subscriptions", label: "Подписки" },
-];
+const navItems = [{ href: "/main", label: "Главная" }];
 
 export function Navigation() {
   const pathname = usePathname();
