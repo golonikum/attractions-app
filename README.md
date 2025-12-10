@@ -108,6 +108,8 @@ attractions-app/
 - **Group** - группы достопримечательностей
 - **Attraction** - отдельные достопримечательности
 
+Для работы с базой данных используется Prisma ORM. Дополнительная информация доступна в [официальной документации Prisma](https://www.prisma.io/docs/orm/reference/prisma-cli-reference).
+
 ## API
 
 Приложение использует API Route Handlers Next.js для взаимодействия с базой данных.
