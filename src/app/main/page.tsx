@@ -7,12 +7,10 @@ import {
   YMap,
   YMapDefaultFeaturesLayer,
   YMapDefaultSchemeLayer,
-  YMapMarker,
   initYMaps,
 } from "@/lib/ymaps";
 import { useEffect, useState } from "react";
-import { MapPin } from "lucide-react";
-// import { YMapZoomControl } from "@yandex/ymaps3-default-ui-theme";
+import { MarkerPin } from "@/components/MarkerPin";
 
 export default function MainPage() {
   const [isMapReady, setIsMapReady] = useState(false);
@@ -37,21 +35,13 @@ export default function MainPage() {
           className="flex flex-col gap-4 justify-between items-center"
           style={{ height: "100%" }}
         >
-          <h1 className="text-3xl font-bold">Достопримечательности</h1>
           <div style={{ width: "100%", flex: "1 0 0" }}>
             {isMapReady ? (
               <YMap location={LOCATION}>
                 <YMapDefaultSchemeLayer />
                 <YMapDefaultFeaturesLayer />
-                <YMapMarker
-                  coordinates={[37.66785, 55.729256]}
-                  draggable={false}
-                >
-                  <MapPin
-                    className="h-8 w-8 text-muted-foreground shrink-0 relative"
-                    style={{ top: "-32px", left: "-16px" }}
-                  />
-                </YMapMarker>
+                <MarkerPin coordinates={[37.66785, 55.729256]} visited />
+                <MarkerPin coordinates={[37.89785, 55.779256]} />
               </YMap>
             ) : (
               <div className="flex items-center justify-center h-full bg-gray-100 rounded-lg">
