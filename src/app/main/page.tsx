@@ -9,11 +9,13 @@ import {
   YMapDefaultSchemeLayer,
   initYMaps,
 } from "@/lib/ymaps";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MarkerPin } from "@/components/MarkerPin";
+import { ThemeProviderContext } from "@/contexts/ThemeContext";
 
 export default function MainPage() {
   const [isMapReady, setIsMapReady] = useState(false);
+  const { theme } = useContext(ThemeProviderContext);
 
   useEffect(() => {
     const initializeMap = async () => {
@@ -38,7 +40,7 @@ export default function MainPage() {
           <div style={{ width: "100%", flex: "1 0 0" }}>
             {isMapReady ? (
               <YMap location={LOCATION}>
-                <YMapDefaultSchemeLayer />
+                <YMapDefaultSchemeLayer theme={theme} />
                 <YMapDefaultFeaturesLayer />
                 <MarkerPin coordinates={[37.66785, 55.729256]} visited />
                 <MarkerPin coordinates={[37.89785, 55.779256]} />
