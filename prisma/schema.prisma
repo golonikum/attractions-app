@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("DATABASE_URL")
 }
 
@@ -18,13 +18,16 @@ model User {
 }
 
 model Group {
-  id         String       @id @default(cuid())
-  userId     String
-  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  name       String
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  Attraction Attraction[]
+  id          String       @id @default(cuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String
+  coordinates Json // Хранит координаты в формате [долгота, широта]
+  zoom        Int
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  Attraction  Attraction[]
 }
 
 model Attraction {
