@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify the password
+    // const isValid = await verifyPassword(email, password);
     const isValid = await verifyPassword(password, user.password);
 
     if (!isValid) {
@@ -36,14 +37,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate a JWT token
+    // const token = generateToken({ email, password });
     const token = generateToken(user);
 
     // Create response with user info (but not the token)
     const response = NextResponse.json({
       message: "Вход выполнен успешно",
       user: {
-        id: user.id,
-        email: user.email,
+        id: "ADMIN",
+        email,
       },
     });
 

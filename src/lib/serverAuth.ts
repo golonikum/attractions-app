@@ -23,6 +23,25 @@ export function generateToken(user: PrismaUser): string {
   });
 }
 
+// export async function verifyPassword(
+//   email: string,
+//   password: string
+// ): Promise<boolean> {
+//   return email === process.env.ADMIN_NAME && password === process.env.ADMIN_PWD;
+// }
+
+// export function generateToken({
+//   email,
+//   password,
+// }: {
+//   email: string;
+//   password: string;
+// }): string {
+//   return jwt.sign({ id: password, email }, JWT_SECRET, {
+//     expiresIn: "7d",
+//   });
+// }
+
 export function verifyToken(token: string): User | null {
   try {
     return jwt.verify(token, JWT_SECRET) as User;
