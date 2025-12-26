@@ -23,6 +23,7 @@ model Group {
   user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   name        String
   description String
+  tag         String?
   coordinates Json // Хранит координаты в формате [долгота, широта]
   zoom        Int
   createdAt   DateTime     @default(now())
