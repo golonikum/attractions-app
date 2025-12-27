@@ -1,4 +1,3 @@
-
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { verifyToken } from "@/lib/serverAuth";
@@ -6,7 +5,7 @@ import { verifyToken } from "@/lib/serverAuth";
 // Get a specific group by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify authentication token
@@ -17,13 +16,17 @@ export async function GET(
 
     const decoded = verifyToken(token);
     if (!decoded || !decoded.id) {
-      return NextResponse.json({ error: "Недействительный токен" }, { status: 401 });
+      return NextResponse.json(
+        { error: "Недействительный токен" },
+        { status: 401 }
+      );
     }
 
     // Fetch the group
+    const { id } = await params;
     const group = await prisma.group.findFirst({
       where: {
-        id: params.id,
+        id,
         userId: decoded.id,
       },
     });
@@ -45,7 +48,7 @@ export async function GET(
 // Update a specific group by ID
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify authentication token
@@ -56,16 +59,20 @@ export async function PUT(
 
     const decoded = verifyToken(token);
     if (!decoded || !decoded.id) {
-      return NextResponse.json({ error: "Недействительный токен" }, { status: 401 });
+      return NextResponse.json(
+        { error: "Недействительный токен" },
+        { status: 401 }
+      );
     }
 
     // Parse request body
     const { name, description, tag, coordinates, zoom } = await request.json();
 
     // Check if the group exists and belongs to the user
+    const { id } = await params;
     const existingGroup = await prisma.group.findFirst({
       where: {
-        id: params.id,
+        id,
         userId: decoded.id,
       },
     });
@@ -75,9 +82,15 @@ export async function PUT(
     }
 
     // Validate coordinates if provided
-    if (coordinates && (!Array.isArray(coordinates) || coordinates.length !== 2)) {
+    if (
+      coordinates &&
+      (!Array.isArray(coordinates) || coordinates.length !== 2)
+    ) {
       return NextResponse.json(
-        { error: "Неверный формат координат. Ожидается массив [долгота, широта]" },
+        {
+          error:
+            "Неверный формат координат. Ожидается массив [долгота, широта]",
+        },
         { status: 400 }
       );
     }
@@ -91,7 +104,7 @@ export async function PUT(
     if (zoom !== undefined) updateData.zoom = zoom;
 
     const updatedGroup = await prisma.group.update({
-      where: { id: params.id },
+      where: { id },
       data: updateData,
     });
 
@@ -108,7 +121,7 @@ export async function PUT(
 // Delete a specific group by ID
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify authentication token
@@ -119,13 +132,17 @@ export async function DELETE(
 
     const decoded = verifyToken(token);
     if (!decoded || !decoded.id) {
-      return NextResponse.json({ error: "Недействительный токен" }, { status: 401 });
+      return NextResponse.json(
+        { error: "Недействительный токен" },
+        { status: 401 }
+      );
     }
 
     // Check if the group exists and belongs to the user
+    const { id } = await params;
     const existingGroup = await prisma.group.findFirst({
       where: {
-        id: params.id,
+        id,
         userId: decoded.id,
       },
     });
@@ -136,7 +153,7 @@ export async function DELETE(
 
     // Delete the group (this will also delete related attractions due to Cascade)
     await prisma.group.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: "Группа успешно удалена" });
