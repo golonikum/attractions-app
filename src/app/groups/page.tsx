@@ -1,14 +1,31 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Navigation } from "@/components/Navigation";
 import { Group, CreateGroupRequest } from "@/types/group";
-import { getAllGroups, createGroup, deleteGroup } from "@/services/groupService";
+import {
+  getAllGroups,
+  createGroup,
+  deleteGroup,
+} from "@/services/groupService";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,6 +33,7 @@ import { toast } from "sonner";
 import { Loader2, MapPin, Plus, Trash2 } from "lucide-react";
 
 export default function GroupsPage() {
+  const router = useRouter();
   const [groups, setGroups] = useState<Group[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -71,7 +89,11 @@ export default function GroupsPage() {
 
   // Обработчик удаления группы
   const handleDeleteGroup = async (id: string) => {
-    if (window.confirm("Вы уверены, что хотите удалить эту группу? Все связанные достопримечательности также будут удалены.")) {
+    if (
+      window.confirm(
+        "Вы уверены, что хотите удалить эту группу? Все связанные достопримечательности также будут удалены."
+      )
+    ) {
       try {
         await deleteGroup(id);
         setGroups(groups.filter((group) => group.id !== id));
@@ -88,7 +110,10 @@ export default function GroupsPage() {
       <div className="container mx-auto pt-20 px-4 pb-8">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">Мои группы</h1>
-          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+          <Dialog
+            open={isCreateDialogOpen}
+            onOpenChange={setIsCreateDialogOpen}
+          >
             <DialogTrigger asChild>
               <Button>
                 <Plus className="mr-2 h-4 w-4" />
@@ -99,7 +124,8 @@ export default function GroupsPage() {
               <DialogHeader>
                 <DialogTitle>Создать новую группу</DialogTitle>
                 <DialogDescription>
-                  Создайте новую группу для организации ваших достопримечательностей
+                  Создайте новую группу для организации ваших
+                  достопримечательностей
                 </DialogDescription>
               </DialogHeader>
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -108,7 +134,9 @@ export default function GroupsPage() {
                   <Input
                     id="name"
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
                     required
                   />
                 </div>
@@ -117,7 +145,9 @@ export default function GroupsPage() {
                   <Textarea
                     id="description"
                     value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, description: e.target.value })
+                    }
                     required
                   />
                 </div>
@@ -126,7 +156,9 @@ export default function GroupsPage() {
                   <Input
                     id="tag"
                     value={formData.tag || ""}
-                    onChange={(e) => setFormData({ ...formData, tag: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, tag: e.target.value })
+                    }
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -140,7 +172,10 @@ export default function GroupsPage() {
                       onChange={(e) =>
                         setFormData({
                           ...formData,
-                          coordinates: [parseFloat(e.target.value), formData.coordinates[1]],
+                          coordinates: [
+                            parseFloat(e.target.value),
+                            formData.coordinates[1],
+                          ],
                         })
                       }
                       required
@@ -156,7 +191,10 @@ export default function GroupsPage() {
                       onChange={(e) =>
                         setFormData({
                           ...formData,
-                          coordinates: [formData.coordinates[0], parseFloat(e.target.value)],
+                          coordinates: [
+                            formData.coordinates[0],
+                            parseFloat(e.target.value),
+                          ],
                         })
                       }
                       required
@@ -169,7 +207,12 @@ export default function GroupsPage() {
                     id="zoom"
                     type="number"
                     value={formData.zoom}
-                    onChange={(e) => setFormData({ ...formData, zoom: parseInt(e.target.value) })}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        zoom: parseInt(e.target.value),
+                      })
+                    }
                     min="1"
                     max="20"
                     required
@@ -206,9 +249,12 @@ export default function GroupsPage() {
         ) : groups.length === 0 ? (
           <div className="text-center py-12">
             <MapPin className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-semibold text-gray-900">Нет групп</h3>
+            <h3 className="mt-2 text-sm font-semibold text-gray-900">
+              Нет групп
+            </h3>
             <p className="mt-1 text-sm text-gray-500">
-              У вас пока нет созданных групп. Создайте свою первую группу, чтобы начать добавлять достопримечательности.
+              У вас пока нет созданных групп. Создайте свою первую группу, чтобы
+              начать добавлять достопримечательности.
             </p>
             <div className="mt-6">
               <Button onClick={() => setIsCreateDialogOpen(true)}>
@@ -220,7 +266,11 @@ export default function GroupsPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {groups.map((group) => (
-              <Card key={group.id} className="overflow-hidden">
+              <Card
+                key={group.id}
+                className="overflow-hidden cursor-pointer"
+                onClick={() => router.push(`/groups/${group.id}`)}
+              >
                 <CardHeader>
                   <div className="flex justify-between items-start">
                     <div>
@@ -242,9 +292,14 @@ export default function GroupsPage() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="mb-4">{group.description}</CardDescription>
+                  <CardDescription className="mb-4">
+                    {group.description}
+                  </CardDescription>
                   <div className="flex justify-between text-sm text-gray-500">
-                    <span>Координаты: {group.coordinates[0].toFixed(4)}, {group.coordinates[1].toFixed(4)}</span>
+                    <span>
+                      Координаты: {group.coordinates[0].toFixed(4)},{" "}
+                      {group.coordinates[1].toFixed(4)}
+                    </span>
                     <span>Масштаб: {group.zoom}</span>
                   </div>
                   <div className="mt-4">
