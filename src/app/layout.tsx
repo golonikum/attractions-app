@@ -6,6 +6,7 @@ import { AuthContextProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import PWALayout from "@/components/PWALayout";
 import Script from "next/script";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -80,6 +81,7 @@ export default function RootLayout({
           <AuthContextProvider>
             <PWALayout>
               <Suspense>{children}</Suspense>
+              <Toaster position="top-right" richColors />
             </PWALayout>
           </AuthContextProvider>
         </ThemeProvider>
