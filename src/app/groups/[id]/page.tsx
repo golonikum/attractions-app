@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Navigation } from "@/components/Navigation";
 import { Group } from "@/types/group";
-import { getGroupById } from "@/services/groupService";
+import { getGroupById, updateGroup } from "@/services/groupService";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -100,9 +100,8 @@ export default function GroupDetailPage() {
     setIsSubmitting(true);
 
     try {
-      // Временно заглушка, т.к. функции updateGroup еще нет
-      // const updatedGroup = await updateGroup(groupId, formData);
-      // setGroup(updatedGroup);
+      const updatedGroup = await updateGroup(groupId, formData);
+      setGroup(updatedGroup);
       toast.success("Группа успешно обновлена");
       setIsEditDialogOpen(false);
     } catch (error) {
