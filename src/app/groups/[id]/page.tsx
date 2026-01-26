@@ -7,16 +7,12 @@ import { Navigation } from "@/components/Navigation";
 import { CreateGroupRequest, Group } from "@/types/group";
 import { getGroupById, updateGroup } from "@/services/groupService";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { toast } from "sonner";
-import { Loader2, MapPin, ArrowLeft, Plus, Trash2, Image } from "lucide-react";
+import { Loader2, ArrowLeft, Plus } from "lucide-react";
 import { NewGroupDialog } from "@/components/group/NewGroupDialog";
+import { AttractionCard } from "@/components/attraction/AttractionCard";
+import { EmptyAttractionsState } from "@/components/group/EmptyAttractionsState";
+import { GroupInfoCard } from "@/components/group/GroupInfoCard";
 
 // Временно создадим тип для достопримечательности, так как его нет в types/group.ts
 // Позже его нужно будет добавить в отдельный файл
@@ -70,19 +66,13 @@ export default function GroupDetailPage() {
 
   // Обработчик удаления достопримечательности
   const handleDeleteAttraction = async (id: string) => {
-    if (
-      window.confirm(
-        "Вы уверены, что хотите удалить эту достопримечательность?",
-      )
-    ) {
-      try {
-        // Временно заглушка, т.к. функции deleteAttraction еще нет
-        // await deleteAttraction(id);
-        // setAttractions(attractions.filter((attraction) => attraction.id !== id));
-        toast.success("Достопримечательность успешно удалена");
-      } catch (error) {
-        toast.error("Не удалось удалить достопримечательность");
-      }
+    try {
+      // Временно заглушка, т.к. функции deleteAttraction еще нет
+      // await deleteAttraction(id);
+      // setAttractions(attractions.filter((attraction) => attraction.id !== id));
+      toast.success("Достопримечательность успешно удалена");
+    } catch (error) {
+      toast.error("Не удалось удалить достопримечательность");
     }
   };
 
@@ -147,96 +137,21 @@ export default function GroupDetailPage() {
         </div>
 
         <div className="mb-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Информация о группе</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600 mb-4">{group.description}</p>
-              {group.tag && (
-                <span className="inline-block px-2 py-1 text-xs bg-primary/10 text-primary rounded-full">
-                  {group.tag}
-                </span>
-              )}
-              <div className="flex justify-between text-sm text-gray-500 mt-4">
-                <span>
-                  Координаты: {group.coordinates[0].toFixed(4)},{" "}
-                  {group.coordinates[1].toFixed(4)}
-                </span>
-                <span>Масштаб: {group.zoom}</span>
-              </div>
-            </CardContent>
-          </Card>
+          <GroupInfoCard group={group} />
         </div>
 
         <div>
           <h2 className="text-2xl font-bold mb-4">Достопримечательности</h2>
           {attractions.length === 0 ? (
-            <div className="text-center py-12">
-              <MapPin className="mx-auto h-12 w-12 text-gray-400" />
-              <h3 className="mt-2 text-sm font-semibold text-gray-900">
-                Нет достопримечательностей
-              </h3>
-              <p className="mt-1 text-sm text-gray-500">
-                У этой группы пока нет достопримечательностей. Добавьте первую,
-                чтобы начать.
-              </p>
-              <div className="mt-6">
-                <Button>
-                  <Plus className="mr-2 h-4 w-4" />
-                  Добавить достопримечательность
-                </Button>
-              </div>
-            </div>
+            <EmptyAttractionsState />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {attractions.map((attraction) => (
-                <Card key={attraction.id} className="overflow-hidden">
-                  <div className="aspect-video bg-gray-100 flex items-center justify-center">
-                    {attraction.imageUrl ? (
-                      <img
-                        src={attraction.imageUrl}
-                        alt={attraction.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <Image className="h-8 w-8 text-gray-400" />
-                    )}
-                  </div>
-                  <CardHeader>
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <CardTitle className="text-lg">
-                          {attraction.name}
-                        </CardTitle>
-                        <span className="inline-block px-2 py-1 text-xs bg-primary/10 text-primary rounded-full mt-1">
-                          {attraction.category}
-                        </span>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-red-500"
-                        onClick={() => handleDeleteAttraction(attraction.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    {attraction.description && (
-                      <CardDescription className="mb-4">
-                        {attraction.description}
-                      </CardDescription>
-                    )}
-                    <div className="mt-4">
-                      <Button variant="outline" className="w-full">
-                        <MapPin className="mr-2 h-4 w-4" />
-                        Показать на карте
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                <AttractionCard
+                  key={attraction.id}
+                  attraction={attraction}
+                  onDelete={() => handleDeleteAttraction(attraction.id)}
+                />
               ))}
             </div>
           )}
