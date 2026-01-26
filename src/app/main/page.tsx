@@ -10,7 +10,7 @@ import {
   initYMaps,
 } from "@/lib/ymaps";
 import { useContext, useEffect, useState } from "react";
-import { MarkerPin } from "@/components/MarkerPin";
+import { MarkerPin } from "@/components/ui/MarkerPin";
 import { ThemeProviderContext } from "@/contexts/ThemeContext";
 
 export default function MainPage() {

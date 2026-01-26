@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import PWAInstallPrompt from "@/components/PWAInstallPrompt";
+import PWAInstallPrompt from "@/components/pwa/PWAInstallPrompt";
 
 const navItems = [
   { href: "/main", label: "Главная" },
@@ -28,7 +28,7 @@ export function Navigation() {
                   "text-sm font-medium transition-colors hover:text-primary",
                   pathname === item.href
                     ? "text-foreground"
-                    : "text-muted-foreground"
+                    : "text-muted-foreground",
                 )}
               >
                 {item.label}

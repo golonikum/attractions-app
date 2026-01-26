@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Navigation } from "@/components/Navigation";
-import { Group } from "@/types/group";
+import { CreateGroupRequest, Group } from "@/types/group";
 import { getGroupById, updateGroup } from "@/services/groupService";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,27 +14,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import {
-  Loader2,
-  MapPin,
-  ArrowLeft,
-  Plus,
-  Edit,
-  Trash2,
-  Image,
-} from "lucide-react";
+import { Loader2, MapPin, ArrowLeft, Plus, Trash2, Image } from "lucide-react";
+import { NewGroupDialog } from "@/components/group/NewGroupDialog";
 
 // Временно создадим тип для достопримечательности, так как его нет в types/group.ts
 // Позже его нужно будет добавить в отдельный файл
@@ -59,13 +41,6 @@ export default function GroupDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    tag: "",
-    coordinates: [37.617644, 55.755819], // Москва по умолчанию
-    zoom: 10,
-  });
 
   // Загрузка данных группы при монтировании компонента
   useEffect(() => {
@@ -73,13 +48,6 @@ export default function GroupDetailPage() {
       try {
         const groupData = await getGroupById(groupId);
         setGroup(groupData);
-        setFormData({
-          name: groupData.name,
-          description: groupData.description,
-          tag: groupData.tag || "",
-          coordinates: groupData.coordinates,
-          zoom: groupData.zoom,
-        });
 
         // Временно заглушка для достопримечательностей, т.к. сервиса для них еще нет
         // setAttractions(await getAttractionsByGroupId(groupId));
@@ -95,27 +63,16 @@ export default function GroupDetailPage() {
   }, [groupId, router]);
 
   // Обработчик отправки формы редактирования группы
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      const updatedGroup = await updateGroup(groupId, formData);
-      setGroup(updatedGroup);
-      toast.success("Группа успешно обновлена");
-      setIsEditDialogOpen(false);
-    } catch (error) {
-      toast.error("Не удалось обновить группу");
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleSubmit = async (formData: CreateGroupRequest) => {
+    const updatedGroup = await updateGroup(groupId, formData);
+    setGroup(updatedGroup);
   };
 
   // Обработчик удаления достопримечательности
   const handleDeleteAttraction = async (id: string) => {
     if (
       window.confirm(
-        "Вы уверены, что хотите удалить эту достопримечательность?"
+        "Вы уверены, что хотите удалить эту достопримечательность?",
       )
     ) {
       try {
@@ -174,135 +131,14 @@ export default function GroupDetailPage() {
           </Button>
           <h1 className="text-3xl font-bold">{group.name}</h1>
           <div className="ml-auto flex space-x-2">
-            <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-              <DialogTrigger asChild>
-                <Button variant="outline">
-                  <Edit className="mr-2 h-4 w-4" />
-                  Редактировать
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Редактировать группу</DialogTitle>
-                  <DialogDescription>
-                    Измените информацию о группе
-                  </DialogDescription>
-                </DialogHeader>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Название</Label>
-                    <Input
-                      id="name"
-                      value={formData.name}
-                      onChange={(e) =>
-                        setFormData({ ...formData, name: e.target.value })
-                      }
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="description">Описание</Label>
-                    <Textarea
-                      id="description"
-                      value={formData.description}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          description: e.target.value,
-                        })
-                      }
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="tag">Тег (необязательно)</Label>
-                    <Input
-                      id="tag"
-                      value={formData.tag || ""}
-                      onChange={(e) =>
-                        setFormData({ ...formData, tag: e.target.value })
-                      }
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="longitude">Долгота</Label>
-                      <Input
-                        id="longitude"
-                        type="number"
-                        step="any"
-                        value={formData.coordinates[0]}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            coordinates: [
-                              parseFloat(e.target.value),
-                              formData.coordinates[1],
-                            ],
-                          })
-                        }
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="latitude">Широта</Label>
-                      <Input
-                        id="latitude"
-                        type="number"
-                        step="any"
-                        value={formData.coordinates[1]}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            coordinates: [
-                              formData.coordinates[0],
-                              parseFloat(e.target.value),
-                            ],
-                          })
-                        }
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="zoom">Масштаб карты</Label>
-                    <Input
-                      id="zoom"
-                      type="number"
-                      value={formData.zoom}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          zoom: parseInt(e.target.value),
-                        })
-                      }
-                      min="1"
-                      max="20"
-                      required
-                    />
-                  </div>
-                  <div className="flex justify-end space-x-2">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setIsEditDialogOpen(false)}
-                    >
-                      Отмена
-                    </Button>
-                    <Button type="submit" disabled={isSubmitting}>
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Сохранение...
-                        </>
-                      ) : (
-                        "Сохранить"
-                      )}
-                    </Button>
-                  </div>
-                </form>
-              </DialogContent>
-            </Dialog>
+            <NewGroupDialog
+              groupData={group}
+              handleSubmit={handleSubmit}
+              isOpen={isEditDialogOpen}
+              setIsOpen={setIsEditDialogOpen}
+              isSubmitting={isSubmitting}
+              setIsSubmitting={setIsSubmitting}
+            />
             <Button>
               <Plus className="mr-2 h-4 w-4" />
               Добавить достопримечательность

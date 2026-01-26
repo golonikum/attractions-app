@@ -4,7 +4,7 @@ import "./globals.css";
 import { Suspense } from "react";
 import { AuthContextProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
-import PWALayout from "@/components/PWALayout";
+import PWALayout from "@/components/pwa/PWALayout";
 import Script from "next/script";
 import { Toaster } from "sonner";
 
