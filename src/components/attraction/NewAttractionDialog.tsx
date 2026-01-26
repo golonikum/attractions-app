@@ -129,61 +129,53 @@ export const NewAttractionDialog = ({
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleFormSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="name">Название</Label>
-            <Input
-              id="name"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="category">Категория</Label>
-            <Input
-              id="category"
-              value={formData.category}
-              onChange={(e) =>
-                setFormData({ ...formData, category: e.target.value })
-              }
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="description">Описание</Label>
-            <Textarea
-              id="description"
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="imageUrl">URL изображения (необязательно)</Label>
-            <Input
-              id="imageUrl"
-              type="url"
-              value={formData.imageUrl}
-              onChange={(e) =>
-                setFormData({ ...formData, imageUrl: e.target.value })
-              }
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="yaMapUrl">URL Яндекс.Карты (необязательно)</Label>
-            <Input
-              id="yaMapUrl"
-              type="url"
-              value={formData.yaMapUrl}
-              onChange={(e) =>
-                setFormData({ ...formData, yaMapUrl: e.target.value })
-              }
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Название</Label>
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="category">Категория</Label>
+              <Input
+                id="category"
+                value={formData.category}
+                onChange={(e) =>
+                  setFormData({ ...formData, category: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="imageUrl">URL изображения</Label>
+              <Input
+                id="imageUrl"
+                type="url"
+                value={formData.imageUrl}
+                onChange={(e) =>
+                  setFormData({ ...formData, imageUrl: e.target.value })
+                }
+                placeholder="https://example.com/image.jpg"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="yaMapUrl">URL Яндекс.Карты</Label>
+              <Input
+                id="yaMapUrl"
+                type="url"
+                value={formData.yaMapUrl}
+                onChange={(e) =>
+                  setFormData({ ...formData, yaMapUrl: e.target.value })
+                }
+                placeholder="https://yandex.ru/maps/-/CDgBC~cD"
+              />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="longitude">Долгота</Label>
               <Input
@@ -222,22 +214,20 @@ export const NewAttractionDialog = ({
                 required
               />
             </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="order">Порядок (необязательно)</Label>
-            <Input
-              id="order"
-              type="number"
-              value={formData.order || 1}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  order: parseInt(e.target.value) || 1,
-                })
-              }
-            />
-          </div>
-          <div className="flex space-x-4">
+            <div className="space-y-2">
+              <Label htmlFor="order">Порядок</Label>
+              <Input
+                id="order"
+                type="number"
+                value={formData.order || 1}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    order: parseInt(e.target.value) || 1,
+                  })
+                }
+              />
+            </div>
             <div className="flex items-center space-x-2">
               <input
                 type="checkbox"
@@ -262,6 +252,18 @@ export const NewAttractionDialog = ({
               />
               <Label htmlFor="isFavorite">Избранное</Label>
             </div>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="description">Описание</Label>
+            <Textarea
+              id="description"
+              value={formData.description}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
+              placeholder="Добавьте описание достопримечательности..."
+              rows={3}
+            />
           </div>
           <div className="flex justify-end space-x-2">
             <Button
