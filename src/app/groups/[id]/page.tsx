@@ -79,21 +79,10 @@ export default function GroupDetailPage() {
 
   // Обработчик добавления достопримечательности
   const handleAddAttraction = async (formData: CreateAttractionRequest) => {
-    setIsSubmittingAttraction(true);
-    try {
-      const newAttraction = await createAttraction({
-        ...formData,
-        // latitude: 55.755819, // Координаты Москвы по умолчанию
-        // longitude: 37.617644, // TODO
-      });
-      setAttractions([...attractions, newAttraction]);
-      setIsAddAttractionDialogOpen(false);
-      toast.success("Достопримечательность успешно добавлена");
-    } catch (error) {
-      toast.error("Не удалось добавить достопримечательность");
-    } finally {
-      setIsSubmittingAttraction(false);
-    }
+    const newAttraction = await createAttraction({
+      ...formData,
+    });
+    setAttractions([...attractions, newAttraction]);
   };
 
   // Обработчик обновления достопримечательности
@@ -104,26 +93,13 @@ export default function GroupDetailPage() {
    */
   const handleUpdateAttraction =
     (id: string) => async (updateData: CreateAttractionRequest) => {
-      // Set submitting state to true to indicate the update process has started
-      setIsSubmittingAttraction(true);
-      try {
-        // Call the updateAttraction function with the ID and update data
-        const updatedAttraction = await updateAttraction(id, updateData);
-        // Update the attractions state with the new data
-        setAttractions(
-          attractions.map((attraction) =>
-            attraction.id === id ? updatedAttraction : attraction,
-          ),
-        );
-        // Show success message
-        toast.success("Достопримечательность успешно обновлена");
-      } catch (error) {
-        // Show error message if update fails
-        toast.error("Не удалось обновить достопримечательность");
-      } finally {
-        // Reset submitting state regardless of success or failure
-        setIsSubmittingAttraction(false);
-      }
+      const updatedAttraction = await updateAttraction(id, updateData);
+      // Update the attractions state with the new data
+      setAttractions(
+        attractions.map((attraction) =>
+          attraction.id === id ? updatedAttraction : attraction,
+        ),
+      );
     };
 
   if (isLoading) {
