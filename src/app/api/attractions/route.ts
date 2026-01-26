@@ -82,7 +82,6 @@ export async function POST(request: NextRequest) {
     if (
       !groupId ||
       !name ||
-      !category ||
       !coordinates ||
       !Array.isArray(coordinates) ||
       coordinates.length !== 2
@@ -90,7 +89,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error:
-            "Неверные данные. Убедитесь, что groupId, name, category и coordinates [long, lat] указаны правильно",
+            "Неверные данные. Убедитесь, что groupId, name и coordinates [lat, long] указаны правильно",
         },
         { status: 400 },
       );

@@ -43,7 +43,7 @@ export const NewAttractionDialog = ({
     yaMapUrl: "",
     isVisited: false,
     isFavorite: false,
-    coordinates: [37.617644, 55.755819], // [долгота, широта] по умолчанию (Москва)
+    coordinates: [55.755819, 37.617644], // [долгота, широта] по умолчанию (Москва)
     order: 1,
     notes: [],
   });
@@ -69,7 +69,7 @@ export const NewAttractionDialog = ({
         yaMapUrl: "",
         isVisited: false,
         isFavorite: false,
-        coordinates: [37.617644, 55.755819], // [долгота, широта] по умолчанию (Москва)
+        coordinates: [55.755819, 37.617644], // [долгота, широта] по умолчанию (Москва)
         order: 1,
         notes: [],
       });

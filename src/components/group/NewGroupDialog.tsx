@@ -34,7 +34,7 @@ export const NewGroupDialog = ({
     name: "",
     description: "",
     tag: "",
-    coordinates: [37.617644, 55.755819],
+    coordinates: [55.755819, 37.617644],
     zoom: 10,
   });
 
@@ -53,7 +53,7 @@ export const NewGroupDialog = ({
           name: "",
           description: "",
           tag: "",
-          coordinates: [37.617644, 55.755819],
+          coordinates: [55.755819, 37.617644],
           zoom: 10,
         });
       }
