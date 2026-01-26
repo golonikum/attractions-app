@@ -38,7 +38,13 @@ model Attraction {
   name        String
   category    String
   imageUrl    String?
+  yaMapUrl    String?
   description String?
+  isVisited   Boolean?
+  isFavorite  Boolean?
+  coordinates Json // Хранит координаты в формате [долгота, широта]
+  order       Int?
+  notes       Json? // Хранит дополнительные заметки в формате [{date: "2023-01-01", note: "Заметка 1"}]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

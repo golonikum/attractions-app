@@ -8,24 +8,21 @@ import { CreateGroupRequest, Group } from "@/types/group";
 import { getGroupById, updateGroup } from "@/services/groupService";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Loader2, ArrowLeft, Plus } from "lucide-react";
-import { NewGroupDialog } from "@/components/group/NewGroupDialog";
+import { Loader2, ArrowLeft } from "lucide-react";
 import { AttractionCard } from "@/components/attraction/AttractionCard";
 import { EmptyAttractionsState } from "@/components/group/EmptyAttractionsState";
 import { GroupInfoCard } from "@/components/group/GroupInfoCard";
 
-// Временно создадим тип для достопримечательности, так как его нет в types/group.ts
-// Позже его нужно будет добавить в отдельный файл
-interface AttractionItem {
-  id: string;
-  groupId: string;
-  name: string;
-  category: string;
-  imageUrl?: string;
-  description?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Attraction, CreateAttractionRequest } from "@/types/attraction";
+import {
+  getAttractionsByGroupId,
+  createAttraction,
+  deleteAttraction,
+  updateAttraction,
+} from "@/services/attractionService";
+import { NewAttractionDialog } from "@/components/attraction/NewAttractionDialog";
+
+// Используем тип Attraction из types/attraction.ts
 
 export default function GroupDetailPage() {
   const params = useParams();
@@ -33,10 +30,11 @@ export default function GroupDetailPage() {
   const groupId = params.id as string;
 
   const [group, setGroup] = useState<Group | null>(null);
-  const [attractions, setAttractions] = useState<AttractionItem[]>([]);
+  const [attractions, setAttractions] = useState<Attraction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAddAttractionDialogOpen, setIsAddAttractionDialogOpen] =
+    useState(false);
+  const [isSubmittingAttraction, setIsSubmittingAttraction] = useState(false);
 
   // Загрузка данных группы при монтировании компонента
   useEffect(() => {
@@ -45,8 +43,9 @@ export default function GroupDetailPage() {
         const groupData = await getGroupById(groupId);
         setGroup(groupData);
 
-        // Временно заглушка для достопримечательностей, т.к. сервиса для них еще нет
-        // setAttractions(await getAttractionsByGroupId(groupId));
+        // Загрузка достопримечательностей для группы
+        const attractionsData = await getAttractionsByGroupId(groupId);
+        setAttractions(attractionsData);
       } catch (error) {
         toast.error("Не удалось загрузить данные группы");
         router.push("/groups");
@@ -67,14 +66,62 @@ export default function GroupDetailPage() {
   // Обработчик удаления достопримечательности
   const handleDeleteAttraction = async (id: string) => {
     try {
-      // Временно заглушка, т.к. функции deleteAttraction еще нет
-      // await deleteAttraction(id);
-      // setAttractions(attractions.filter((attraction) => attraction.id !== id));
+      await deleteAttraction(id);
+      setAttractions(attractions.filter((attraction) => attraction.id !== id));
       toast.success("Достопримечательность успешно удалена");
     } catch (error) {
       toast.error("Не удалось удалить достопримечательность");
     }
   };
+
+  // Обработчик добавления достопримечательности
+  const handleAddAttraction = async (formData: CreateAttractionRequest) => {
+    setIsSubmittingAttraction(true);
+    try {
+      const newAttraction = await createAttraction({
+        ...formData,
+        // latitude: 55.755819, // Координаты Москвы по умолчанию
+        // longitude: 37.617644, // TODO
+      });
+      setAttractions([...attractions, newAttraction]);
+      setIsAddAttractionDialogOpen(false);
+      toast.success("Достопримечательность успешно добавлена");
+    } catch (error) {
+      toast.error("Не удалось добавить достопримечательность");
+    } finally {
+      setIsSubmittingAttraction(false);
+    }
+  };
+
+  // Обработчик обновления достопримечательности
+  /**
+   * Handles updating an attraction with the provided data
+   * @param {string} id - The ID of the attraction to update
+   * @returns {Function} An async function that takes updateData as parameter
+   */
+  const handleUpdateAttraction =
+    (id: string) => async (updateData: CreateAttractionRequest) => {
+      // Set submitting state to true to indicate the update process has started
+      setIsSubmittingAttraction(true);
+      try {
+        // Call the updateAttraction function with the ID and update data
+        const updatedAttraction = await updateAttraction(id, updateData);
+        // Update the attractions state with the new data
+        setAttractions(
+          attractions.map((attraction) =>
+            attraction.id === id ? updatedAttraction : attraction,
+          ),
+        );
+        // Show success message
+        toast.success("Достопримечательность успешно обновлена");
+      } catch (error) {
+        // Show error message if update fails
+        toast.error("Не удалось обновить достопримечательность");
+      } finally {
+        // Reset submitting state regardless of success or failure
+        setIsSubmittingAttraction(false);
+      }
+    };
 
   if (isLoading) {
     return (
@@ -121,18 +168,22 @@ export default function GroupDetailPage() {
           </Button>
           <h1 className="text-3xl font-bold">{group.name}</h1>
           <div className="ml-auto flex space-x-2">
-            <NewGroupDialog
+            {/* <NewGroupDialog
               groupData={group}
               handleSubmit={handleSubmit}
               isOpen={isEditDialogOpen}
               setIsOpen={setIsEditDialogOpen}
               isSubmitting={isSubmitting}
               setIsSubmitting={setIsSubmitting}
+            /> */}
+            <NewAttractionDialog
+              isOpen={isAddAttractionDialogOpen}
+              setIsOpen={setIsAddAttractionDialogOpen}
+              handleSubmit={handleAddAttraction}
+              isSubmitting={isSubmittingAttraction}
+              setIsSubmitting={setIsSubmittingAttraction}
+              groupId={groupId}
             />
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              Добавить достопримечательность
-            </Button>
           </div>
         </div>
 
@@ -143,7 +194,9 @@ export default function GroupDetailPage() {
         <div>
           <h2 className="text-2xl font-bold mb-4">Достопримечательности</h2>
           {attractions.length === 0 ? (
-            <EmptyAttractionsState />
+            <EmptyAttractionsState
+              onAddAttraction={() => setIsAddAttractionDialogOpen(true)}
+            />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {attractions.map((attraction) => (
@@ -151,6 +204,7 @@ export default function GroupDetailPage() {
                   key={attraction.id}
                   attraction={attraction}
                   onDelete={() => handleDeleteAttraction(attraction.id)}
+                  onUpdate={handleUpdateAttraction(attraction.id)}
                 />
               ))}
             </div>
