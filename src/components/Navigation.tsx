@@ -7,8 +7,8 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import PWAInstallPrompt from "@/components/pwa/PWAInstallPrompt";
 
 const navItems = [
-  { href: "/main", label: "Главная" },
-  { href: "/groups", label: "Группы" },
+  { href: "/main", label: "Карта" },
+  { href: "/groups", label: "Города" },
 ];
 
 export function Navigation() {
