@@ -1,5 +1,6 @@
 export interface Attraction {
   id: string;
+  userId: string;
   groupId: string;
   name: string;
   category?: string;

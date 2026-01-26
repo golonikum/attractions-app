@@ -21,6 +21,7 @@ import {
   updateAttraction,
 } from "@/services/attractionService";
 import { NewAttractionDialog } from "@/components/attraction/NewAttractionDialog";
+import { NewGroupDialog } from "@/components/group/NewGroupDialog";
 
 // Используем тип Attraction из types/attraction.ts
 
@@ -32,6 +33,8 @@ export default function GroupDetailPage() {
   const [group, setGroup] = useState<Group | null>(null);
   const [attractions, setAttractions] = useState<Attraction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAddAttractionDialogOpen, setIsAddAttractionDialogOpen] =
     useState(false);
   const [isSubmittingAttraction, setIsSubmittingAttraction] = useState(false);
@@ -168,14 +171,14 @@ export default function GroupDetailPage() {
           </Button>
           <h1 className="text-3xl font-bold">{group.name}</h1>
           <div className="ml-auto flex space-x-2">
-            {/* <NewGroupDialog
+            <NewGroupDialog
               groupData={group}
               handleSubmit={handleSubmit}
               isOpen={isEditDialogOpen}
               setIsOpen={setIsEditDialogOpen}
               isSubmitting={isSubmitting}
               setIsSubmitting={setIsSubmitting}
-            /> */}
+            />
             <NewAttractionDialog
               isOpen={isAddAttractionDialogOpen}
               setIsOpen={setIsAddAttractionDialogOpen}

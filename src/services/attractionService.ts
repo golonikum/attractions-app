@@ -1,102 +1,81 @@
 import { Attraction, CreateAttractionRequest, UpdateAttractionRequest } from "@/types/attraction";
 
-// Заглушка для данных о достопримечательностях
-const attractionsData: Attraction[] = [
-  {
-    id: "1",
-    groupId: "1",
-    name: "Красная площадь",
-    category: "Историческое место",
-    description: "Центральная площадь Москвы, расположенная между Кремлём, Китай-городом и Василевским спуском.",
-    imageUrl: "https://example.com/red-square.jpg",
-    yaMapUrl: "https://yandex.ru/maps/-/CDgBC~cD",
-    coordinates: [37.6232, 55.7525], // [долгота, широта]
-    isVisited: true,
-    isFavorite: false,
-    order: 1,
-    createdAt: "2023-01-01T00:00:00Z",
-    updatedAt: "2023-01-01T00:00:00Z",
-  },
-  {
-    id: "2",
-    groupId: "1",
-    name: "Мавзолей Ленина",
-    category: "Мемориальное место",
-    description: "Мавзолей на Красной площади в Москве, где находится тело Владимира Ильича Ленина.",
-    imageUrl: "https://example.com/lenin-mausoleum.jpg",
-    yaMapUrl: "https://yandex.ru/maps/-/CDgBC~cD",
-    coordinates: [37.6232, 55.7525], // [долгота, широта]
-    isVisited: true,
-    isFavorite: true,
-    order: 2,
-    notes: [{ date: "2023-05-01", note: "Посетил в День Победы" }],
-    createdAt: "2023-01-01T00:00:00Z",
-    updatedAt: "2023-01-01T00:00:00Z",
-  },
-];
+const API_URL = "/api/attractions";
 
-// Имитация задержки API
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+// Get authorization header
+const getAuthHeaders = () => {
+  const token = typeof document !== "undefined" ? document.cookie.match(/(^|;)token=([^;]*)/)?.[2] : null;
+  return {
+    "Content-Type": "application/json",
+    ...(token && { Authorization: `Bearer ${token}` }),
+  };
+};
 
 export const getAttractionsByGroupId = async (groupId: string): Promise<Attraction[]> => {
-  await delay(500); // Имитация задержки запроса
-  return attractionsData.filter(attraction => attraction.groupId === groupId);
+  const response = await fetch(`${API_URL}?groupId=${groupId}`, {
+    method: "GET",
+    headers: getAuthHeaders(),
+  });
+
+  if (!response.ok) {
+    throw new Error("Не удалось загрузить достопримечательности");
+  }
+
+  const data = await response.json();
+  return data.attractions || [];
 };
 
 export const getAttractionById = async (id: string): Promise<Attraction | null> => {
-  await delay(300); // Имитация задержки запроса
-  return attractionsData.find(attraction => attraction.id === id) || null;
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "GET",
+    headers: getAuthHeaders(),
+  });
+
+  if (!response.ok) {
+    throw new Error("Не удалось загрузить достопримечательность");
+  }
+
+  const data = await response.json();
+  return data.attraction || null;
 };
 
 export const createAttraction = async (attractionData: CreateAttractionRequest): Promise<Attraction> => {
-  await delay(800); // Имитация задержки запроса
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(attractionData),
+  });
 
-  const newAttraction: Attraction = {
-    id: Date.now().toString(),
-    groupId: attractionData.groupId,
-    name: attractionData.name,
-    category: attractionData.category,
-    description: attractionData.description,
-    imageUrl: attractionData.imageUrl,
-    yaMapUrl: attractionData.yaMapUrl,
-    isVisited: attractionData.isVisited,
-    isFavorite: attractionData.isFavorite,
-    coordinates: attractionData.coordinates,
-    order: attractionData.order,
-    notes: attractionData.notes,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
+  if (!response.ok) {
+    throw new Error("Не удалось создать достопримечательность");
+  }
 
-  attractionsData.push(newAttraction);
-  return newAttraction;
+  const data = await response.json();
+  return data.attraction;
 };
 
 export const updateAttraction = async (id: string, updateData: UpdateAttractionRequest): Promise<Attraction> => {
-  await delay(600); // Имитация задержки запроса
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(updateData),
+  });
 
-  const attractionIndex = attractionsData.findIndex(attraction => attraction.id === id);
-  if (attractionIndex === -1) {
-    throw new Error("Достопримечательность не найдена");
+  if (!response.ok) {
+    throw new Error("Не удалось обновить достопримечательность");
   }
 
-  const updatedAttraction = {
-    ...attractionsData[attractionIndex],
-    ...updateData,
-    updatedAt: new Date().toISOString(),
-  };
-
-  attractionsData[attractionIndex] = updatedAttraction;
-  return updatedAttraction;
+  const data = await response.json();
+  return data.attraction;
 };
 
 export const deleteAttraction = async (id: string): Promise<void> => {
-  await delay(400); // Имитация задержки запроса
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
 
-  const attractionIndex = attractionsData.findIndex(attraction => attraction.id === id);
-  if (attractionIndex === -1) {
-    throw new Error("Достопримечательность не найдена");
+  if (!response.ok) {
+    throw new Error("Не удалось удалить достопримечательность");
   }
-
-  attractionsData.splice(attractionIndex, 1);
 };
