@@ -42,6 +42,7 @@ export function GroupCard({ group, onDelete }: GroupCardProps) {
             className="h-8 w-8 text-red-500"
             onClick={(e) => {
               e.stopPropagation();
+              e.preventDefault();
               setIsDeleteDialogOpen(true);
             }}
           >
