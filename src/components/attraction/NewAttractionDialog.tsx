@@ -149,7 +149,6 @@ export const NewAttractionDialog = ({
                 onChange={(e) =>
                   setFormData({ ...formData, category: e.target.value })
                 }
-                required
               />
             </div>
             <div className="space-y-2">
@@ -225,7 +224,9 @@ export const NewAttractionDialog = ({
             <div className="flex items-center space-x-2">
               <button
                 type="button"
-                onClick={() => setFormData({ ...formData, isVisited: !formData.isVisited })}
+                onClick={() =>
+                  setFormData({ ...formData, isVisited: !formData.isVisited })
+                }
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
                   formData.isVisited ? "bg-green-500" : "bg-gray-200"
                 }`}
@@ -241,7 +242,9 @@ export const NewAttractionDialog = ({
             <div className="flex items-center space-x-2">
               <button
                 type="button"
-                onClick={() => setFormData({ ...formData, isFavorite: !formData.isFavorite })}
+                onClick={() =>
+                  setFormData({ ...formData, isFavorite: !formData.isFavorite })
+                }
                 className="p-1 rounded-full hover:bg-gray-100 focus:outline-none"
               >
                 <Star
