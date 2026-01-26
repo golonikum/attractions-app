@@ -177,42 +177,31 @@ export const NewAttractionDialog = ({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="longitude">Долгота</Label>
+              <Label htmlFor="coordinates">Координаты (формат: долгота, широта)</Label>
               <Input
-                id="longitude"
-                type="number"
-                step="any"
-                value={formData.coordinates[0]}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    coordinates: [
-                      parseFloat(e.target.value),
-                      formData.coordinates[1],
-                    ],
-                  })
-                }
+                id="coordinates"
+                type="text"
+                value={`${formData.coordinates[0]}, ${formData.coordinates[1]}`}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  // Парсим координаты из строки формата "долгота, широта"
+                  const parts = value.split(',');
+                  if (parts.length === 2) {
+                    const longitude = parseFloat(parts[0].trim());
+                    const latitude = parseFloat(parts[1].trim());
+
+                    if (!isNaN(longitude) && !isNaN(latitude)) {
+                      setFormData({
+                        ...formData,
+                        coordinates: [longitude, latitude]
+                      });
+                    }
+                  }
+                }}
+                placeholder="37.617644, 55.755819"
                 required
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="latitude">Широта</Label>
-              <Input
-                id="latitude"
-                type="number"
-                step="any"
-                value={formData.coordinates[1]}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    coordinates: [
-                      formData.coordinates[0],
-                      parseFloat(e.target.value),
-                    ],
-                  })
-                }
-                required
-              />
+              <p className="text-xs text-muted-foreground">Введите координаты в формате: долгота, широта (например: 37.617644, 55.755819)</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="order">Порядок</Label>

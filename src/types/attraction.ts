@@ -1,9 +1,8 @@
-
 export interface Attraction {
   id: string;
   groupId: string;
   name: string;
-  category: string;
+  category?: string;
   imageUrl?: string;
   yaMapUrl?: string;
   description?: string;
@@ -19,7 +18,7 @@ export interface Attraction {
 export interface CreateAttractionRequest {
   groupId: string;
   name: string;
-  category: string;
+  category?: string;
   imageUrl?: string;
   yaMapUrl?: string;
   description?: string;

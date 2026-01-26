@@ -36,7 +36,7 @@ model Attraction {
   groupId     String
   group       Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
   name        String
-  category    String
+  category    String?
   imageUrl    String?
   yaMapUrl    String?
   description String?
