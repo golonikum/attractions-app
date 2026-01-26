@@ -1,4 +1,4 @@
-import { Plus, Edit, Loader2 } from "lucide-react";
+import { Plus, Edit, Loader2, Star } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -115,7 +115,7 @@ export const NewAttractionDialog = ({
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogTitle>
             {attraction
@@ -177,31 +177,36 @@ export const NewAttractionDialog = ({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="coordinates">Координаты (формат: долгота, широта)</Label>
+              <Label htmlFor="coordinates">
+                Координаты (формат: широта, долгота)
+              </Label>
               <Input
                 id="coordinates"
                 type="text"
                 value={`${formData.coordinates[0]}, ${formData.coordinates[1]}`}
                 onChange={(e) => {
                   const value = e.target.value;
-                  // Парсим координаты из строки формата "долгота, широта"
-                  const parts = value.split(',');
+                  // Парсим координаты из строки формата "широта, долгота"
+                  const parts = value.split(",");
                   if (parts.length === 2) {
-                    const longitude = parseFloat(parts[0].trim());
-                    const latitude = parseFloat(parts[1].trim());
+                    const latitude = parseFloat(parts[0].trim());
+                    const longitude = parseFloat(parts[1].trim());
 
                     if (!isNaN(longitude) && !isNaN(latitude)) {
                       setFormData({
                         ...formData,
-                        coordinates: [longitude, latitude]
+                        coordinates: [latitude, longitude],
                       });
                     }
                   }
                 }}
-                placeholder="37.617644, 55.755819"
+                placeholder="55.755819, 37.617644"
                 required
               />
-              <p className="text-xs text-muted-foreground">Введите координаты в формате: долгота, широта (например: 37.617644, 55.755819)</p>
+              <p className="text-xs text-muted-foreground">
+                Введите координаты в формате: широта, долгота (например:
+                55.755819, 37.617644)
+              </p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="order">Порядок</Label>
@@ -218,28 +223,32 @@ export const NewAttractionDialog = ({
               />
             </div>
             <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="isVisited"
-                checked={formData.isVisited}
-                onChange={(e) =>
-                  setFormData({ ...formData, isVisited: e.target.checked })
-                }
-                className="rounded"
-              />
-              <Label htmlFor="isVisited">Посещено</Label>
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, isVisited: !formData.isVisited })}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                  formData.isVisited ? "bg-green-500" : "bg-gray-200"
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    formData.isVisited ? "translate-x-6" : "translate-x-1"
+                  }`}
+                />
+              </button>
+              <Label>Посещено</Label>
             </div>
             <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="isFavorite"
-                checked={formData.isFavorite}
-                onChange={(e) =>
-                  setFormData({ ...formData, isFavorite: e.target.checked })
-                }
-                className="rounded"
-              />
-              <Label htmlFor="isFavorite">Избранное</Label>
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, isFavorite: !formData.isFavorite })}
+                className="p-1 rounded-full hover:bg-gray-100 focus:outline-none"
+              >
+                <Star
+                  className={`h-5 w-5 ${formData.isFavorite ? "text-yellow-500 fill-current" : "text-gray-300"}`}
+                />
+              </button>
+              <Label>Избранное</Label>
             </div>
           </div>
           <div className="space-y-2">
@@ -251,7 +260,7 @@ export const NewAttractionDialog = ({
                 setFormData({ ...formData, description: e.target.value })
               }
               placeholder="Добавьте описание достопримечательности..."
-              rows={3}
+              rows={5}
             />
           </div>
           <div className="flex justify-end space-x-2">
