@@ -145,7 +145,6 @@ export default function GroupDetailPage() {
             <ArrowLeft className="mr-2 h-4 w-4" />
             Назад
           </Button>
-          <h1 className="text-3xl font-bold">{group.name}</h1>
           <div className="ml-auto flex space-x-2">
             <NewGroupDialog
               groupData={group}

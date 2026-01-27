@@ -9,7 +9,7 @@ export function GroupInfoCard({ group }: GroupInfoCardProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Информация о группе</CardTitle>
+        <CardTitle>{group.name}</CardTitle>
       </CardHeader>
       <CardContent>
         <p className="text-gray-600 mb-4">{group.description}</p>
