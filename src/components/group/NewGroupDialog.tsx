@@ -101,7 +101,7 @@ export const NewGroupDialog = ({
           <DialogDescription>
             {groupData
               ? "Измените информацию о группе"
-              : "Создайте новую группу для организации ваших достопримечательностей"}
+              : "Создайте новую группу для организации ваших объектов"}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleFormSubmit} className="space-y-4">

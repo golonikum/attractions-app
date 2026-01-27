@@ -46,7 +46,7 @@ export default function GroupDetailPage() {
         const groupData = await getGroupById(groupId);
         setGroup(groupData);
 
-        // Загрузка достопримечательностей для группы
+        // Загрузка объектов для группы
         const attractionsData = await getAttractionsByGroupId(groupId);
         setAttractions(attractionsData);
       } catch (error) {
@@ -66,18 +66,18 @@ export default function GroupDetailPage() {
     setGroup(updatedGroup);
   };
 
-  // Обработчик удаления достопримечательности
+  // Обработчик удаления объекта
   const handleDeleteAttraction = async (id: string) => {
     try {
       await deleteAttraction(id);
       setAttractions(attractions.filter((attraction) => attraction.id !== id));
-      toast.success("Достопримечательность успешно удалена");
+      toast.success("Объект успешно удалена");
     } catch (error) {
-      toast.error("Не удалось удалить достопримечательность");
+      toast.error("Не удалось удалить объект");
     }
   };
 
-  // Обработчик добавления достопримечательности
+  // Обработчик добавления объекта
   const handleAddAttraction = async (formData: CreateAttractionRequest) => {
     const newAttraction = await createAttraction({
       ...formData,
@@ -85,7 +85,7 @@ export default function GroupDetailPage() {
     setAttractions([...attractions, newAttraction]);
   };
 
-  // Обработчик обновления достопримечательности
+  // Обработчик обновления объекта
   /**
    * Handles updating an attraction with the provided data
    * @param {string} id - The ID of the attraction to update

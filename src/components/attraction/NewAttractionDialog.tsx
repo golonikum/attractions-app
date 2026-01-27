@@ -55,9 +55,7 @@ export const NewAttractionDialog = ({
 
     try {
       await handleSubmit?.(formData);
-      toast.success(
-        `Достопримечательность успешно ${attraction ? "обновлена" : "создана"}`,
-      );
+      toast.success(`Объект успешно ${attraction ? "обновлена" : "создана"}`);
       setIsOpen(false);
 
       // Сброс формы
@@ -75,9 +73,7 @@ export const NewAttractionDialog = ({
         notes: [],
       });
     } catch (error) {
-      toast.error(
-        `Не удалось ${attraction ? "обновить" : "создать"} достопримечательность`,
-      );
+      toast.error(`Не удалось ${attraction ? "обновить" : "создать"} объект`);
     } finally {
       setIsSubmitting(false);
     }
@@ -85,7 +81,7 @@ export const NewAttractionDialog = ({
 
   useEffect(() => {
     if (attraction) {
-      // Заполнение формы данными достопримечательности в режиме редактирования
+      // Заполнение формы данными объекта в режиме редактирования
       setFormData({
         groupId: attraction.groupId,
         name: attraction.name,
@@ -236,7 +232,7 @@ export const NewAttractionDialog = ({
               onChange={(e) =>
                 setFormData({ ...formData, description: e.target.value })
               }
-              placeholder="Добавьте описание достопримечательности..."
+              placeholder="Добавьте описание объекта..."
               rows={5}
             />
           </div>

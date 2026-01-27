@@ -57,7 +57,7 @@ export function GroupCard({ group, onDelete }: GroupCardProps) {
             onClose={() => setIsDeleteDialogOpen(false)}
             onConfirm={() => onDelete(group.id)}
             title="Удалить группу?"
-            description="Вы уверены, что хотите удалить эту группу? Все связанные достопримечательности также будут удалены."
+            description="Вы уверены, что хотите удалить эту группу? Все связанные объекта также будут удалены."
             confirmText="Удалить"
             cancelText="Отмена"
             variant="destructive"

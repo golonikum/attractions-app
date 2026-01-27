@@ -1,45 +1,58 @@
-import { Attraction, CreateAttractionRequest, UpdateAttractionRequest } from "@/types/attraction";
+import {
+  Attraction,
+  CreateAttractionRequest,
+  UpdateAttractionRequest,
+} from "@/types/attraction";
 
 const API_URL = "/api/attractions";
 
 // Get authorization header
 const getAuthHeaders = () => {
-  const token = typeof document !== "undefined" ? document.cookie.match(/(^|;)token=([^;]*)/)?.[2] : null;
+  const token =
+    typeof document !== "undefined"
+      ? document.cookie.match(/(^|;)token=([^;]*)/)?.[2]
+      : null;
   return {
     "Content-Type": "application/json",
     ...(token && { Authorization: `Bearer ${token}` }),
   };
 };
 
-export const getAttractionsByGroupId = async (groupId: string): Promise<Attraction[]> => {
+export const getAttractionsByGroupId = async (
+  groupId: string,
+): Promise<Attraction[]> => {
   const response = await fetch(`${API_URL}?groupId=${groupId}`, {
     method: "GET",
     headers: getAuthHeaders(),
   });
 
   if (!response.ok) {
-    throw new Error("Не удалось загрузить достопримечательности");
+    throw new Error("Не удалось загрузить объекта");
   }
 
   const data = await response.json();
   return data.attractions || [];
 };
 
-export const getAttractionById = async (id: string): Promise<Attraction | null> => {
+export const getAttractionById = async (
+  id: string,
+): Promise<Attraction | null> => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "GET",
     headers: getAuthHeaders(),
   });
 
   if (!response.ok) {
-    throw new Error("Не удалось загрузить достопримечательность");
+    throw new Error("Не удалось загрузить объект");
   }
 
   const data = await response.json();
   return data.attraction || null;
 };
 
-export const createAttraction = async (attractionData: CreateAttractionRequest): Promise<Attraction> => {
+export const createAttraction = async (
+  attractionData: CreateAttractionRequest,
+): Promise<Attraction> => {
   const response = await fetch(API_URL, {
     method: "POST",
     headers: getAuthHeaders(),
@@ -47,14 +60,17 @@ export const createAttraction = async (attractionData: CreateAttractionRequest):
   });
 
   if (!response.ok) {
-    throw new Error("Не удалось создать достопримечательность");
+    throw new Error("Не удалось создать объект");
   }
 
   const data = await response.json();
   return data.attraction;
 };
 
-export const updateAttraction = async (id: string, updateData: UpdateAttractionRequest): Promise<Attraction> => {
+export const updateAttraction = async (
+  id: string,
+  updateData: UpdateAttractionRequest,
+): Promise<Attraction> => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
     headers: getAuthHeaders(),
@@ -62,7 +78,7 @@ export const updateAttraction = async (id: string, updateData: UpdateAttractionR
   });
 
   if (!response.ok) {
-    throw new Error("Не удалось обновить достопримечательность");
+    throw new Error("Не удалось обновить объект");
   }
 
   const data = await response.json();
@@ -76,6 +92,6 @@ export const deleteAttraction = async (id: string): Promise<void> => {
   });
 
   if (!response.ok) {
-    throw new Error("Не удалось удалить достопримечательность");
+    throw new Error("Не удалось удалить объект");
   }
 };

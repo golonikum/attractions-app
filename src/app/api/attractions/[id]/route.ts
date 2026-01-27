@@ -5,7 +5,7 @@ import { verifyToken } from "@/lib/serverAuth";
 // Get a specific attraction by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     // Verify authentication token
@@ -18,7 +18,7 @@ export async function GET(
     if (!decoded || !decoded.id) {
       return NextResponse.json(
         { error: "Недействительный токен" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -32,7 +32,7 @@ export async function GET(
     });
 
     if (!attraction) {
-      return NextResponse.json({ error: "Достопримечательность не найдена" }, { status: 404 });
+      return NextResponse.json({ error: "Объект не найдена" }, { status: 404 });
     }
 
     return NextResponse.json({ attraction });
@@ -40,7 +40,7 @@ export async function GET(
     console.error("Error fetching attraction:", error);
     return NextResponse.json(
       { error: "Внутренняя ошибка сервера" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -48,7 +48,7 @@ export async function GET(
 // Update a specific attraction by ID
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     // Verify authentication token
@@ -61,23 +61,23 @@ export async function PUT(
     if (!decoded || !decoded.id) {
       return NextResponse.json(
         { error: "Недействительный токен" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
     // Parse request body
-    const { 
-      groupId, 
-      name, 
-      category, 
-      description, 
-      imageUrl, 
-      yaMapUrl, 
-      coordinates, 
-      isVisited, 
-      isFavorite, 
+    const {
+      groupId,
+      name,
+      category,
+      description,
+      imageUrl,
+      yaMapUrl,
+      coordinates,
+      isVisited,
+      isFavorite,
       order,
-      notes 
+      notes,
     } = await request.json();
 
     // Check if the attraction exists and belongs to the user
@@ -90,7 +90,7 @@ export async function PUT(
     });
 
     if (!existingAttraction) {
-      return NextResponse.json({ error: "Достопримечательность не найдена" }, { status: 404 });
+      return NextResponse.json({ error: "Объект не найдена" }, { status: 404 });
     }
 
     // Validate coordinates if provided
@@ -103,7 +103,7 @@ export async function PUT(
           error:
             "Неверный формат координат. Ожидается массив [долгота, широта]",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -131,7 +131,7 @@ export async function PUT(
     console.error("Error updating attraction:", error);
     return NextResponse.json(
       { error: "Внутренняя ошибка сервера" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -139,7 +139,7 @@ export async function PUT(
 // Delete a specific attraction by ID
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     // Verify authentication token
@@ -152,7 +152,7 @@ export async function DELETE(
     if (!decoded || !decoded.id) {
       return NextResponse.json(
         { error: "Недействительный токен" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -166,7 +166,7 @@ export async function DELETE(
     });
 
     if (!existingAttraction) {
-      return NextResponse.json({ error: "Достопримечательность не найдена" }, { status: 404 });
+      return NextResponse.json({ error: "Объект не найдена" }, { status: 404 });
     }
 
     // Delete the attraction
@@ -174,12 +174,12 @@ export async function DELETE(
       where: { id },
     });
 
-    return NextResponse.json({ message: "Достопримечательность успешно удалена" });
+    return NextResponse.json({ message: "Объект успешно удалена" });
   } catch (error) {
     console.error("Error deleting attraction:", error);
     return NextResponse.json(
       { error: "Внутренняя ошибка сервера" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

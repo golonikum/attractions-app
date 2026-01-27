@@ -88,8 +88,8 @@ export function AttractionCard({
             isOpen={isDeleteDialogOpen}
             onClose={() => setIsDeleteDialogOpen(false)}
             onConfirm={() => onDelete(attraction.id)}
-            title="Удалить достопримечательность?"
-            description="Вы уверены, что хотите удалить эту достопримечательность?"
+            title="Удалить объект?"
+            description="Вы уверены, что хотите удалить эту объект?"
             confirmText="Удалить"
             cancelText="Отмена"
             variant="destructive"
