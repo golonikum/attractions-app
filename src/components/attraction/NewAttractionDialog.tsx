@@ -11,6 +11,7 @@ import {
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { CoordinatesInput } from "../ui/CoordinatesInput";
 import { useState, useEffect } from "react";
 import { CreateAttractionRequest, Attraction } from "@/types/attraction";
 import { toast } from "sonner";
@@ -175,38 +176,11 @@ export const NewAttractionDialog = ({
                 placeholder="https://yandex.ru/maps/-/CDgBC~cD"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="coordinates">
-                Координаты (формат: широта, долгота)
-              </Label>
-              <Input
-                id="coordinates"
-                type="text"
-                value={`${formData.coordinates[0]}, ${formData.coordinates[1]}`}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  // Парсим координаты из строки формата "широта, долгота"
-                  const parts = value.split(",");
-                  if (parts.length === 2) {
-                    const latitude = parseFloat(parts[0].trim());
-                    const longitude = parseFloat(parts[1].trim());
-
-                    if (!isNaN(longitude) && !isNaN(latitude)) {
-                      setFormData({
-                        ...formData,
-                        coordinates: [latitude, longitude],
-                      });
-                    }
-                  }
-                }}
-                placeholder="55.755819, 37.617644"
-                required
-              />
-              <p className="text-xs text-muted-foreground">
-                Введите координаты в формате: широта, долгота (например:
-                55.755819, 37.617644)
-              </p>
-            </div>
+            <CoordinatesInput
+              value={formData.coordinates}
+              onChange={(coordinates) => setFormData({ ...formData, coordinates })}
+              required
+            />
             <div className="space-y-2">
               <Label htmlFor="order">Порядок</Label>
               <Input

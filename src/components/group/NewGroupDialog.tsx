@@ -11,6 +11,7 @@ import {
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { CoordinatesInput } from "../ui/CoordinatesInput";
 import { useEffect, useState } from "react";
 import { CreateGroupRequest, Group } from "@/types/group";
 import { toast } from "sonner";
@@ -136,46 +137,12 @@ export const NewGroupDialog = ({
               }
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="longitude">Долгота</Label>
-              <Input
-                id="longitude"
-                type="number"
-                step="any"
-                value={formData.coordinates[0]}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    coordinates: [
-                      parseFloat(e.target.value),
-                      formData.coordinates[1],
-                    ],
-                  })
-                }
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="latitude">Широта</Label>
-              <Input
-                id="latitude"
-                type="number"
-                step="any"
-                value={formData.coordinates[1]}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    coordinates: [
-                      formData.coordinates[0],
-                      parseFloat(e.target.value),
-                    ],
-                  })
-                }
-                required
-              />
-            </div>
-          </div>
+          <CoordinatesInput
+            value={formData.coordinates}
+            onChange={(coordinates) => setFormData({ ...formData, coordinates })}
+            format="separate"
+            required
+          />
           <div className="space-y-2">
             <Label htmlFor="zoom">Масштаб карты</Label>
             <Input
