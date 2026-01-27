@@ -112,21 +112,19 @@ export const NewAttractionDialog = ({
         ) : (
           <Button>
             <Plus className="mr-2 h-4 w-4" />
-            Добавить достопримечательность
+            Добавить объект
           </Button>
         )}
       </DialogTrigger>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogTitle>
-            {attraction
-              ? "Редактировать достопримечательность"
-              : "Добавить достопримечательность"}
+            {attraction ? "Редактировать объект" : "Добавить объект"}
           </DialogTitle>
           <DialogDescription>
             {attraction
-              ? "Измените информацию о достопримечательности"
-              : "Заполните информацию о новой достопримечательности"}
+              ? "Измените информацию об объекте"
+              : "Заполните информацию о новом объекте"}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleFormSubmit} className="space-y-4">
@@ -178,7 +176,9 @@ export const NewAttractionDialog = ({
             </div>
             <CoordinatesInput
               value={formData.coordinates}
-              onChange={(coordinates) => setFormData({ ...formData, coordinates })}
+              onChange={(coordinates) =>
+                setFormData({ ...formData, coordinates })
+              }
               required
             />
             <div className="space-y-2">

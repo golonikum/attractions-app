@@ -171,7 +171,7 @@ export default function GroupDetailPage() {
         </div>
 
         <div>
-          <h2 className="text-2xl font-bold mb-4">Достопримечательности</h2>
+          <h2 className="text-2xl font-bold mb-4">Объекты</h2>
           {attractions.length === 0 ? (
             <EmptyAttractionsState
               onAddAttraction={() => setIsAddAttractionDialogOpen(true)}

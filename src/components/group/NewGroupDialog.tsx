@@ -139,8 +139,9 @@ export const NewGroupDialog = ({
           </div>
           <CoordinatesInput
             value={formData.coordinates}
-            onChange={(coordinates) => setFormData({ ...formData, coordinates })}
-            format="separate"
+            onChange={(coordinates) =>
+              setFormData({ ...formData, coordinates })
+            }
             required
           />
           <div className="space-y-2">
