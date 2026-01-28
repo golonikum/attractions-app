@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MapPin } from "lucide-react";
 import { Attraction } from "@/types/attraction";
+import { Tag } from "@/components/ui/Tag";
 
 interface AttractionInfoCardProps {
   attraction: Attraction;
@@ -9,14 +10,15 @@ interface AttractionInfoCardProps {
 
 export function AttractionInfoCard({ attraction }: AttractionInfoCardProps) {
   return (
-    <Card isFavorite={attraction.isFavorite} isVisited={attraction.isVisited}>
+    <Card className={attraction.isVisited ? "bg-green-50" : ""}>
       <CardHeader>
         <div className="flex gap-4 justify-between items-start">
           <CardTitle>{attraction.name}</CardTitle>
           {attraction.category && (
-            <span className="inline-block px-2 py-1 text-xs bg-primary/10 text-primary rounded-full">
-              {attraction.category}
-            </span>
+            <Tag text={attraction.category} variant="default" />
+          )}
+          {attraction.isFavorite && (
+            <Tag text="Избранное" variant="warning" />
           )}
         </div>
       </CardHeader>

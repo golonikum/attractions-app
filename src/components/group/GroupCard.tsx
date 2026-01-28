@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { Group } from "@/types/group";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { useState } from "react";
+import { Tag } from "../ui/Tag";
 
 interface GroupCardProps {
   group: Group;
@@ -37,11 +38,7 @@ export function GroupCard({ group, onDelete }: GroupCardProps) {
         <div className="flex justify-between items-start">
           <div className="flex-1 cursor-pointer" onClick={handleCardClick}>
             <CardTitle className="text-lg">{group.name}</CardTitle>
-            {group.tag && (
-              <span className="inline-block px-2 py-1 text-xs bg-primary/10 text-primary rounded-full mt-1">
-                {group.tag}
-              </span>
-            )}
+            {group.tag && <Tag text={group.tag} />}
           </div>
           <Button
             variant="ghost"

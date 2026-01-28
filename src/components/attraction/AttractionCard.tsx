@@ -12,6 +12,7 @@ import { NewAttractionDialog } from "./NewAttractionDialog";
 import { useState } from "react";
 import { Attraction, CreateAttractionRequest } from "@/types/attraction";
 import Link from "next/link";
+import { Tag } from "../ui/Tag";
 
 // Используем тип Attraction из types/attraction.ts вместо интерфейса AttractionItem
 type AttractionItem = Attraction;
@@ -61,9 +62,7 @@ export function AttractionCard({
                 </CardTitle>
               </Link>
             </div>
-            <span className="inline-block px-2 py-1 text-xs bg-primary/10 text-primary rounded-full mt-1">
-              {attraction.category}
-            </span>
+            {attraction.category && <Tag text={attraction.category} />}
           </div>
           <div className="flex space-x-1">
             <NewAttractionDialog
