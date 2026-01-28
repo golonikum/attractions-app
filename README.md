@@ -47,11 +47,12 @@ yarn
 3. Получите переменные окружения из Vercel:
 
 ```bash
-yarn global add vercel
+npx global add vercel
+npx vercel link
 vercel env pull .env.development.local
 ```
 
-4. Если вы работаете локально без Vercel, создайте файл `.env` на основе `.env.example`:
+1. Если вы работаете локально без Vercel, создайте файл `.env` на основе `.env.example`:
 
 ```
 DATABASE_URL="your_postgresql_database_url"

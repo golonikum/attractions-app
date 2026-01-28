@@ -22,6 +22,7 @@ import {
 } from "@/services/attractionService";
 import { NewAttractionDialog } from "@/components/attraction/NewAttractionDialog";
 import { NewGroupDialog } from "@/components/group/NewGroupDialog";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 // Используем тип Attraction из types/attraction.ts
 
@@ -38,6 +39,7 @@ export default function GroupDetailPage() {
   const [isAddAttractionDialogOpen, setIsAddAttractionDialogOpen] =
     useState(false);
   const [isSubmittingAttraction, setIsSubmittingAttraction] = useState(false);
+  const isMobile = useIsMobile();
 
   // Загрузка данных группы при монтировании компонента
   useEffect(() => {
@@ -165,29 +167,59 @@ export default function GroupDetailPage() {
           </div>
         </div>
 
-        <div className="mb-6">
-          <GroupInfoCard group={group} />
-        </div>
-
-        <div>
-          <h2 className="text-2xl font-bold mb-4">Объекты</h2>
-          {attractions.length === 0 ? (
-            <EmptyAttractionsState
-              onAddAttraction={() => setIsAddAttractionDialogOpen(true)}
-            />
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {attractions.map((attraction) => (
-                <AttractionCard
-                  key={attraction.id}
-                  attraction={attraction}
-                  onDelete={() => handleDeleteAttraction(attraction.id)}
-                  onUpdate={handleUpdateAttraction(attraction.id)}
-                />
-              ))}
+        {isMobile ? (
+          <>
+            <div className="mb-6">
+              <GroupInfoCard group={group} />
             </div>
-          )}
-        </div>
+
+            <div>
+              <h2 className="text-2xl font-bold mb-4">Объекты</h2>
+              {attractions.length === 0 ? (
+                <EmptyAttractionsState
+                  onAddAttraction={() => setIsAddAttractionDialogOpen(true)}
+                />
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {attractions.map((attraction) => (
+                    <AttractionCard
+                      key={attraction.id}
+                      attraction={attraction}
+                      onDelete={() => handleDeleteAttraction(attraction.id)}
+                      onUpdate={handleUpdateAttraction(attraction.id)}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="mb-6">
+              <GroupInfoCard group={group} />
+            </div>
+
+            <div>
+              <h2 className="text-2xl font-bold mb-4">Объекты</h2>
+              {attractions.length === 0 ? (
+                <EmptyAttractionsState
+                  onAddAttraction={() => setIsAddAttractionDialogOpen(true)}
+                />
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {attractions.map((attraction) => (
+                    <AttractionCard
+                      key={attraction.id}
+                      attraction={attraction}
+                      onDelete={() => handleDeleteAttraction(attraction.id)}
+                      onUpdate={handleUpdateAttraction(attraction.id)}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </ProtectedRoute>
   );
