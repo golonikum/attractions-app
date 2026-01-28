@@ -1,8 +1,7 @@
-const CACHE_NAME = "contacts-app-v1";
+const CACHE_NAME = "attraction-app-v3";
 const urlsToCache = [
   "/",
-  "/contacts",
-  "/events",
+  "/groups",
   "/manifest.json",
   "/icon.svg",
   "/icon-192x192.png",
@@ -11,32 +10,33 @@ const urlsToCache = [
   "/_next/static/chunks/webpack.js",
   "/_next/static/chunks/main-app.js",
   "/_next/static/chunks/app/_not-found.js",
-  "/_next/static/chunks/app/contacts/page.js",
-  "/_next/static/chunks/app/events/page.js"
+  "/_next/static/chunks/app/groups/page.js",
+  "/_next/static/chunks/app/attractions/page.js",
 ];
 
 // Install event - cache resources
 self.addEventListener("install", (event) => {
   console.log("Service Worker installing");
   event.waitUntil(
-    caches.open(CACHE_NAME)
+    caches
+      .open(CACHE_NAME)
       .then((cache) => {
         console.log("Service Worker caching files");
         // Используем Promise.allSettled для обработки каждого ресурса отдельно
         return Promise.allSettled(
-          urlsToCache.map(url => {
-            return cache.add(url).catch(error => {
+          urlsToCache.map((url) => {
+            return cache.add(url).catch((error) => {
               console.error(`Failed to cache ${url}:`, error);
               return null;
             });
-          })
+          }),
         );
       })
       .then(() => {
         console.log("Service Worker installed");
         // Force the waiting service worker to become the active service worker
         return self.skipWaiting();
-      })
+      }),
   );
 });
 
@@ -52,10 +52,12 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(
       fetch(event.request).catch(() => {
         return new Response(
-          JSON.stringify({ error: "Network request failed. You appear to be offline." }),
-          { status: 408, headers: { "Content-Type": "application/json" } }
+          JSON.stringify({
+            error: "Network request failed. You appear to be offline.",
+          }),
+          { status: 408, headers: { "Content-Type": "application/json" } },
         );
-      })
+      }),
     );
     return;
   }
@@ -75,18 +77,17 @@ self.addEventListener("fetch", (event) => {
         .catch(() => {
           // If network fails, try to get from cache
           return caches.match(event.request);
-        })
+        }),
     );
     return;
   }
 
   // For other requests, try cache first, then network
   event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Return cached version or fetch from network
-        return response || fetch(event.request);
-      })
+    caches.match(event.request).then((response) => {
+      // Return cached version or fetch from network
+      return response || fetch(event.request);
+    }),
   );
 });
 
@@ -95,21 +96,23 @@ self.addEventListener("activate", (event) => {
   console.log("Service Worker activating");
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            console.log("Service Worker deleting old cache:", cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-    .then(() => {
-      console.log("Service Worker activated");
-      // Take control of all pages
-      return self.clients.claim();
-    })
+    caches
+      .keys()
+      .then((cacheNames) => {
+        return Promise.all(
+          cacheNames.map((cacheName) => {
+            if (cacheWhitelist.indexOf(cacheName) === -1) {
+              console.log("Service Worker deleting old cache:", cacheName);
+              return caches.delete(cacheName);
+            }
+          }),
+        );
+      })
+      .then(() => {
+        console.log("Service Worker activated");
+        // Take control of all pages
+        return self.clients.claim();
+      }),
   );
 });
 
@@ -123,12 +126,12 @@ self.addEventListener("push", (event) => {
       body: "У вас новое уведомление",
       icon: "/icon-192x192.png",
       badge: "/icon-192x192.png",
-      tag: "contacts-app-event",
+      tag: "attractions-app-event",
       requireInteraction: false,
       data: {
-        url: "/events"
-      }
-    }
+        url: "/groups",
+      },
+    },
   };
 
   if (event.data) {
@@ -142,9 +145,7 @@ self.addEventListener("push", (event) => {
   const title = notificationData.title;
   const options = notificationData.options;
 
-  event.waitUntil(
-    self.registration.showNotification(title, options)
-  );
+  event.waitUntil(self.registration.showNotification(title, options));
 });
 
 // Notification click event
@@ -155,13 +156,9 @@ self.addEventListener("notificationclick", (event) => {
 
   // Handle notification click
   if (event.notification.data && event.notification.data.url) {
-    event.waitUntil(
-      clients.openWindow(event.notification.data.url)
-    );
+    event.waitUntil(clients.openWindow(event.notification.data.url));
   } else {
-    event.waitUntil(
-      clients.openWindow("/")
-    );
+    event.waitUntil(clients.openWindow("/"));
   }
 });
 
@@ -169,10 +166,9 @@ self.addEventListener("notificationclick", (event) => {
 self.addEventListener("message", (event) => {
   if (event.data && event.data.type === "SHOW_NOTIFICATION") {
     const { title, options } = event.data.payload;
-    
-    self.registration.showNotification(title, options)
-      .catch(error => {
-        console.error("Error showing notification:", error);
-      });
+
+    self.registration.showNotification(title, options).catch((error) => {
+      console.error("Error showing notification:", error);
+    });
   }
 });

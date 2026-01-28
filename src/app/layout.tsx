@@ -21,12 +21,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Attractions App",
   description:
-    "Приложение для управления контактами с возможностью отслеживания событий",
+    "Приложение для создания и управления группами достопримечательностей с интерактивной картой",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Contacts",
+    title: "Attractions",
   },
   icons: {
     icon: [
@@ -40,16 +40,16 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    siteName: "Contacts App",
-    title: "Contacts App",
+    siteName: "Attractions App",
+    title: "Attractions App",
     description:
-      "Приложение для управления контактами с возможностью отслеживания событий",
+      "Приложение для создания и управления группами достопримечательностей с интерактивной картой.",
   },
   twitter: {
     card: "summary",
-    title: "Contacts App",
+    title: "Attractions App",
     description:
-      "Приложение для управления контактами с возможностью отслеживания событий",
+      "Приложение для создания и управления группами достопримечательностей с интерактивной картой.",
   },
 };
 
