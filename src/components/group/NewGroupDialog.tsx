@@ -90,14 +90,16 @@ export const NewGroupDialog = ({
           ) : (
             <>
               <Plus className="mr-2 h-4 w-4" />
-              Создать группу
+              Добавить
             </>
           )}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Создать новую группу</DialogTitle>
+          <DialogTitle>
+            {groupData ? "Изменить группу" : "Создать новую группу"}
+          </DialogTitle>
           <DialogDescription>
             {groupData
               ? "Измените информацию о группе"

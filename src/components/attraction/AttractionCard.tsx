@@ -11,6 +11,7 @@ import { ConfirmDialog } from "../ui/ConfirmDialog";
 import { NewAttractionDialog } from "./NewAttractionDialog";
 import { useState } from "react";
 import { Attraction, CreateAttractionRequest } from "@/types/attraction";
+import Link from "next/link";
 
 // Используем тип Attraction из types/attraction.ts вместо интерфейса AttractionItem
 type AttractionItem = Attraction;
@@ -52,7 +53,11 @@ export function AttractionCard({
         <div className="flex justify-between items-start">
           <div className="flex-1">
             <div className="flex justify-between items-start">
-              <CardTitle className="text-lg">{attraction.name}</CardTitle>
+              <Link href={`/attractions/${attraction.id}`}>
+                <CardTitle className="text-lg hover:shadow-md transition-shadow cursor-pointer">
+                  {attraction.name}
+                </CardTitle>
+              </Link>
               {attraction.isFavorite && (
                 <Star className="h-5 w-5 text-yellow-500" />
               )}
