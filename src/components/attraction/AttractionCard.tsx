@@ -37,7 +37,9 @@ export function AttractionCard({
   };
 
   return (
-    <Card className="overflow-hidden">
+    <Card
+      className={`overflow-hidden ${attraction.isVisited ? "bg-green-50" : ""}`}
+    >
       <div className="aspect-video bg-gray-100 flex items-center justify-center">
         <Link href={`/attractions/${attraction.id}`} className="cursor-pointer">
           {attraction.imageUrl ? (
@@ -67,11 +69,6 @@ export function AttractionCard({
             <span className="inline-block px-2 py-1 text-xs bg-primary/10 text-primary rounded-full mt-1">
               {attraction.category}
             </span>
-            {attraction.isVisited && (
-              <span className="inline-block px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full mt-1">
-                Посещено
-              </span>
-            )}
           </div>
           <div className="flex space-x-1">
             <NewAttractionDialog
