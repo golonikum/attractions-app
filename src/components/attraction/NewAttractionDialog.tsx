@@ -55,7 +55,7 @@ export const NewAttractionDialog = ({
 
     try {
       await handleSubmit?.(formData);
-      toast.success(`Объект успешно ${attraction ? "обновлена" : "создана"}`);
+      toast.success(`Объект успешно ${attraction ? "обновлен" : "создан"}`);
       setIsOpen(false);
 
       // Сброс формы
