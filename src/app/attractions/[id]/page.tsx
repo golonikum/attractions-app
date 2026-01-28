@@ -12,11 +12,12 @@ import {
 } from "@/services/attractionService";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Loader2, ArrowLeft, MapPin } from "lucide-react";
+import { Loader2, ArrowLeft, Trash2 } from "lucide-react";
 import { NewAttractionDialog } from "@/components/attraction/NewAttractionDialog";
 import { AttractionInfoCard } from "@/components/attraction/AttractionInfoCard";
 import { Group } from "@/types/group";
 import { getGroupById } from "@/services/groupService";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 
 export default function AttractionDetailPage() {
   const params = useParams();
@@ -67,6 +68,18 @@ export default function AttractionDetailPage() {
     }
   };
 
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    handleDeleteAttraction();
+    setIsDeleteDialogOpen(false);
+  };
+
   if (isLoading) {
     return (
       <ProtectedRoute>
@@ -102,22 +115,14 @@ export default function AttractionDetailPage() {
       <Navigation />
       <div className="container mx-auto pt-20 px-4 pb-8">
         <div className="flex items-center mb-6">
-          <Button
-            variant="ghost"
-            onClick={() => router.push("/groups")}
-            className="mr-4"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Назад
-          </Button>
-
           {group && (
             <Button
               variant="ghost"
               onClick={() => router.push(`/groups/${group.id}`)}
               className="mr-4"
             >
-              <MapPin className="mr-2 h-4 w-4" />К группе
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Назад
             </Button>
           )}
 
@@ -131,17 +136,30 @@ export default function AttractionDetailPage() {
               setIsSubmitting={setIsSubmitting}
             />
           </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-red-500"
+            onClick={handleDeleteClick}
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
         </div>
 
         <div className="mb-6">
-          <AttractionInfoCard 
-            attraction={attraction} 
-            onDelete={async () => {
-              await handleDeleteAttraction();
-            }}
-            onEdit={() => setIsEditDialogOpen(true)}
-          />
+          <AttractionInfoCard attraction={attraction} />
         </div>
+
+        <ConfirmDialog
+          isOpen={isDeleteDialogOpen}
+          onClose={() => setIsDeleteDialogOpen(false)}
+          onConfirm={handleConfirmDelete}
+          title="Удалить объект?"
+          description="Вы уверены, что хотите удалить этот объект?"
+          confirmText="Удалить"
+          cancelText="Отмена"
+          variant="destructive"
+        />
       </div>
     </ProtectedRoute>
   );

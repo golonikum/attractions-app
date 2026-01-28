@@ -39,22 +39,24 @@ export function AttractionCard({
   return (
     <Card className="overflow-hidden">
       <div className="aspect-video bg-gray-100 flex items-center justify-center">
-        {attraction.imageUrl ? (
-          <img
-            src={attraction.imageUrl}
-            alt={attraction.name}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <Image className="h-8 w-8 text-gray-400" />
-        )}
+        <Link href={`/attractions/${attraction.id}`} className="cursor-pointer">
+          {attraction.imageUrl ? (
+            <img
+              src={attraction.imageUrl}
+              alt={attraction.name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <Image className="h-8 w-8 text-gray-400" />
+          )}
+        </Link>
       </div>
       <CardHeader>
         <div className="flex justify-between items-start">
           <div className="flex-1">
             <div className="flex justify-between items-start">
               <Link href={`/attractions/${attraction.id}`}>
-                <CardTitle className="text-lg hover:shadow-md transition-shadow cursor-pointer">
+                <CardTitle className="text-lg cursor-pointer">
                   {attraction.name}
                 </CardTitle>
               </Link>
