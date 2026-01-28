@@ -37,9 +37,7 @@ export function AttractionCard({
   };
 
   return (
-    <Card
-      className={`overflow-hidden ${attraction.isVisited ? "bg-green-50" : ""} ${attraction.isFavorite ? "border-2 border-yellow-500" : ""}`}
-    >
+    <Card isFavorite={attraction.isFavorite} isVisited={attraction.isVisited}>
       <div className="aspect-video bg-gray-100 flex items-center justify-center">
         <Link href={`/attractions/${attraction.id}`} className="cursor-pointer">
           {attraction.imageUrl ? (
