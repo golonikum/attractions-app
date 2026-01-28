@@ -12,7 +12,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-sm",
+      "rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden",
       isVisited ? "bg-green-50" : undefined,
       isFavorite ? "border-2 border-yellow-500" : undefined,
       className,
