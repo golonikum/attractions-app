@@ -12,13 +12,11 @@ export function GroupInfoCard({ group }: GroupInfoCardProps) {
       <CardHeader>
         <div className="flex gap-4 justify-between items-start">
           <CardTitle>{group.name}</CardTitle>
-          {group.tag && (
-            <Tag text={group.tag} variant="default" />
-          )}
+          {group.tag && <Tag text={group.tag} variant="default" />}
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-gray-600 mb-4">{group.description}</p>
+        <p className="text-gray-600">{group.description}</p>
       </CardContent>
     </Card>
   );
