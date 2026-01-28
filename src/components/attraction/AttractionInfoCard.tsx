@@ -46,7 +46,11 @@ export function AttractionInfoCard({ attraction }: AttractionInfoCardProps) {
 
         {attraction.yaMapUrl && (
           <div className="mt-4">
-            <Button variant="outline" className="w-full">
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => window.open(attraction.yaMapUrl, "_blank")}
+            >
               <MapPin className="mr-2 h-4 w-4" />
               Открыть на Яндекс.Картах
             </Button>
