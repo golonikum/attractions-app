@@ -59,7 +59,7 @@ export default function GroupsPage() {
       <Navigation />
       <div className="container mx-auto pt-20 px-4 pb-8">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">Мои группы</h1>
+          <h1 className="text-3xl font-bold"></h1>
           <NewGroupDialog
             handleSubmit={handleSubmit}
             isOpen={isCreateDialogOpen}

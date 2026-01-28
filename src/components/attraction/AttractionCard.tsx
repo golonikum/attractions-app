@@ -38,7 +38,7 @@ export function AttractionCard({
 
   return (
     <Card
-      className={`overflow-hidden ${attraction.isVisited ? "bg-green-50" : ""}`}
+      className={`overflow-hidden ${attraction.isVisited ? "bg-green-50" : ""} ${attraction.isFavorite ? "border-2 border-yellow-950" : ""}`}
     >
       <div className="aspect-video bg-gray-100 flex items-center justify-center">
         <Link href={`/attractions/${attraction.id}`} className="cursor-pointer">
@@ -62,9 +62,6 @@ export function AttractionCard({
                   {attraction.name}
                 </CardTitle>
               </Link>
-              {attraction.isFavorite && (
-                <Star className="h-5 w-5 text-yellow-500" />
-              )}
             </div>
             <span className="inline-block px-2 py-1 text-xs bg-primary/10 text-primary rounded-full mt-1">
               {attraction.category}
