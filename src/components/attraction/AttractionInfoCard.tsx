@@ -10,7 +10,7 @@ interface AttractionInfoCardProps {
 export function AttractionInfoCard({ attraction }: AttractionInfoCardProps) {
   return (
     <Card
-      className={`overflow-hidden ${attraction.isVisited ? "bg-green-50" : ""} ${attraction.isFavorite ? "border-2 border-yellow-950" : ""}`}
+      className={`overflow-hidden ${attraction.isVisited ? "bg-green-50" : ""} ${attraction.isFavorite ? "border-2 border-yellow-500" : ""}`}
     >
       <CardHeader>
         <div className="flex gap-4 justify-between items-start">
