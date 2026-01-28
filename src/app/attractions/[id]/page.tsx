@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Navigation } from "@/components/Navigation";
@@ -58,15 +58,20 @@ export default function AttractionDetailPage() {
   };
 
   // Обработчик удаления достопримечательности
-  const handleDeleteAttraction = async () => {
+  const handleDeleteAttraction = useCallback(async () => {
     try {
       await deleteAttraction(attractionId);
       toast.success("Объект успешно удален");
-      router.push("/groups");
+
+      if (group) {
+        router.push(`/groups/${group?.id}`);
+      } else {
+        router.push("/groups");
+      }
     } catch (error) {
       toast.error("Не удалось удалить объект");
     }
-  };
+  }, [group]);
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
