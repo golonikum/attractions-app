@@ -6,13 +6,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MapPin, Trash2, Image, Star } from "lucide-react";
+import { MapPin, Image } from "lucide-react";
 import { ConfirmDialog } from "../ui/ConfirmDialog";
 import { NewAttractionDialog } from "./NewAttractionDialog";
 import { useState } from "react";
 import { Attraction, CreateAttractionRequest } from "@/types/attraction";
 import Link from "next/link";
 import { Tag } from "../ui/Tag";
+import { RemoveButton } from "../ui/buttons";
 
 // Используем тип Attraction из types/attraction.ts вместо интерфейса AttractionItem
 type AttractionItem = Attraction;
@@ -73,14 +74,7 @@ export function AttractionCard({
               isSubmitting={isSubmitting}
               setIsSubmitting={setIsSubmitting}
             />
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-red-500"
-              onClick={handleDeleteClick}
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
+            <RemoveButton onClick={handleDeleteClick} />
           </div>
           <ConfirmDialog
             isOpen={isDeleteDialogOpen}

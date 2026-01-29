@@ -22,10 +22,6 @@ export function AttractionInfoCard({ attraction }: AttractionInfoCardProps) {
       </CardHeader>
 
       <CardContent>
-        {attraction.description && (
-          <p className="text-gray-600 mb-4">{attraction.description}</p>
-        )}
-
         {attraction.imageUrl && (
           <div className="mb-4">
             <img
@@ -34,6 +30,10 @@ export function AttractionInfoCard({ attraction }: AttractionInfoCardProps) {
               className="w-full h-48 object-cover rounded-md"
             />
           </div>
+        )}
+
+        {attraction.description && (
+          <p className="text-gray-600 mb-4">{attraction.description}</p>
         )}
 
         <div className="flex justify-between text-sm text-gray-500 mb-4">

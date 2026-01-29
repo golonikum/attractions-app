@@ -6,12 +6,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MapPin, Trash2 } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Group } from "@/types/group";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { useState } from "react";
 import { Tag } from "../ui/Tag";
+import { RemoveButton } from "../ui/buttons";
 
 interface GroupCardProps {
   group: Group;
@@ -40,14 +41,7 @@ export function GroupCard({ group, onDelete }: GroupCardProps) {
             <CardTitle className="text-lg">{group.name}</CardTitle>
             {group.tag && <Tag text={group.tag} />}
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-red-500 ml-2"
-            onClick={handleDeleteClick}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+          <RemoveButton onClick={handleDeleteClick} />
 
           <ConfirmDialog
             isOpen={isDeleteDialogOpen}

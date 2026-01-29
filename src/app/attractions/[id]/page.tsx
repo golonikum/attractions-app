@@ -10,14 +10,14 @@ import {
   updateAttraction,
   deleteAttraction,
 } from "@/services/attractionService";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Loader2, ArrowLeft, Trash2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { NewAttractionDialog } from "@/components/attraction/NewAttractionDialog";
 import { AttractionInfoCard } from "@/components/attraction/AttractionInfoCard";
 import { Group } from "@/types/group";
 import { getGroupById } from "@/services/groupService";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { BackButton, RemoveButton } from "@/components/ui/buttons";
 
 export default function AttractionDetailPage() {
   const params = useParams();
@@ -105,10 +105,6 @@ export default function AttractionDetailPage() {
         <div className="container mx-auto pt-20 px-4 pb-8">
           <div className="text-center py-12">
             <h2 className="text-2xl font-bold">Объект не найден</h2>
-            <Button className="mt-4" onClick={() => router.push("/groups")}>
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Вернуться к списку групп
-            </Button>
           </div>
         </div>
       </ProtectedRoute>
@@ -119,17 +115,8 @@ export default function AttractionDetailPage() {
     <ProtectedRoute>
       <Navigation />
       <div className="container mx-auto pt-20 px-4 pb-8">
-        <div className="flex items-center mb-6">
-          {group && (
-            <Button
-              variant="ghost"
-              onClick={() => router.push(`/groups/${group.id}`)}
-              className="mr-4"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Назад
-            </Button>
-          )}
+        <div className="flex items-center mb-6 gap-2">
+          {group && <BackButton route={`/groups/${group.id}`} />}
 
           <div className="ml-auto flex space-x-2">
             <NewAttractionDialog
@@ -141,14 +128,7 @@ export default function AttractionDetailPage() {
               setIsSubmitting={setIsSubmitting}
             />
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-red-500"
-            onClick={handleDeleteClick}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+          <RemoveButton onClick={handleDeleteClick} />
         </div>
 
         <div className="mb-6">

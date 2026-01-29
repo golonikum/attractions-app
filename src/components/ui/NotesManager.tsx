@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Button } from "./button";
 import { Input } from "./input";
 import { Textarea } from "./textarea";
-import { Trash2, Plus, Calendar } from "lucide-react";
+import { Plus, Calendar } from "lucide-react";
 import { NoteType } from "@/types/attraction";
+import { RemoveButton } from "./buttons";
 
 interface NotesManagerProps {
   notes: NoteType[];
@@ -41,7 +42,6 @@ export function NotesManager({ notes, onChange }: NotesManagerProps) {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <h4 className="font-medium">Заметки</h4>
         {notes.length === 0 && (
           <p className="text-sm text-gray-500">Нет заметок</p>
         )}
@@ -68,15 +68,7 @@ export function NotesManager({ notes, onChange }: NotesManagerProps) {
                 className="col-span-1 md:col-span-1"
               />
             </div>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={() => removeNote(index)}
-              className="mt-1"
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
+            <RemoveButton onClick={() => removeNote(index)} />
           </div>
         ))}
       </div>

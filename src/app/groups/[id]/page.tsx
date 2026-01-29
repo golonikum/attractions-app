@@ -23,6 +23,7 @@ import {
 import { NewAttractionDialog } from "@/components/attraction/NewAttractionDialog";
 import { NewGroupDialog } from "@/components/group/NewGroupDialog";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { BackButton } from "@/components/ui/buttons";
 
 // Используем тип Attraction из types/attraction.ts
 
@@ -139,14 +140,7 @@ export default function GroupDetailPage() {
       <Navigation />
       <div className="container mx-auto pt-20 px-4 pb-8">
         <div className="flex items-center mb-6">
-          <Button
-            variant="ghost"
-            onClick={() => router.push("/groups")}
-            className="mr-4"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Назад
-          </Button>
+          <BackButton route="/groups" />
           <div className="ml-auto flex space-x-2">
             <NewGroupDialog
               groupData={group}
