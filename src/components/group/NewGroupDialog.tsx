@@ -1,4 +1,4 @@
-import { Edit, Loader2, Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -15,6 +15,7 @@ import { CoordinatesInput } from "../ui/CoordinatesInput";
 import { useEffect, useState } from "react";
 import { CreateGroupRequest, Group } from "@/types/group";
 import { toast } from "sonner";
+import { EditButton } from "../ui/buttons";
 
 export const NewGroupDialog = ({
   isOpen,
@@ -83,10 +84,7 @@ export const NewGroupDialog = ({
       <DialogTrigger asChild>
         <Button>
           {groupData ? (
-            <>
-              <Edit className="mr-2 h-4 w-4" />
-              Изменить
-            </>
+            <EditButton />
           ) : (
             <>
               <Plus className="mr-2 h-4 w-4" />
