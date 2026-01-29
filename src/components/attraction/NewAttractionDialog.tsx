@@ -12,6 +12,7 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { CoordinatesInput } from "../ui/CoordinatesInput";
+import { NotesManager } from "../ui/NotesManager";
 import { useState, useEffect } from "react";
 import { CreateAttractionRequest, Attraction } from "@/types/attraction";
 import { toast } from "sonner";
@@ -236,6 +237,15 @@ export const NewAttractionDialog = ({
               rows={5}
             />
           </div>
+
+          <div className="space-y-2">
+            <Label>Заметки</Label>
+            <NotesManager
+              notes={formData.notes || []}
+              onChange={(notes) => setFormData({ ...formData, notes })}
+            />
+          </div>
+
           <div className="flex justify-end space-x-2">
             <Button
               type="button"

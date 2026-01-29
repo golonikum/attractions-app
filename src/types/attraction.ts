@@ -11,7 +11,7 @@ export interface Attraction {
   isFavorite?: boolean;
   coordinates: [number, number]; // [долгота, широта]
   order?: number;
-  notes?: Array<{ date: string; note: string }>;
+  notes?: Array<NoteType>;
   createdAt: string;
   updatedAt: string;
 }
@@ -27,7 +27,7 @@ export interface CreateAttractionRequest {
   isFavorite?: boolean;
   coordinates: [number, number]; // [долгота, широта]
   order?: number;
-  notes?: Array<{ date: string; note: string }>;
+  notes?: Array<NoteType>;
 }
 
 export interface UpdateAttractionRequest {
@@ -40,5 +40,10 @@ export interface UpdateAttractionRequest {
   isFavorite?: boolean;
   coordinates?: [number, number]; // [долгота, широта]
   order?: number;
-  notes?: Array<{ date: string; note: string }>;
+  notes?: Array<NoteType>;
+}
+
+export interface NoteType {
+  date: string;
+  note: string;
 }

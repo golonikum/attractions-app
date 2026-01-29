@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MapPin } from "lucide-react";
+import { MapPin, Calendar } from "lucide-react";
 import { Attraction } from "@/types/attraction";
 import { Tag } from "@/components/ui/Tag";
 
@@ -17,9 +17,7 @@ export function AttractionInfoCard({ attraction }: AttractionInfoCardProps) {
           {attraction.category && (
             <Tag text={attraction.category} variant="default" />
           )}
-          {attraction.isFavorite && (
-            <Tag text="Избранное" variant="warning" />
-          )}
+          {attraction.isFavorite && <Tag text="Избранное" variant="warning" />}
         </div>
       </CardHeader>
 
@@ -45,6 +43,26 @@ export function AttractionInfoCard({ attraction }: AttractionInfoCardProps) {
           </span>
           <span>Порядок: {attraction.order}</span>
         </div>
+
+        {attraction.notes && attraction.notes.length > 0 && (
+          <div className="mt-4">
+            <h4 className="font-medium mb-2 flex items-center">
+              <Calendar className="mr-2 h-4 w-4" />
+              Заметки ({attraction.notes.length})
+            </h4>
+            <div className="space-y-2">
+              {attraction.notes.map((note, index) => (
+                <div
+                  key={index}
+                  className="border-l-4 border-blue-500 pl-3 py-1"
+                >
+                  <div className="text-sm text-gray-500">{note.date}</div>
+                  <p className="text-sm">{note.note}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {attraction.yaMapUrl && (
           <div className="mt-4">
