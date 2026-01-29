@@ -2,9 +2,9 @@
 
 import { MouseEventHandler } from "react";
 import { Button } from "../button";
-import { Edit } from "lucide-react";
+import { Plus } from "lucide-react";
 
-export const EditButton = ({
+export const AddButton = ({
   onClick,
 }: {
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -14,10 +14,10 @@ export const EditButton = ({
       variant="ghost"
       size="sm"
       onClick={onClick}
-      title="Изменить"
-      className="cursor-pointer"
+      title="Добавить"
+      className="text-green-500 cursor-pointer"
     >
-      <Edit className="h-4 w-4" />
+      <Plus className="h-4 w-4" />
     </Button>
   );
 };

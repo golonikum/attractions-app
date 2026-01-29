@@ -1,4 +1,4 @@
-import { Loader2, Plus } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -15,7 +15,7 @@ import { CoordinatesInput } from "../ui/CoordinatesInput";
 import { useEffect, useState } from "react";
 import { CreateGroupRequest, Group } from "@/types/group";
 import { toast } from "sonner";
-import { EditButton } from "../ui/buttons";
+import { AddButton, EditButton } from "../ui/buttons";
 
 export const NewGroupDialog = ({
   isOpen,
@@ -82,16 +82,7 @@ export const NewGroupDialog = ({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>
-          {groupData ? (
-            <EditButton />
-          ) : (
-            <>
-              <Plus className="mr-2 h-4 w-4" />
-              Добавить
-            </>
-          )}
-        </Button>
+        {groupData ? <EditButton /> : <AddButton />}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

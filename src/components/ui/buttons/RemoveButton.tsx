@@ -13,7 +13,7 @@ export const RemoveButton = ({
     <Button
       variant="ghost"
       size="sm"
-      className="text-red-500"
+      className="text-red-500 cursor-pointer"
       onClick={onClick}
       title="Удалить"
     >

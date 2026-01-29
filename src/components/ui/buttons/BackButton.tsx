@@ -11,7 +11,7 @@ export const BackButton = ({ route }: { route: string }) => {
       variant="ghost"
       size="sm"
       onClick={() => router.push(route)}
-      className="mr-4"
+      className="mr-4 cursor-pointer"
     >
       <ArrowLeft className="mr-2 h-4 w-4" />
       Назад

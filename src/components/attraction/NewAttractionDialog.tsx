@@ -1,4 +1,4 @@
-import { Plus, Loader2, Star } from "lucide-react";
+import { Loader2, Star } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -16,7 +16,7 @@ import { NotesManager } from "../ui/NotesManager";
 import { useState, useEffect } from "react";
 import { CreateAttractionRequest, Attraction } from "@/types/attraction";
 import { toast } from "sonner";
-import { EditButton } from "../ui/buttons";
+import { AddButton, EditButton } from "../ui/buttons";
 
 interface NewAttractionDialogProps {
   isOpen: boolean;
@@ -103,14 +103,7 @@ export const NewAttractionDialog = ({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        {attraction ? (
-          <EditButton />
-        ) : (
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            Объект
-          </Button>
-        )}
+        {attraction ? <EditButton /> : <AddButton />}
       </DialogTrigger>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
