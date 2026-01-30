@@ -141,7 +141,7 @@ export default function GroupDetailPage() {
       <div className="container mx-auto pt-20 px-4 pb-8">
         <div className="flex items-center mb-6">
           <BackButton route="/groups" />
-          <div className="ml-auto flex space-x-2">
+          <div className="ml-auto flex space-x-1">
             <NewGroupDialog
               groupData={group}
               handleSubmit={handleSubmit}

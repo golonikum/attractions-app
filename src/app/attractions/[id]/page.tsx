@@ -118,7 +118,7 @@ export default function AttractionDetailPage() {
         <div className="flex items-center mb-6 gap-2">
           {group && <BackButton route={`/groups/${group.id}`} />}
 
-          <div className="ml-auto flex space-x-2">
+          <div className="ml-auto flex space-x-1">
             <NewAttractionDialog
               attraction={attraction}
               isOpen={isEditDialogOpen}
@@ -127,8 +127,8 @@ export default function AttractionDetailPage() {
               isSubmitting={isSubmitting}
               setIsSubmitting={setIsSubmitting}
             />
+            <RemoveButton onClick={handleDeleteClick} />
           </div>
-          <RemoveButton onClick={handleDeleteClick} />
         </div>
 
         <div className="mb-6">

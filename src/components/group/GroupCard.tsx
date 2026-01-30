@@ -40,7 +40,7 @@ export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
   return (
     <Card className="overflow-hidden">
       <CardHeader>
-        <div className="flex justify-between items-start space-x-2">
+        <div className="flex justify-between items-start space-x-1">
           <div className="flex-1 cursor-pointer" onClick={handleCardClick}>
             <CardTitle className="text-lg">{group.name}</CardTitle>
             {group.tag && <Tag text={group.tag} />}
