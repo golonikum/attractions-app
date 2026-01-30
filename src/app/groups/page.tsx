@@ -48,7 +48,13 @@ export default function GroupsPage() {
   const getHandleUpdate =
     (groupId: string) => async (formData: CreateGroupRequest) => {
       const updatedGroup = await updateGroup(groupId, formData);
-      setGroups([...groups, updatedGroup]);
+      const index = groups.findIndex((item) => item.id === groupId);
+
+      if (index !== -1) {
+        const newGroups = [...groups];
+        newGroups.splice(index, 1, updatedGroup);
+        setGroups(newGroups);
+      }
     };
 
   // Обработчик удаления группы
