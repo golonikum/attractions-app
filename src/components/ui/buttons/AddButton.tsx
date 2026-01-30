@@ -2,7 +2,7 @@
 
 import { MouseEventHandler } from "react";
 import { Button } from "../button";
-import { Plus } from "lucide-react";
+import { SquarePlus } from "lucide-react";
 
 export const AddButton = ({
   onClick,
@@ -17,7 +17,7 @@ export const AddButton = ({
       title="Добавить"
       className="text-green-500 cursor-pointer"
     >
-      <Plus className="h-4 w-4" />
+      <SquarePlus className="h-4 w-4" />
     </Button>
   );
 };
