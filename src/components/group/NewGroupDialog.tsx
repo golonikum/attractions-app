@@ -82,7 +82,11 @@ export const NewGroupDialog = ({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        {groupData ? <EditButton /> : <AddButton />}
+        {groupData ? (
+          <EditButton />
+        ) : (
+          <AddButton title="Добавить новую группу" />
+        )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

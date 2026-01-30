@@ -8,6 +8,7 @@ import {
   getAllGroups,
   createGroup,
   deleteGroup,
+  updateGroup,
 } from "@/services/groupService";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
@@ -42,6 +43,13 @@ export default function GroupsPage() {
     const newGroup = await createGroup(formData);
     setGroups([...groups, newGroup]);
   };
+
+  // Обработчик отправки формы обновления группы
+  const getHandleUpdate =
+    (groupId: string) => async (formData: CreateGroupRequest) => {
+      const updatedGroup = await updateGroup(groupId, formData);
+      setGroups([...groups, updatedGroup]);
+    };
 
   // Обработчик удаления группы
   const handleDeleteGroup = async (id: string) => {
@@ -82,6 +90,7 @@ export default function GroupsPage() {
                 key={group.id}
                 group={group}
                 onDelete={handleDeleteGroup}
+                onUpdate={getHandleUpdate(group.id)}
               />
             ))}
           </div>

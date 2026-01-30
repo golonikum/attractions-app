@@ -6,15 +6,17 @@ import { SquarePlus } from "lucide-react";
 
 export const AddButton = ({
   onClick,
+  title = "Добавить",
 }: {
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  title?: string;
 }) => {
   return (
     <Button
       variant="ghost"
       size="sm"
       onClick={onClick}
-      title="Добавить"
+      title={title}
       className="text-green-500 cursor-pointer"
     >
       <SquarePlus className="h-4 w-4" />

@@ -8,20 +8,24 @@ import {
 import { Button } from "@/components/ui/button";
 import { MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Group } from "@/types/group";
+import { CreateGroupRequest, Group } from "@/types/group";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { useState } from "react";
 import { Tag } from "../ui/Tag";
 import { RemoveButton } from "../ui/buttons";
+import { NewGroupDialog } from "./NewGroupDialog";
 
 interface GroupCardProps {
   group: Group;
   onDelete: (id: string) => void;
+  onUpdate: (formData: CreateGroupRequest) => Promise<void>;
 }
 
-export function GroupCard({ group, onDelete }: GroupCardProps) {
+export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
   const router = useRouter();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleCardClick = () => {
     router.push(`/groups/${group.id}`);
@@ -41,6 +45,14 @@ export function GroupCard({ group, onDelete }: GroupCardProps) {
             <CardTitle className="text-lg">{group.name}</CardTitle>
             {group.tag && <Tag text={group.tag} />}
           </div>
+          <NewGroupDialog
+            groupData={group}
+            handleSubmit={onUpdate}
+            isOpen={isEditDialogOpen}
+            setIsOpen={setIsEditDialogOpen}
+            isSubmitting={isSubmitting}
+            setIsSubmitting={setIsSubmitting}
+          />
           <RemoveButton onClick={handleDeleteClick} />
 
           <ConfirmDialog

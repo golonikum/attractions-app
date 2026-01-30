@@ -65,7 +65,7 @@ export function AttractionCard({
             </div>
             {attraction.category && <Tag text={attraction.category} />}
           </div>
-          <div className="flex space-x-1">
+          <div className="flex space-x-2">
             <NewAttractionDialog
               attraction={attraction}
               isOpen={isEditDialogOpen}

@@ -103,7 +103,11 @@ export const NewAttractionDialog = ({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        {attraction ? <EditButton /> : <AddButton />}
+        {attraction ? (
+          <EditButton />
+        ) : (
+          <AddButton title="Добавить новый объект" />
+        )}
       </DialogTrigger>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
