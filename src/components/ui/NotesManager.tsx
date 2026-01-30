@@ -92,7 +92,7 @@ export function NotesManager({ notes, onChange }: NotesManagerProps) {
             className="col-span-1 md:col-span-1"
           />
         </div>
-        <AddButton title="Добавить заметку" onClick={addNote} type="note" />
+        <AddButton title="Добавить заметку" onClick={addNote} view="note" />
       </div>
     </div>
   );

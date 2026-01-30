@@ -9,13 +9,13 @@ type AddButtonType = "default" | "note";
 export const AddButton = ({
   onClick,
   title = "Добавить",
-  type = "default",
+  view = "default",
 }: {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   title?: string;
-  type?: AddButtonType;
+  view?: AddButtonType;
 }) => {
-  const Icon = type === "default" ? SquarePlus : MessageSquarePlus;
+  const Icon = view === "note" ? MessageSquarePlus : SquarePlus;
 
   return (
     <Button
@@ -24,6 +24,7 @@ export const AddButton = ({
       onClick={onClick}
       title={title}
       className="text-green-600 cursor-pointer"
+      type="button"
     >
       <Icon className="h-4 w-4" />
     </Button>
