@@ -134,7 +134,7 @@ export const NewAttractionDialog = ({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="category">Категория</Label>
+              <Label htmlFor="category">Категория (необязательно)</Label>
               <Input
                 id="category"
                 value={formData.category}
@@ -222,7 +222,7 @@ export const NewAttractionDialog = ({
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="description">Описание</Label>
+            <Label htmlFor="description">Описание (необязательно)</Label>
             <Textarea
               id="description"
               value={formData.description}
