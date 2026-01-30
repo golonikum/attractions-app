@@ -1,24 +1,10 @@
 "use client";
 
-import {
-  ForwardRefExoticComponent,
-  MouseEventHandler,
-  RefAttributes,
-} from "react";
+import { MouseEventHandler } from "react";
 import { Button } from "../button";
-import { LucideProps, MessageSquarePlus, SquarePlus } from "lucide-react";
+import { MessageSquarePlus, SquarePlus } from "lucide-react";
 
 type AddButtonType = "default" | "note";
-
-const iconsMap: Record<
-  AddButtonType,
-  ForwardRefExoticComponent<
-    Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
-  >
-> = {
-  default: SquarePlus,
-  note: MessageSquarePlus,
-};
 
 export const AddButton = ({
   onClick,
@@ -29,7 +15,7 @@ export const AddButton = ({
   title?: string;
   type?: AddButtonType;
 }) => {
-  const Icon = iconsMap[type];
+  const Icon = type === "default" ? SquarePlus : MessageSquarePlus;
 
   return (
     <Button
