@@ -17,7 +17,7 @@ export const AddButton = ({
       size="sm"
       onClick={onClick}
       title={title}
-      className="text-green-500 cursor-pointer"
+      className="text-green-600 cursor-pointer"
     >
       <SquarePlus className="h-4 w-4" />
     </Button>
