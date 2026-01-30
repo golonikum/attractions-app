@@ -4,7 +4,7 @@ import { Input } from "./input";
 import { Textarea } from "./textarea";
 import { Plus, Calendar } from "lucide-react";
 import { NoteType } from "@/types/attraction";
-import { RemoveButton } from "./buttons";
+import { AddButton, RemoveButton } from "./buttons";
 
 interface NotesManagerProps {
   notes: NoteType[];
@@ -87,14 +87,12 @@ export function NotesManager({ notes, onChange }: NotesManagerProps) {
           <Textarea
             value={newNote.note}
             onChange={(e) => setNewNote({ ...newNote, note: e.target.value })}
-            placeholder="Добавить новую заметку..."
+            placeholder="Текст заметки"
             rows={2}
             className="col-span-1 md:col-span-1"
           />
         </div>
-        <Button type="button" variant="outline" size="icon" onClick={addNote}>
-          <Plus className="h-4 w-4" />
-        </Button>
+        <AddButton title="Добавить заметку" onClick={addNote} type="note" />
       </div>
     </div>
   );
