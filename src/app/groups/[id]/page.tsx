@@ -151,14 +151,6 @@ export default function GroupDetailPage() {
               isSubmitting={isSubmitting}
               setIsSubmitting={setIsSubmitting}
             />
-            <NewAttractionDialog
-              isOpen={isAddAttractionDialogOpen}
-              setIsOpen={setIsAddAttractionDialogOpen}
-              handleSubmit={handleAddAttraction}
-              isSubmitting={isSubmittingAttraction}
-              setIsSubmitting={setIsSubmittingAttraction}
-              groupId={groupId}
-            />
           </div>
         </div>
 
@@ -171,9 +163,14 @@ export default function GroupDetailPage() {
             <div>
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">Объекты</h2>
-                <Button onClick={() => setIsAddAttractionDialogOpen(true)}>
-                  Добавить объект
-                </Button>
+                <NewAttractionDialog
+                  isOpen={isAddAttractionDialogOpen}
+                  setIsOpen={setIsAddAttractionDialogOpen}
+                  handleSubmit={handleAddAttraction}
+                  isSubmitting={isSubmittingAttraction}
+                  setIsSubmitting={setIsSubmittingAttraction}
+                  groupId={groupId}
+                />
               </div>
               {attractions.length === 0 ? (
                 <EmptyAttractionsState

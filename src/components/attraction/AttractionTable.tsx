@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import { Attraction, CreateAttractionRequest } from "@/types/attraction";
 import { NewAttractionDialog } from "./NewAttractionDialog";
 import { useState } from "react";
@@ -17,6 +18,7 @@ export function AttractionTable({
   onDelete,
   onUpdate,
 }: AttractionTableProps) {
+  const router = useRouter();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -59,7 +61,11 @@ export function AttractionTable({
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {attractions.map((attraction) => (
-            <tr key={attraction.id} className="hover:bg-gray-50">
+            <tr
+              key={attraction.id}
+              className="hover:bg-gray-50 cursor-pointer"
+              onClick={() => router.push(`/attractions/${attraction.id}`)}
+            >
               <td className="px-6 py-4 whitespace-nowrap">
                 {attraction.imageUrl ? (
                   <img
