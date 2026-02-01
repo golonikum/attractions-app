@@ -161,28 +161,119 @@ export default function GroupDetailPage() {
           </div>
         </div>
 
-        {isMobile ? (
+        {!isMobile ? (
           <>
             <div className="mb-6">
               <GroupInfoCard group={group} />
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold mb-4">Объекты</h2>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold">Объекты</h2>
+                <Button onClick={() => setIsAddAttractionDialogOpen(true)}>
+                  Добавить объект
+                </Button>
+              </div>
               {attractions.length === 0 ? (
                 <EmptyAttractionsState
                   onAddAttraction={() => setIsAddAttractionDialogOpen(true)}
                 />
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {attractions.map((attraction) => (
-                    <AttractionCard
-                      key={attraction.id}
-                      attraction={attraction}
-                      onDelete={() => handleDeleteAttraction(attraction.id)}
-                      onUpdate={handleUpdateAttraction(attraction.id)}
-                    />
-                  ))}
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Изображение
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Название
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Описание
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Действия
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {attractions.map((attraction) => (
+                        <tr key={attraction.id} className="hover:bg-gray-50">
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            {attraction.imageUrl ? (
+                              <img
+                                className="h-16 w-16 rounded-md object-cover"
+                                src={attraction.imageUrl}
+                                alt={attraction.name}
+                              />
+                            ) : (
+                              <div className="h-16 w-16 rounded-md bg-gray-200 flex items-center justify-center">
+                                <span className="text-gray-500 text-xs">
+                                  Нет изображения
+                                </span>
+                              </div>
+                            )}
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="text-sm font-medium text-gray-900">
+                              {attraction.name}
+                            </div>
+                            {attraction.category && (
+                              <div className="text-sm text-gray-500">
+                                {attraction.category}
+                              </div>
+                            )}
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="text-sm text-gray-900 max-w-xs truncate">
+                              {attraction.description || "Нет описания"}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div className="flex space-x-2">
+                              <NewAttractionDialog
+                                isOpen={false}
+                                setIsOpen={() => {}}
+                                handleSubmit={handleUpdateAttraction(
+                                  attraction.id,
+                                )}
+                                isSubmitting={false}
+                                setIsSubmitting={() => {}}
+                                groupId={groupId}
+                                attraction={attraction}
+                              >
+                                <Button variant="ghost" size="sm">
+                                  Редактировать
+                                </Button>
+                              </NewAttractionDialog>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() =>
+                                  handleDeleteAttraction(attraction.id)
+                                }
+                              >
+                                Удалить
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               )}
             </div>
