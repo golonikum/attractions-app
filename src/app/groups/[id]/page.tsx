@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { AttractionCard } from "@/components/attraction/AttractionCard";
+import { AttractionTable } from "@/components/attraction/AttractionTable";
 import { EmptyAttractionsState } from "@/components/group/EmptyAttractionsState";
 import { GroupInfoCard } from "@/components/group/GroupInfoCard";
 
@@ -179,102 +180,11 @@ export default function GroupDetailPage() {
                   onAddAttraction={() => setIsAddAttractionDialogOpen(true)}
                 />
               ) : (
-                <div className="hidden md:block overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Изображение
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Название
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Описание
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Действия
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {attractions.map((attraction) => (
-                        <tr key={attraction.id} className="hover:bg-gray-50">
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            {attraction.imageUrl ? (
-                              <img
-                                className="h-16 w-16 rounded-md object-cover"
-                                src={attraction.imageUrl}
-                                alt={attraction.name}
-                              />
-                            ) : (
-                              <div className="h-16 w-16 rounded-md bg-gray-200 flex items-center justify-center">
-                                <span className="text-gray-500 text-xs">
-                                  Нет изображения
-                                </span>
-                              </div>
-                            )}
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className="text-sm font-medium text-gray-900">
-                              {attraction.name}
-                            </div>
-                            {attraction.category && (
-                              <div className="text-sm text-gray-500">
-                                {attraction.category}
-                              </div>
-                            )}
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className="text-sm text-gray-900 max-w-xs truncate">
-                              {attraction.description || "Нет описания"}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <div className="flex space-x-2">
-                              <NewAttractionDialog
-                                isOpen={false}
-                                setIsOpen={() => {}}
-                                handleSubmit={handleUpdateAttraction(
-                                  attraction.id,
-                                )}
-                                isSubmitting={false}
-                                setIsSubmitting={() => {}}
-                                groupId={groupId}
-                                attraction={attraction}
-                              >
-                                <Button variant="ghost" size="sm">
-                                  Редактировать
-                                </Button>
-                              </NewAttractionDialog>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() =>
-                                  handleDeleteAttraction(attraction.id)
-                                }
-                              >
-                                Удалить
-                              </Button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                <AttractionTable
+                  attractions={attractions}
+                  onDelete={handleDeleteAttraction}
+                  onUpdate={handleUpdateAttraction}
+                />
               )}
             </div>
           </>
