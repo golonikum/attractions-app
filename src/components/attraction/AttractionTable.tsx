@@ -70,7 +70,7 @@ export function AttractionTable({
               <td className="px-6 py-4 whitespace-nowrap">
                 <AttractionImage
                   attraction={attraction}
-                  className="h-16 w-16"
+                  className="h-24 w-24 rounded-md"
                 />
               </td>
               <td className="px-6 py-4">

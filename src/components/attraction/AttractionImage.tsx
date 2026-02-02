@@ -12,7 +12,7 @@ export const AttractionImage = ({
     <img
       src={attraction.imageUrl}
       alt={attraction.name}
-      className={`w-full h-full object-cover rounded-md ${className}`}
+      className={`object-cover ${className}`}
     />
   ) : (
     <Image className="h-8 w-8 text-gray-400" />

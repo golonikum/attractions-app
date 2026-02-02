@@ -43,7 +43,7 @@ export function AttractionCard({
     <Card isFavorite={attraction.isFavorite} isVisited={attraction.isVisited}>
       <div className="aspect-video bg-gray-100 flex items-center justify-center">
         <Link href={`/attractions/${attraction.id}`} className="cursor-pointer">
-          <AttractionImage attraction={attraction} />
+          <AttractionImage attraction={attraction} className="w-full h-full" />
         </Link>
       </div>
       <CardHeader>
