@@ -172,7 +172,12 @@ export default function GroupDetailPage() {
           <div className="flex-1 flex flex-row gap-4">
             <div style={{ height: "100%", width: "500px" }}>
               {isMapReady ? (
-                <YMap location={LOCATION}>
+                <YMap
+                  location={{
+                    center: [group.coordinates[1], group.coordinates[0]],
+                    zoom: group.zoom,
+                  }}
+                >
                   <YMapDefaultSchemeLayer theme={theme} />
                   <YMapDefaultFeaturesLayer />
                   <MarkerPin coordinates={[37.66785, 55.729256]} visited />
