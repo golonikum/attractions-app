@@ -4,6 +4,7 @@ import { NewAttractionDialog } from "./NewAttractionDialog";
 import { useState } from "react";
 import { RemoveButton } from "../ui/buttons";
 import { ConfirmDialog } from "../ui/ConfirmDialog";
+import { AttractionImage } from "./AttractionImage";
 
 interface AttractionTableProps {
   attractions: Attraction[];
@@ -67,19 +68,10 @@ export function AttractionTable({
               onClick={() => router.push(`/attractions/${attraction.id}`)}
             >
               <td className="px-6 py-4 whitespace-nowrap">
-                {attraction.imageUrl ? (
-                  <img
-                    className="h-16 w-16 rounded-md object-cover"
-                    src={attraction.imageUrl}
-                    alt={attraction.name}
-                  />
-                ) : (
-                  <div className="h-16 w-16 rounded-md bg-gray-200 flex items-center justify-center">
-                    <span className="text-gray-500 text-xs">
-                      Нет изображения
-                    </span>
-                  </div>
-                )}
+                <AttractionImage
+                  attraction={attraction}
+                  className="h-16 w-16"
+                />
               </td>
               <td className="px-6 py-4">
                 <div className="text-sm font-medium text-gray-900">

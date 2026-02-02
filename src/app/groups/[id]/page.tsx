@@ -41,7 +41,7 @@ export default function GroupDetailPage() {
   const [isAddAttractionDialogOpen, setIsAddAttractionDialogOpen] =
     useState(false);
   const [isSubmittingAttraction, setIsSubmittingAttraction] = useState(false);
-  const isMobile = useIsMobile();
+  const { isWideScreen } = useIsMobile();
 
   // Загрузка данных группы при монтировании компонента
   useEffect(() => {
@@ -154,7 +154,7 @@ export default function GroupDetailPage() {
           </div>
         </div>
 
-        {!isMobile ? (
+        {isWideScreen ? (
           <>
             <div className="mb-6">
               <GroupInfoCard group={group} />

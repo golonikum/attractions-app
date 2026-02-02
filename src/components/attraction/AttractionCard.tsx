@@ -14,6 +14,7 @@ import { Attraction, CreateAttractionRequest } from "@/types/attraction";
 import Link from "next/link";
 import { Tag } from "../ui/Tag";
 import { RemoveButton } from "../ui/buttons";
+import { AttractionImage } from "./AttractionImage";
 
 // Используем тип Attraction из types/attraction.ts вместо интерфейса AttractionItem
 type AttractionItem = Attraction;
@@ -42,15 +43,7 @@ export function AttractionCard({
     <Card isFavorite={attraction.isFavorite} isVisited={attraction.isVisited}>
       <div className="aspect-video bg-gray-100 flex items-center justify-center">
         <Link href={`/attractions/${attraction.id}`} className="cursor-pointer">
-          {attraction.imageUrl ? (
-            <img
-              src={attraction.imageUrl}
-              alt={attraction.name}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <Image className="h-8 w-8 text-gray-400" />
-          )}
+          <AttractionImage attraction={attraction} />
         </Link>
       </div>
       <CardHeader>
