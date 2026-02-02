@@ -30,7 +30,7 @@ export function AttractionInfoCard({ attraction }: AttractionInfoCardProps) {
       >
         <AttractionImage
           attraction={attraction}
-          className={`rounded-md ${isWideScreen ? "h-full w-48" : "h-48 w-full"}`}
+          className={`rounded-md ${isWideScreen ? "h-full w-96" : "h-96 w-full"}`}
         />
 
         <div className="flex flex-col gap-4">
