@@ -7,24 +7,16 @@ import {
   YMap,
   YMapDefaultFeaturesLayer,
   YMapDefaultSchemeLayer,
-  initYMaps,
 } from "@/lib/ymaps";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { MarkerPin } from "@/components/ui/MarkerPin";
 import { ThemeProviderContext } from "@/contexts/ThemeContext";
+import { useMapReady } from "@/hooks/useMapReady";
 
 export default function MainPage() {
-  const [isMapReady, setIsMapReady] = useState(false);
+  const { isMapReady } = useMapReady();
   const { theme } = useContext(ThemeProviderContext);
 
-  useEffect(() => {
-    const initializeMap = async () => {
-      const success = await initYMaps();
-      setIsMapReady(success);
-    };
-
-    initializeMap();
-  }, []);
   return (
     <ProtectedRoute>
       <Navigation />

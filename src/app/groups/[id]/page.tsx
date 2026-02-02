@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Navigation } from "@/components/Navigation";
@@ -25,10 +25,21 @@ import { NewAttractionDialog } from "@/components/attraction/NewAttractionDialog
 import { NewGroupDialog } from "@/components/group/NewGroupDialog";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { BackButton } from "@/components/ui/buttons";
+import { useMapReady } from "@/hooks/useMapReady";
+import {
+  LOCATION,
+  YMap,
+  YMapDefaultFeaturesLayer,
+  YMapDefaultSchemeLayer,
+} from "@/lib/ymaps";
+import { MarkerPin } from "@/components/ui/MarkerPin";
+import { ThemeProviderContext } from "@/contexts/ThemeContext";
 
 // Используем тип Attraction из types/attraction.ts
 
 export default function GroupDetailPage() {
+  const { isMapReady } = useMapReady();
+  const { theme } = useContext(ThemeProviderContext);
   const params = useParams();
   const router = useRouter();
   const groupId = params.id as string;
@@ -139,7 +150,10 @@ export default function GroupDetailPage() {
   return (
     <ProtectedRoute>
       <Navigation />
-      <div className="container mx-auto pt-20 px-4 pb-8">
+      <div
+        className="container mx-auto pt-20 px-4 pb-8 flex flex-col gap-4"
+        style={isWideScreen ? { height: "calc(100vh)" } : {}}
+      >
         <div className="flex items-center mb-6">
           <BackButton route="/groups" />
           <div className="ml-auto flex space-x-1">
@@ -155,36 +169,53 @@ export default function GroupDetailPage() {
         </div>
 
         {isWideScreen ? (
-          <>
-            <div className="mb-6">
-              <GroupInfoCard group={group} />
-            </div>
-
-            <div>
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold">Объекты</h2>
-                <NewAttractionDialog
-                  isOpen={isAddAttractionDialogOpen}
-                  setIsOpen={setIsAddAttractionDialogOpen}
-                  handleSubmit={handleAddAttraction}
-                  isSubmitting={isSubmittingAttraction}
-                  setIsSubmitting={setIsSubmittingAttraction}
-                  groupId={groupId}
-                />
-              </div>
-              {attractions.length === 0 ? (
-                <EmptyAttractionsState
-                  onAddAttraction={() => setIsAddAttractionDialogOpen(true)}
-                />
+          <div className="flex-1 flex flex-row gap-4">
+            <div style={{ height: "100%", flex: "1 0 0" }}>
+              {isMapReady ? (
+                <YMap location={LOCATION}>
+                  <YMapDefaultSchemeLayer theme={theme} />
+                  <YMapDefaultFeaturesLayer />
+                  <MarkerPin coordinates={[37.66785, 55.729256]} visited />
+                  <MarkerPin coordinates={[37.89785, 55.779256]} />
+                </YMap>
               ) : (
-                <AttractionTable
-                  attractions={attractions}
-                  onDelete={handleDeleteAttraction}
-                  onUpdate={handleUpdateAttraction}
-                />
+                <div className="flex items-center justify-center h-full bg-gray-100 rounded-lg">
+                  <p>Загрузка карты...</p>
+                </div>
               )}
             </div>
-          </>
+
+            <div className="flex flex-col gap-4">
+              <div className="mb-6">
+                <GroupInfoCard group={group} />
+              </div>
+
+              <div>
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-2xl font-bold">Объекты</h2>
+                  <NewAttractionDialog
+                    isOpen={isAddAttractionDialogOpen}
+                    setIsOpen={setIsAddAttractionDialogOpen}
+                    handleSubmit={handleAddAttraction}
+                    isSubmitting={isSubmittingAttraction}
+                    setIsSubmitting={setIsSubmittingAttraction}
+                    groupId={groupId}
+                  />
+                </div>
+                {attractions.length === 0 ? (
+                  <EmptyAttractionsState
+                    onAddAttraction={() => setIsAddAttractionDialogOpen(true)}
+                  />
+                ) : (
+                  <AttractionTable
+                    attractions={attractions}
+                    onDelete={handleDeleteAttraction}
+                    onUpdate={handleUpdateAttraction}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
         ) : (
           <>
             <div className="mb-6">
