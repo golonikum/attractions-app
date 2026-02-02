@@ -170,7 +170,7 @@ export default function GroupDetailPage() {
 
         {isWideScreen ? (
           <div className="flex-1 flex flex-row gap-4">
-            <div style={{ height: "100%", flex: "1 0 0" }}>
+            <div style={{ height: "100%", width: "500px" }}>
               {isMapReady ? (
                 <YMap location={LOCATION}>
                   <YMapDefaultSchemeLayer theme={theme} />
