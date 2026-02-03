@@ -7,7 +7,8 @@ import { useState } from "react";
 export const MarkerPin: FC<{
   coordinates: [number, number];
   visited?: boolean;
-}> = ({ coordinates, visited = false }) => {
+  title?: string;
+}> = ({ title, coordinates, visited = false }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -24,7 +25,7 @@ export const MarkerPin: FC<{
           style={{ top: "-32px", left: "-16px", cursor: "pointer" }}
           onClick={() => console.log(coordinates)}
         />
-        {isHovered && (
+        {isHovered && title && (
           <div
             className="text-xs shrink-0 absolute px-2 py-0.5 overflow-hidden rounded-md bg-white shadow-md whitespace-nowrap text-black-0"
             style={{
@@ -35,7 +36,7 @@ export const MarkerPin: FC<{
               zIndex: 10,
             }}
           >
-            Описание очень этого объекта
+            {title}
           </div>
         )}
       </div>
