@@ -13,6 +13,7 @@ import { AttractionCard } from "@/components/attraction/AttractionCard";
 import { AttractionTable } from "@/components/attraction/AttractionTable";
 import { EmptyAttractionsState } from "@/components/group/EmptyAttractionsState";
 import { GroupInfoCard } from "@/components/group/GroupInfoCard";
+import type { YMapControlsProps } from "ymaps3";
 
 import { Attraction, CreateAttractionRequest } from "@/types/attraction";
 import {
@@ -31,6 +32,7 @@ import {
   YMapControls,
   YMapDefaultFeaturesLayer,
   YMapDefaultSchemeLayer,
+  YMapScaleControl,
   YMapZoomControl,
 } from "@/lib/ymaps";
 import { MarkerPin } from "@/components/ui/MarkerPin";
@@ -187,8 +189,11 @@ export default function GroupDetailPage() {
                 >
                   <YMapDefaultSchemeLayer theme={theme} />
                   <YMapDefaultFeaturesLayer />
-                  <YMapControls>
-                    <YMapZoomControl position="topRight" />
+                  <YMapControls position="right">
+                    <YMapZoomControl />
+                  </YMapControls>
+                  <YMapControls position="bottom right">
+                    <YMapScaleControl />
                   </YMapControls>
                   {attractions.map((attraction) => (
                     <MarkerPin

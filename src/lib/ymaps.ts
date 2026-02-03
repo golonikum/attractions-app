@@ -11,6 +11,7 @@ let YMapDefaultFeaturesLayer: any;
 let YMapMarker: any;
 let YMapControls: any;
 let YMapZoomControl: any;
+let YMapScaleControl: any;
 
 export const LOCATION: YMapLocationRequest = {
   center: [37.588144, 55.733842],
@@ -38,6 +39,7 @@ export async function initYMaps() {
     YMapDefaultFeaturesLayer = components.YMapDefaultFeaturesLayer;
     YMapControls = components.YMapControls;
     YMapZoomControl = components.YMapZoomControl;
+    YMapScaleControl = components.YMapScaleControl;
 
     return true;
   } catch (error) {
@@ -55,4 +57,5 @@ export {
   YMapMarker,
   YMapControls,
   YMapZoomControl,
+  YMapScaleControl,
 };
