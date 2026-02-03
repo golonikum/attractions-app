@@ -154,7 +154,7 @@ export default function GroupDetailPage() {
         className="container mx-auto pt-20 px-4 pb-8 flex flex-col gap-4"
         style={isWideScreen ? { height: "calc(100vh)" } : {}}
       >
-        <div className="flex items-center mb-6">
+        <div className="flex items-center">
           <BackButton route="/groups" />
           <div className="ml-auto flex space-x-1">
             <NewGroupDialog
