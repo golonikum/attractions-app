@@ -27,15 +27,12 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { BackButton } from "@/components/ui/buttons";
 import { useMapReady } from "@/hooks/useMapReady";
 import {
-  LOCATION,
   YMap,
   YMapDefaultFeaturesLayer,
   YMapDefaultSchemeLayer,
 } from "@/lib/ymaps";
 import { MarkerPin } from "@/components/ui/MarkerPin";
 import { ThemeProviderContext } from "@/contexts/ThemeContext";
-
-// Используем тип Attraction из types/attraction.ts
 
 export default function GroupDetailPage() {
   const { isMapReady } = useMapReady();
@@ -165,6 +162,14 @@ export default function GroupDetailPage() {
               isSubmitting={isSubmitting}
               setIsSubmitting={setIsSubmitting}
             />
+            <NewAttractionDialog
+              isOpen={isAddAttractionDialogOpen}
+              setIsOpen={setIsAddAttractionDialogOpen}
+              handleSubmit={handleAddAttraction}
+              isSubmitting={isSubmittingAttraction}
+              setIsSubmitting={setIsSubmittingAttraction}
+              groupId={groupId}
+            />
           </div>
         </div>
 
@@ -200,22 +205,9 @@ export default function GroupDetailPage() {
             </div>
 
             <div className="flex flex-1 flex-col gap-4">
-              <div className="mb-6">
-                <GroupInfoCard group={group} />
-              </div>
+              <GroupInfoCard group={group} />
 
               <div>
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-2xl font-bold">Объекты</h2>
-                  <NewAttractionDialog
-                    isOpen={isAddAttractionDialogOpen}
-                    setIsOpen={setIsAddAttractionDialogOpen}
-                    handleSubmit={handleAddAttraction}
-                    isSubmitting={isSubmittingAttraction}
-                    setIsSubmitting={setIsSubmittingAttraction}
-                    groupId={groupId}
-                  />
-                </div>
                 {attractions.length === 0 ? (
                   <EmptyAttractionsState
                     onAddAttraction={() => setIsAddAttractionDialogOpen(true)}
@@ -237,7 +229,6 @@ export default function GroupDetailPage() {
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold mb-4">Объекты</h2>
               {attractions.length === 0 ? (
                 <EmptyAttractionsState
                   onAddAttraction={() => setIsAddAttractionDialogOpen(true)}
