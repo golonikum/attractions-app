@@ -188,6 +188,7 @@ export default function GroupDetailPage() {
                         attraction.coordinates[0],
                       ]}
                       visited={attraction.isVisited}
+                      title={attraction.name}
                     />
                   ))}
                 </YMap>
