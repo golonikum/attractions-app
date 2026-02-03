@@ -26,6 +26,7 @@ export function AttractionTable({
 
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     setIsDeleteDialogOpen(true);
   };
 
