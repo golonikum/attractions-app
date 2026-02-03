@@ -170,7 +170,7 @@ export default function GroupDetailPage() {
 
         {isWideScreen ? (
           <div className="flex-1 flex flex-row gap-4">
-            <div style={{ height: "100%", width: "500px" }}>
+            <div style={{ height: "100%", minWidth: "600px" }}>
               {isMapReady ? (
                 <YMap
                   location={{
@@ -180,8 +180,16 @@ export default function GroupDetailPage() {
                 >
                   <YMapDefaultSchemeLayer theme={theme} />
                   <YMapDefaultFeaturesLayer />
-                  <MarkerPin coordinates={[37.66785, 55.729256]} visited />
-                  <MarkerPin coordinates={[37.89785, 55.779256]} />
+                  {attractions.map((attraction) => (
+                    <MarkerPin
+                      key={attraction.id}
+                      coordinates={[
+                        attraction.coordinates[1],
+                        attraction.coordinates[0],
+                      ]}
+                      visited={attraction.isVisited}
+                    />
+                  ))}
                 </YMap>
               ) : (
                 <div className="flex items-center justify-center h-full bg-gray-100 rounded-lg">
@@ -190,7 +198,7 @@ export default function GroupDetailPage() {
               )}
             </div>
 
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-1 flex-col gap-4">
               <div className="mb-6">
                 <GroupInfoCard group={group} />
               </div>
