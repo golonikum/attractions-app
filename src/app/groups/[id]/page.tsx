@@ -28,8 +28,10 @@ import { BackButton } from "@/components/ui/buttons";
 import { useMapReady } from "@/hooks/useMapReady";
 import {
   YMap,
+  YMapControls,
   YMapDefaultFeaturesLayer,
   YMapDefaultSchemeLayer,
+  YMapZoomControl,
 } from "@/lib/ymaps";
 import { MarkerPin } from "@/components/ui/MarkerPin";
 import { ThemeProviderContext } from "@/contexts/ThemeContext";
@@ -185,6 +187,9 @@ export default function GroupDetailPage() {
                 >
                   <YMapDefaultSchemeLayer theme={theme} />
                   <YMapDefaultFeaturesLayer />
+                  <YMapControls>
+                    <YMapZoomControl position="topRight" />
+                  </YMapControls>
                   {attractions.map((attraction) => (
                     <MarkerPin
                       key={attraction.id}
