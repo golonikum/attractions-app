@@ -189,12 +189,10 @@ export default function GroupDetailPage() {
                 >
                   <YMapDefaultSchemeLayer theme={theme} />
                   <YMapDefaultFeaturesLayer />
-                  {/* <YMapControls position="right">
-                    <YMapZoomControl />
+                  <YMapControls position="right top" direction="vertical">
+                    <YMapZoomControl className="bg-white/80 rounded-lg p-2 mb-4 shadow-md hover:bg-white transition-colors" />
+                    <YMapScaleControl className="bg-white/80 rounded-lg p-2 shadow-md hover:bg-white transition-colors" />
                   </YMapControls>
-                  <YMapControls position="bottom right">
-                    <YMapScaleControl />
-                  </YMapControls> */}
                   {attractions.map((attraction) => (
                     <MarkerPin
                       key={attraction.id}
