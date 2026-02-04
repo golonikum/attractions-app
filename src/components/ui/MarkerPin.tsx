@@ -1,9 +1,8 @@
-// import { YMapMarker } from "@/lib/ymaps";
+import { YMapMarker } from "@/lib/ymaps";
 import { MapPin } from "lucide-react";
 import { FC } from "react";
 
 import { useState } from "react";
-import { YMapMarker } from "ymap3-components";
 
 export const MarkerPin: FC<{
   coordinates: [number, number];
