@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import { AuthContextProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import PWALayout from "@/components/pwa/PWALayout";
-import Script from "next/script";
+// import Script from "next/script";
 import { Toaster } from "sonner";
 
 const geistSans = Geist({
@@ -64,12 +64,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" suppressHydrationWarning>
-      <head>
+      {/* <head>
         <Script
           src={`https://api-maps.yandex.ru/v3/?apikey=${process.env.YA_MAPS_API_KEY}&lang=ru_RU`}
           strategy="beforeInteractive"
         />
-      </head>
+      </head> */}
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
