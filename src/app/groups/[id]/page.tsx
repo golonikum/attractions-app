@@ -189,12 +189,12 @@ export default function GroupDetailPage() {
                 >
                   <YMapDefaultSchemeLayer theme={theme} />
                   <YMapDefaultFeaturesLayer />
-                  <YMapControls position="right">
+                  {/* <YMapControls position="right">
                     <YMapZoomControl />
                   </YMapControls>
                   <YMapControls position="bottom right">
                     <YMapScaleControl />
-                  </YMapControls>
+                  </YMapControls> */}
                   {attractions.map((attraction) => (
                     <MarkerPin
                       key={attraction.id}
