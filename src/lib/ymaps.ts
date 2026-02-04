@@ -40,6 +40,7 @@ export async function initYMaps() {
     YMapControls = components.YMapControls;
     YMapZoomControl = components.YMapZoomControl;
     YMapScaleControl = components.YMapScaleControl;
+    YMapMarker = components.YMapMarker;
 
     return true;
   } catch (error) {
