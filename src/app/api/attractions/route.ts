@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
 
     const attractions = await prisma.attraction.findMany({
       where: whereClause,
-      // orderBy: { order: "asc" }, // TODO
+      orderBy: { order: "asc" },
     });
 
     return NextResponse.json({ attractions });

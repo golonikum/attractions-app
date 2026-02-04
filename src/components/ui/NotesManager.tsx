@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Button } from "./button";
 import { Input } from "./input";
 import { Textarea } from "./textarea";
-import { Plus, Calendar } from "lucide-react";
+import { Calendar } from "lucide-react";
 import { NoteType } from "@/types/attraction";
 import { AddButton, RemoveButton } from "./buttons";
 

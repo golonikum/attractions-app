@@ -2,21 +2,9 @@
 
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Navigation } from "@/components/Navigation";
-import {
-  LOCATION,
-  YMap,
-  YMapDefaultFeaturesLayer,
-  YMapDefaultSchemeLayer,
-} from "@/lib/ymaps";
-import { useContext } from "react";
-import { MarkerPin } from "@/components/ui/MarkerPin";
-import { ThemeProviderContext } from "@/contexts/ThemeContext";
-import { useMapReady } from "@/hooks/useMapReady";
+import { Map } from "@/components/ui/Map";
 
 export default function MainPage() {
-  const { isMapReady } = useMapReady();
-  const { theme } = useContext(ThemeProviderContext);
-
   return (
     <ProtectedRoute>
       <Navigation />
@@ -30,18 +18,7 @@ export default function MainPage() {
           style={{ height: "100%" }}
         >
           <div style={{ width: "100%", flex: "1 0 0" }}>
-            {isMapReady ? (
-              <YMap location={LOCATION}>
-                <YMapDefaultSchemeLayer theme={theme} />
-                <YMapDefaultFeaturesLayer />
-                <MarkerPin coordinates={[37.66785, 55.729256]} visited />
-                <MarkerPin coordinates={[37.89785, 55.779256]} />
-              </YMap>
-            ) : (
-              <div className="flex items-center justify-center h-full bg-gray-100 rounded-lg">
-                <p>Загрузка карты...</p>
-              </div>
-            )}
+            <Map />
           </div>
         </div>
       </div>

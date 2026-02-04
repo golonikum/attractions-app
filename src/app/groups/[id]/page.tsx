@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Navigation } from "@/components/Navigation";
@@ -13,7 +13,6 @@ import { AttractionCard } from "@/components/attraction/AttractionCard";
 import { AttractionTable } from "@/components/attraction/AttractionTable";
 import { EmptyAttractionsState } from "@/components/group/EmptyAttractionsState";
 import { GroupInfoCard } from "@/components/group/GroupInfoCard";
-import type { YMapControlsProps } from "ymaps3";
 
 import { Attraction, CreateAttractionRequest } from "@/types/attraction";
 import {
@@ -26,21 +25,9 @@ import { NewAttractionDialog } from "@/components/attraction/NewAttractionDialog
 import { NewGroupDialog } from "@/components/group/NewGroupDialog";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { BackButton } from "@/components/ui/buttons";
-import { useMapReady } from "@/hooks/useMapReady";
-import {
-  YMap,
-  YMapControls,
-  YMapDefaultFeaturesLayer,
-  YMapDefaultSchemeLayer,
-  YMapScaleControl,
-  YMapZoomControl,
-} from "@/lib/ymaps";
-import { MarkerPin } from "@/components/ui/MarkerPin";
-import { ThemeProviderContext } from "@/contexts/ThemeContext";
+import { Map } from "@/components/ui/Map";
 
 export default function GroupDetailPage() {
-  const { isMapReady } = useMapReady();
-  const { theme } = useContext(ThemeProviderContext);
   const params = useParams();
   const router = useRouter();
   const groupId = params.id as string;
@@ -180,36 +167,13 @@ export default function GroupDetailPage() {
         {isWideScreen ? (
           <div className="flex-1 flex flex-row gap-4">
             <div style={{ height: "100%", minWidth: "600px" }}>
-              {isMapReady ? (
-                <YMap
-                  location={{
-                    center: [group.coordinates[1], group.coordinates[0]],
-                    zoom: group.zoom,
-                  }}
-                >
-                  <YMapDefaultSchemeLayer theme={theme} />
-                  <YMapDefaultFeaturesLayer />
-                  <YMapControls position="right top" direction="vertical">
-                    <YMapZoomControl className="bg-white/80 rounded-lg p-2 mb-4 shadow-md hover:bg-white transition-colors" />
-                    <YMapScaleControl className="bg-white/80 rounded-lg p-2 shadow-md hover:bg-white transition-colors" />
-                  </YMapControls>
-                  {attractions.map((attraction) => (
-                    <MarkerPin
-                      key={attraction.id}
-                      coordinates={[
-                        attraction.coordinates[1],
-                        attraction.coordinates[0],
-                      ]}
-                      visited={attraction.isVisited}
-                      title={attraction.name}
-                    />
-                  ))}
-                </YMap>
-              ) : (
-                <div className="flex items-center justify-center h-full bg-gray-100 rounded-lg">
-                  <p>Загрузка карты...</p>
-                </div>
-              )}
+              <Map
+                location={{
+                  center: [group.coordinates[1], group.coordinates[0]],
+                  zoom: group.zoom,
+                }}
+                attractions={attractions}
+              />
             </div>
 
             <div className="flex flex-1 flex-col gap-4">

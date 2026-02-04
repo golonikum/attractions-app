@@ -1,21 +1,32 @@
-import React from "react";
+import React, { FC, PropsWithChildren } from "react";
 import ReactDom from "react-dom";
-import type { YMapLocationRequest } from "ymaps3";
+import type {
+  YMapLocationRequest,
+  YMapControlButtonProps,
+  YMapControlsProps,
+  YMapScaleControlProps,
+  YMapMarkerProps,
+  YMapDefaultSchemeLayerProps,
+  YMapDefaultFeaturesLayerProps,
+  YMapProps,
+  YMapListenerProps,
+} from "ymaps3";
 
 // Инициализация Yandex Maps
 let ymaps3: any;
 let reactify: any;
-let YMap: any;
-let YMapDefaultSchemeLayer: any;
-let YMapDefaultFeaturesLayer: any;
-let YMapMarker: any;
-let YMapControls: any;
-let YMapZoomControl: any;
-let YMapScaleControl: any;
+let YMap: FC<PropsWithChildren<YMapProps>>;
+let YMapDefaultSchemeLayer: FC<YMapDefaultSchemeLayerProps>;
+let YMapDefaultFeaturesLayer: FC<YMapDefaultFeaturesLayerProps>;
+let YMapMarker: FC<PropsWithChildren<YMapMarkerProps>>;
+let YMapControls: FC<PropsWithChildren<YMapControlsProps>>;
+let YMapControlButton: FC<PropsWithChildren<YMapControlButtonProps>>;
+let YMapScaleControl: FC<YMapScaleControlProps>;
+let YMapListener: FC<YMapListenerProps>;
 
-export const LOCATION: YMapLocationRequest = {
+export const DEFAULT_LOCATION: YMapLocationRequest = {
   center: [37.588144, 55.733842],
-  zoom: 9,
+  zoom: 5,
 };
 
 // Функция для инициализации Yandex Maps
@@ -38,9 +49,10 @@ export async function initYMaps() {
     YMapDefaultSchemeLayer = components.YMapDefaultSchemeLayer;
     YMapDefaultFeaturesLayer = components.YMapDefaultFeaturesLayer;
     YMapControls = components.YMapControls;
-    YMapZoomControl = components.YMapZoomControl;
+    YMapControlButton = components.YMapControlButton;
     YMapScaleControl = components.YMapScaleControl;
     YMapMarker = components.YMapMarker;
+    YMapListener = components.YMapListener;
 
     return true;
   } catch (error) {
@@ -57,6 +69,7 @@ export {
   YMapDefaultFeaturesLayer,
   YMapMarker,
   YMapControls,
-  YMapZoomControl,
+  YMapControlButton,
   YMapScaleControl,
+  YMapListener,
 };
