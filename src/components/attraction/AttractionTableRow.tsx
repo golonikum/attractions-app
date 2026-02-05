@@ -77,7 +77,9 @@ export const AttractionTableRow = ({
       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
         <div className="flex space-x-2">
           <ShowOnMapButton onClick={onLocateAttractionClick} />
-          <OpenInYandexMapButton attraction={attraction} />
+          {attraction.yaMapUrl && (
+            <OpenInYandexMapButton attraction={attraction} />
+          )}
           <NewAttractionDialog
             isOpen={isEditDialogOpen}
             setIsOpen={setIsEditDialogOpen}
