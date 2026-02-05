@@ -47,8 +47,13 @@ export const Map: FC<MapPropsType> = ({
   };
 
   return isMapReady ? (
-    <YMap location={{ ...location }} mode="raster" zoomStrategy="zoomToCenter">
-      <YMapDefaultSchemeLayer theme={theme} />
+    <YMap
+      location={{ ...location }}
+      mode="raster"
+      zoomStrategy="zoomToCenter"
+      theme={theme}
+    >
+      <YMapDefaultSchemeLayer />
       <YMapDefaultFeaturesLayer />
       <YMapListener
         onUpdate={({ location }) => {
