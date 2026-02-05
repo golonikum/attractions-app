@@ -84,8 +84,8 @@ export const Map: FC<MapPropsType> = ({
 
         console.log(
           attraction.name,
-          Math.abs(location.center[0] - attraction.coordinates[1]),
-          Math.abs(location.center[1] - attraction.coordinates[0]),
+          Math.abs(location.center[0] - attraction.coordinates[1]) < 0.00001,
+          Math.abs(location.center[1] - attraction.coordinates[0]) < 0.00001,
         );
 
         return (
