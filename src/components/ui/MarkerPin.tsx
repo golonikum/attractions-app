@@ -14,7 +14,11 @@ export const MarkerPin: FC<{
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <YMapMarker coordinates={coordinates} draggable={false}>
+    <YMapMarker
+      coordinates={coordinates}
+      draggable={false}
+      zIndex={isHovered || isActive ? 1 : 0}
+    >
       <div className="relative">
         <MapPin
           onMouseEnter={() => setIsHovered(true)}
@@ -25,7 +29,7 @@ export const MarkerPin: FC<{
               : visited
                 ? "text-muted-foreground text-green-500 fill-green-200"
                 : "text-red-500 fill-red-200"
-          } ${isHovered || isActive ? "z-1" : ""}`}
+          }`}
           style={{ top: "-32px", left: "-16px", cursor: "pointer" }}
           onClick={onClick}
         />
