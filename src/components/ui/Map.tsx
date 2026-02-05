@@ -85,8 +85,8 @@ export const Map: FC<MapPropsType> = ({
           title={attraction.name}
           onClick={() => onAttractionClick?.(attraction)}
           isActive={
-            location.center[0] === attraction.coordinates[0] &&
-            location.center[1] === attraction.coordinates[1]
+            location.center[0] === attraction.coordinates[1] &&
+            location.center[1] === attraction.coordinates[0]
           }
         />
       ))}
