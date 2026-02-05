@@ -11,7 +11,7 @@ export const MarkerPin: FC<{
   onClick?: () => void;
   isActive?: boolean;
 }> = ({ title, onClick, coordinates, visited = false, isActive = false }) => {
-  const [isHovered, setIsHovered] = useState(isActive);
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <YMapMarker coordinates={coordinates} draggable={false}>
@@ -23,11 +23,11 @@ export const MarkerPin: FC<{
             visited
               ? "text-green-500 fill-green-200"
               : "text-red-500 fill-red-200"
-          } ${isHovered ? "text-blue-500 fill-blue-200" : ""}`}
+          } ${isHovered || isActive ? "text-blue-500 fill-blue-200" : ""}`}
           style={{ top: "-32px", left: "-16px", cursor: "pointer" }}
           onClick={onClick}
         />
-        {isHovered && title && (
+        {(isHovered || isActive) && title && (
           <div
             className="text-xs shrink-0 absolute px-2 py-0.5 overflow-hidden rounded-md bg-white shadow-md whitespace-nowrap text-black-0"
             style={{
