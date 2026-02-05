@@ -45,7 +45,10 @@ export const AttractionTableRow = ({
   };
 
   return (
-    <tr key={attraction.id}>
+    <tr
+      key={attraction.id}
+      className={attraction.isVisited ? "bg-green-50" : ""}
+    >
       <td
         className="px-6 py-4 whitespace-nowrap cursor-pointer"
         onClick={handleAttractionClick(attraction)}
