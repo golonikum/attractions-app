@@ -85,13 +85,15 @@ export function AttractionCard({
           />
         </div>
       </CardHeader>
-      <CardContent className="flex flex-col gap-2">
+      <CardContent className="flex flex-col gap-4 justify-between">
         {attraction.description && (
           <CardDescription>{attraction.description}</CardDescription>
         )}
 
-        <OpenInYandexMapButton attraction={attraction} />
-        <ShowOnMapButton onClick={() => {}} />
+        <div className="flex flex-col gap-4">
+          <OpenInYandexMapButton attraction={attraction} />
+          <ShowOnMapButton onClick={() => {}} />
+        </div>
       </CardContent>
     </Card>
   );

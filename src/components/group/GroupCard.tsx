@@ -12,7 +12,7 @@ import { CreateGroupRequest, Group } from "@/types/group";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { useState } from "react";
 import { Tag } from "../ui/Tag";
-import { RemoveButton } from "../ui/buttons";
+import { RemoveButton, ShowOnMapButton } from "../ui/buttons";
 import { NewGroupDialog } from "./NewGroupDialog";
 
 interface GroupCardProps {
@@ -67,21 +67,23 @@ export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
           />
         </div>
       </CardHeader>
-      <CardContent className="cursor-pointer" onClick={handleCardClick}>
-        <CardDescription className="mb-4">{group.description}</CardDescription>
-        <div className="flex justify-between text-sm text-gray-500">
-          <span>
-            Координаты: {group.coordinates[0].toFixed(4)},{" "}
-            {group.coordinates[1].toFixed(4)}
-          </span>
-          <span>Масштаб: {group.zoom}</span>
+      <CardContent
+        className="cursor-pointer flex flex-col gap-4 justify-between"
+        onClick={handleCardClick}
+      >
+        <div className="flex flex-col gap-4">
+          <CardDescription className="mb-4">
+            {group.description}
+          </CardDescription>
+          <div className="flex justify-between text-sm text-gray-500">
+            <span>
+              Координаты: {group.coordinates[0].toFixed(4)},{" "}
+              {group.coordinates[1].toFixed(4)}
+            </span>
+            <span>Масштаб: {group.zoom}</span>
+          </div>
         </div>
-        <div className="mt-4">
-          <Button variant="outline" className="w-full">
-            <MapPin className="mr-2 h-4 w-4" />
-            Открыть на карте
-          </Button>
-        </div>
+        <ShowOnMapButton onClick={() => {}} />
       </CardContent>
     </Card>
   );

@@ -26,10 +26,14 @@ export const OpenInYandexMapButton = ({
       title={label}
       className="cursor-pointer"
     >
-      <MapPinned className="h-4 w-4" />
+      <MapPinned className="h-4 w-4 " />
     </Button>
   ) : (
-    <Button variant="outline" className="w-full" onClick={onClickHandler}>
+    <Button
+      variant="outline"
+      className="w-full cursor-pointer"
+      onClick={onClickHandler}
+    >
       <MapPinned className="mr-2 h-4 w-4" />
       {label}
     </Button>

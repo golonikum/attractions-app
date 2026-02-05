@@ -25,7 +25,7 @@ export const ShowOnMapButton = ({
   ) : (
     <Button
       variant="outline"
-      className="w-full"
+      className="w-full cursor-pointer"
       onClick={() => console.log("onClick")}
     >
       <MapPin className="mr-2 h-4 w-4" />
