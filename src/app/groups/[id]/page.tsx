@@ -216,9 +216,7 @@ export default function GroupDetailPage() {
           </div>
         ) : (
           <>
-            <div className="mb-6">
-              <GroupInfoCard group={group} />
-            </div>
+            <GroupInfoCard group={group} />
 
             <div>
               {attractions.length === 0 ? (

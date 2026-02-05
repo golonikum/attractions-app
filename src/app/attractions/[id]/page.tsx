@@ -114,8 +114,8 @@ export default function AttractionDetailPage() {
   return (
     <ProtectedRoute>
       <Navigation />
-      <div className="container mx-auto pt-20 px-4 pb-8">
-        <div className="flex items-center mb-6 gap-2">
+      <div className="container mx-auto pt-20 px-4 pb-8 flex flex-col gap-4">
+        <div className="flex items-center gap-2">
           {group && <BackButton route={`/groups/${group.id}`} />}
 
           <div className="ml-auto flex space-x-1">
@@ -131,9 +131,7 @@ export default function AttractionDetailPage() {
           </div>
         </div>
 
-        <div className="mb-6">
-          <AttractionInfoCard attraction={attraction} />
-        </div>
+        <AttractionInfoCard attraction={attraction} />
 
         <ConfirmDialog
           isOpen={isDeleteDialogOpen}
