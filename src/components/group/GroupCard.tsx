@@ -38,7 +38,7 @@ export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
   };
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden flex flex-col">
       <CardHeader>
         <div className="flex justify-between items-start space-x-1">
           <div className="flex-1 cursor-pointer" onClick={handleCardClick}>
@@ -68,7 +68,7 @@ export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
         </div>
       </CardHeader>
       <CardContent
-        className="cursor-pointer flex flex-col gap-4 justify-between"
+        className="cursor-pointer flex flex-col gap-4 justify-between flex-1"
         onClick={handleCardClick}
       >
         <CardDescription className="mb-4">{group.description}</CardDescription>
