@@ -77,19 +77,24 @@ export const Map: FC<MapPropsType> = ({
           <Minus />
         </YMapControlButton>
       </YMapControls>
-      {attractions?.map((attraction) => (
-        <MarkerPin
-          key={attraction.id}
-          coordinates={[attraction.coordinates[1], attraction.coordinates[0]]}
-          visited={attraction.isVisited}
-          title={attraction.name}
-          onClick={() => onAttractionClick?.(attraction)}
-          isActive={
-            location.center[0] === attraction.coordinates[1] &&
-            location.center[1] === attraction.coordinates[0]
-          }
-        />
-      ))}
+      {attractions?.map((attraction) => {
+        const isActive =
+          location.center[0] === attraction.coordinates[1] &&
+          location.center[1] === attraction.coordinates[0];
+
+        console.log("isActive", location, attraction.coordinates);
+
+        return (
+          <MarkerPin
+            key={attraction.id}
+            coordinates={[attraction.coordinates[1], attraction.coordinates[0]]}
+            visited={attraction.isVisited}
+            title={attraction.name}
+            onClick={() => onAttractionClick?.(attraction)}
+            isActive={isActive}
+          />
+        );
+      })}
     </YMap>
   ) : (
     <div className="flex items-center justify-center h-full bg-gray-100 rounded-lg">
