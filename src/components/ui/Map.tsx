@@ -46,15 +46,12 @@ export const Map: FC<MapPropsType> = ({
     }));
   };
 
-  console.log(location);
-
   return isMapReady ? (
     <YMap location={{ ...location }} mode="raster" zoomStrategy="zoomToCenter">
       <YMapDefaultSchemeLayer theme={theme} />
       <YMapDefaultFeaturesLayer />
       <YMapListener
-        onUpdate={({ type, camera, location }) => {
-          console.log(type, camera.tilt, location);
+        onUpdate={({ location }) => {
           setLocation(location);
         }}
       />
