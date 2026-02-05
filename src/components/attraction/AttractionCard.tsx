@@ -13,7 +13,11 @@ import { useState } from "react";
 import { Attraction, CreateAttractionRequest } from "@/types/attraction";
 import Link from "next/link";
 import { Tag } from "../ui/Tag";
-import { RemoveButton } from "../ui/buttons";
+import {
+  OpenInYandexMapButton,
+  RemoveButton,
+  ShowOnMapButton,
+} from "../ui/buttons";
 import { AttractionImage } from "./AttractionImage";
 
 // Используем тип Attraction из types/attraction.ts вместо интерфейса AttractionItem
@@ -43,10 +47,7 @@ export function AttractionCard({
     <Card isFavorite={attraction.isFavorite} isVisited={attraction.isVisited}>
       <div className="aspect-video bg-gray-100 flex items-center justify-center">
         <Link href={`/attractions/${attraction.id}`} className="cursor-pointer">
-          <AttractionImage
-            attraction={attraction}
-            className="w-full h-full max-h-96 "
-          />
+          <AttractionImage attraction={attraction} className="w-full h-full" />
         </Link>
       </div>
       <CardHeader>
@@ -84,33 +85,13 @@ export function AttractionCard({
           />
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-col gap-2">
         {attraction.description && (
-          <CardDescription className="mb-4">
-            {attraction.description}
-          </CardDescription>
+          <CardDescription>{attraction.description}</CardDescription>
         )}
 
-        {attraction.yaMapUrl && (
-          <div className="mt-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full"
-              onClick={() => window.open(attraction.yaMapUrl, "_blank")}
-            >
-              <MapPin className="mr-2 h-4 w-4" />
-              Открыть на Яндекс.Картах
-            </Button>
-          </div>
-        )}
-
-        <div className="mt-4">
-          <Button variant="outline" className="w-full">
-            <MapPin className="mr-2 h-4 w-4" />
-            Показать на карте
-          </Button>
-        </div>
+        <OpenInYandexMapButton attraction={attraction} />
+        <ShowOnMapButton onClick={() => {}} />
       </CardContent>
     </Card>
   );

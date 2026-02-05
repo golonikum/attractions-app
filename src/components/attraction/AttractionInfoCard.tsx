@@ -5,6 +5,7 @@ import { Attraction } from "@/types/attraction";
 import { Tag } from "@/components/ui/Tag";
 import { AttractionImage } from "./AttractionImage";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { OpenInYandexMapButton, ShowOnMapButton } from "../ui/buttons";
 
 interface AttractionInfoCardProps {
   attraction: Attraction;
@@ -14,14 +15,13 @@ export function AttractionInfoCard({ attraction }: AttractionInfoCardProps) {
   const { isWideScreen } = useIsMobile();
 
   return (
-    <Card className={attraction.isVisited ? "bg-green-50" : ""}>
+    <Card isFavorite={attraction.isFavorite} isVisited={attraction.isVisited}>
       <CardHeader>
         <div className="flex gap-4 justify-between items-start">
           <CardTitle>{attraction.name}</CardTitle>
           {attraction.category && (
             <Tag text={attraction.category} variant="default" />
           )}
-          {attraction.isFavorite && <Tag text="Избранное" variant="warning" />}
         </div>
       </CardHeader>
 
@@ -35,10 +35,10 @@ export function AttractionInfoCard({ attraction }: AttractionInfoCardProps) {
 
         <div className="flex flex-col gap-4">
           {attraction.description && (
-            <p className="text-gray-600 mb-4">{attraction.description}</p>
+            <p className="text-gray-600">{attraction.description}</p>
           )}
 
-          <div className="flex justify-between text-sm text-gray-500 mb-4">
+          <div className="flex justify-between text-sm text-gray-500">
             <span>
               Координаты: {attraction.coordinates[0].toFixed(4)},{" "}
               {attraction.coordinates[1].toFixed(4)}
@@ -47,7 +47,7 @@ export function AttractionInfoCard({ attraction }: AttractionInfoCardProps) {
           </div>
 
           {attraction.notes && attraction.notes.length > 0 && (
-            <div className="mt-4">
+            <div>
               <h4 className="font-medium mb-2 flex items-center">
                 <Calendar className="mr-2 h-4 w-4" />
                 Заметки ({attraction.notes.length})
@@ -66,18 +66,8 @@ export function AttractionInfoCard({ attraction }: AttractionInfoCardProps) {
             </div>
           )}
 
-          {attraction.yaMapUrl && (
-            <div className="mt-4">
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => window.open(attraction.yaMapUrl, "_blank")}
-              >
-                <MapPin className="mr-2 h-4 w-4" />
-                Открыть на Яндекс.Картах
-              </Button>
-            </div>
-          )}
+          <OpenInYandexMapButton attraction={attraction} />
+          <ShowOnMapButton onClick={() => {}} />
         </div>
       </CardContent>
     </Card>

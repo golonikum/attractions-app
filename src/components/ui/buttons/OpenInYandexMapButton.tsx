@@ -6,18 +6,32 @@ import { Attraction } from "@/types/attraction";
 
 export const OpenInYandexMapButton = ({
   attraction,
+  view = "full",
 }: {
   attraction: Attraction;
+  view?: "icon" | "full";
 }) => {
-  return (
+  if (!attraction.yaMapUrl) {
+    return null;
+  }
+
+  const onClickHandler = () => window.open(attraction.yaMapUrl, "_blank");
+  const label = "Открыть на Яндекс.Картах";
+
+  return view === "icon" ? (
     <Button
       variant="ghost"
       size="sm"
-      onClick={() => window.open(attraction.yaMapUrl, "_blank")}
-      title="Открыть на Яндекс.Картах"
+      onClick={onClickHandler}
+      title={label}
       className="cursor-pointer"
     >
       <MapPinned className="h-4 w-4" />
+    </Button>
+  ) : (
+    <Button variant="outline" className="w-full" onClick={onClickHandler}>
+      <MapPinned className="mr-2 h-4 w-4" />
+      {label}
     </Button>
   );
 };
