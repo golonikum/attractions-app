@@ -183,7 +183,7 @@ export default function GroupDetailPage() {
                         locatedAttraction.coordinates[0],
                       ]
                     : [group.coordinates[1], group.coordinates[0]],
-                  zoom: locatedAttraction ? 14 : group.zoom,
+                  zoom: locatedAttraction ? 16 : group.zoom,
                 }}
                 attractions={attractions}
                 onAttractionClick={(attraction) => {
