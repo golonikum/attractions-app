@@ -173,6 +173,9 @@ export default function GroupDetailPage() {
                   zoom: group.zoom,
                 }}
                 attractions={attractions}
+                onAttractionClick={(attraction) => {
+                  router.push(`/attractions/${attraction.id}`);
+                }}
               />
             </div>
 

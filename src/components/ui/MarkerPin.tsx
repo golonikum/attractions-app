@@ -8,7 +8,8 @@ export const MarkerPin: FC<{
   coordinates: [number, number];
   visited?: boolean;
   title?: string;
-}> = ({ title, coordinates, visited = false }) => {
+  onClick?: () => void;
+}> = ({ title, onClick, coordinates, visited = false }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -23,7 +24,7 @@ export const MarkerPin: FC<{
               : "text-red-500 fill-red-200"
           } hover:text-blue-500 hover:fill-blue-200`}
           style={{ top: "-32px", left: "-16px", cursor: "pointer" }}
-          onClick={() => console.log(coordinates)}
+          onClick={onClick}
         />
         {isHovered && title && (
           <div

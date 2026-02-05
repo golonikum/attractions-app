@@ -7,9 +7,11 @@ import { useEffect, useState } from "react";
 import { getAllAttractions } from "@/services/attractionService";
 import { Attraction } from "@/types/attraction";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function MainPage() {
   const [attractions, setAttractions] = useState<Attraction[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,7 +40,12 @@ export default function MainPage() {
           style={{ height: "100%" }}
         >
           <div style={{ width: "100%", flex: "1 0 0" }}>
-            <Map attractions={attractions} />
+            <Map
+              attractions={attractions}
+              onAttractionClick={(attraction) => {
+                router.push(`/attractions/${attraction.id}`);
+              }}
+            />
           </div>
         </div>
       </div>

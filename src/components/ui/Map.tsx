@@ -23,11 +23,13 @@ import { Minus, Plus } from "lucide-react";
 type MapPropsType = {
   attractions?: Attraction[];
   location?: YMapLocationRequest;
+  onAttractionClick?: (attraction: Attraction) => void;
 };
 
 export const Map: FC<MapPropsType> = ({
   attractions,
   location: defaultLocation = DEFAULT_LOCATION,
+  onAttractionClick,
 }) => {
   const { isMapReady } = useMapReady();
   const { theme } = useContext(ThemeProviderContext);
@@ -80,6 +82,7 @@ export const Map: FC<MapPropsType> = ({
           coordinates={[attraction.coordinates[1], attraction.coordinates[0]]}
           visited={attraction.isVisited}
           title={attraction.name}
+          onClick={() => onAttractionClick?.(attraction)}
         />
       ))}
     </YMap>
