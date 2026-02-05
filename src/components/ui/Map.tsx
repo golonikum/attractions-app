@@ -40,7 +40,6 @@ export const Map: FC<MapPropsType> = ({
   }, [defaultLocation]);
 
   const onClickZoom = (operation: "plus" | "minus") => () => {
-    console.log(operation);
     setLocation((val) => ({
       center: val.center,
       zoom: val.zoom + (operation === "plus" ? 1 : -1),
