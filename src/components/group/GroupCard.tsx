@@ -71,18 +71,7 @@ export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
         className="cursor-pointer flex flex-col gap-4 justify-between"
         onClick={handleCardClick}
       >
-        <div className="flex flex-col gap-4">
-          <CardDescription className="mb-4">
-            {group.description}
-          </CardDescription>
-          <div className="flex justify-between text-sm text-gray-500">
-            <span>
-              Координаты: {group.coordinates[0].toFixed(4)},{" "}
-              {group.coordinates[1].toFixed(4)}
-            </span>
-            <span>Масштаб: {group.zoom}</span>
-          </div>
-        </div>
+        <CardDescription className="mb-4">{group.description}</CardDescription>
         <ShowOnMapButton onClick={() => {}} />
       </CardContent>
     </Card>
