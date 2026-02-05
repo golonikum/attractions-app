@@ -3,20 +3,28 @@ import { NewAttractionDialog } from "./NewAttractionDialog";
 import { AttractionImage } from "./AttractionImage";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { RemoveButton } from "../ui/buttons";
+import {
+  OpenInYandexMapButton,
+  RemoveButton,
+  ShowOnMapButton,
+} from "../ui/buttons";
 import { ConfirmDialog } from "../ui/ConfirmDialog";
 
-export const AttractionTableRow = ({
-  attraction,
-  onDelete,
-  onUpdate,
-}: {
+export type AttractionTableRowProps = {
   attraction: Attraction;
   onDelete: (id: string) => void;
   onUpdate: (
     id: string,
   ) => (updateData: CreateAttractionRequest) => Promise<void>;
-}) => {
+  onLocate: (attraction: Attraction) => void;
+};
+
+export const AttractionTableRow = ({
+  attraction,
+  onDelete,
+  onUpdate,
+  onLocate,
+}: AttractionTableRowProps) => {
   const router = useRouter();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -32,8 +40,12 @@ export const AttractionTableRow = ({
     router.push(`/attractions/${attraction.id}`);
   };
 
+  const onLocateAttractionClick = () => {
+    onLocate(attraction);
+  };
+
   return (
-    <tr key={attraction.id} className="hover:bg-gray-50 cursor-pointer">
+    <tr key={attraction.id}>
       <td
         className="px-6 py-4 whitespace-nowrap cursor-pointer"
         onClick={handleAttractionClick(attraction)}
@@ -64,6 +76,8 @@ export const AttractionTableRow = ({
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
         <div className="flex space-x-2">
+          <ShowOnMapButton onClick={onLocateAttractionClick} />
+          <OpenInYandexMapButton attraction={attraction} />
           <NewAttractionDialog
             isOpen={isEditDialogOpen}
             setIsOpen={setIsEditDialogOpen}

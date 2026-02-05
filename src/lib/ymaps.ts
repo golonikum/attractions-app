@@ -1,7 +1,6 @@
 import React, { FC, PropsWithChildren } from "react";
 import ReactDom from "react-dom";
 import type {
-  YMapLocationRequest,
   YMapControlButtonProps,
   YMapControlsProps,
   YMapScaleControlProps,
@@ -10,6 +9,8 @@ import type {
   YMapDefaultFeaturesLayerProps,
   YMapProps,
   YMapListenerProps,
+  YMapCenterLocation,
+  YMapZoomLocation,
 } from "ymaps3";
 
 // Инициализация Yandex Maps
@@ -24,7 +25,7 @@ let YMapControlButton: FC<PropsWithChildren<YMapControlButtonProps>>;
 let YMapScaleControl: FC<YMapScaleControlProps>;
 let YMapListener: FC<YMapListenerProps>;
 
-export const DEFAULT_LOCATION: YMapLocationRequest = {
+export const DEFAULT_LOCATION: YMapCenterLocation & YMapZoomLocation = {
   center: [37.588144, 55.733842],
   zoom: 5,
 };

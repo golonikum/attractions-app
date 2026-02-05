@@ -22,7 +22,7 @@ import { Minus, Plus } from "lucide-react";
 
 type MapPropsType = {
   attractions?: Attraction[];
-  location?: YMapLocationRequest;
+  location?: YMapCenterLocation & YMapZoomLocation;
   onAttractionClick?: (attraction: Attraction) => void;
 };
 
@@ -42,8 +42,8 @@ export const Map: FC<MapPropsType> = ({
   const onClickZoom = (operation: "plus" | "minus") => () => {
     console.log(operation);
     setLocation((val) => ({
-      center: (val as YMapCenterLocation).center,
-      zoom: (val as YMapZoomLocation).zoom + (operation === "plus" ? 1 : -1),
+      center: val.center,
+      zoom: val.zoom + (operation === "plus" ? 1 : -1),
     }));
   };
 
@@ -65,13 +65,13 @@ export const Map: FC<MapPropsType> = ({
       <YMapControls position="right" orientation="vertical">
         <YMapControlButton
           onClick={onClickZoom("plus")}
-          disabled={(location as YMapZoomLocation).zoom === 20}
+          disabled={location.zoom === 20}
         >
           <Plus />
         </YMapControlButton>
         <YMapControlButton
           onClick={onClickZoom("minus")}
-          disabled={(location as YMapZoomLocation).zoom === 1}
+          disabled={location.zoom === 1}
         >
           <Minus />
         </YMapControlButton>

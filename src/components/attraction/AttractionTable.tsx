@@ -1,18 +1,18 @@
-import { Attraction, CreateAttractionRequest } from "@/types/attraction";
-import { AttractionTableRow } from "./AttractionTableRow";
+import { Attraction } from "@/types/attraction";
+import {
+  AttractionTableRow,
+  AttractionTableRowProps,
+} from "./AttractionTableRow";
 
-interface AttractionTableProps {
+type AttractionTableProps = Omit<AttractionTableRowProps, "attraction"> & {
   attractions: Attraction[];
-  onDelete: (id: string) => void;
-  onUpdate: (
-    id: string,
-  ) => (updateData: CreateAttractionRequest) => Promise<void>;
-}
+};
 
 export function AttractionTable({
   attractions,
   onDelete,
   onUpdate,
+  onLocate,
 }: AttractionTableProps) {
   return (
     <div className="hidden md:block overflow-x-auto">
@@ -52,6 +52,7 @@ export function AttractionTable({
               attraction={attraction}
               onDelete={onDelete}
               onUpdate={onUpdate}
+              onLocate={onLocate}
             />
           ))}
         </tbody>

@@ -1,4 +1,6 @@
 export * from "./AddButton";
 export * from "./BackButton";
 export * from "./EditButton";
+export * from "./OpenInYandexMapButton";
 export * from "./RemoveButton";
+export * from "./ShowOnMapButton";

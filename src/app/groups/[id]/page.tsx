@@ -26,6 +26,7 @@ import { NewGroupDialog } from "@/components/group/NewGroupDialog";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { BackButton } from "@/components/ui/buttons";
 import { Map } from "@/components/ui/Map";
+import { DEFAULT_LOCATION } from "@/lib/ymaps";
 
 export default function GroupDetailPage() {
   const params = useParams();
@@ -41,6 +42,9 @@ export default function GroupDetailPage() {
     useState(false);
   const [isSubmittingAttraction, setIsSubmittingAttraction] = useState(false);
   const { isWideScreen } = useIsMobile();
+  const [locatedAttraction, setLocatedAttraction] = useState<Attraction | null>(
+    null,
+  );
 
   // Загрузка данных группы при монтировании компонента
   useEffect(() => {
@@ -104,6 +108,10 @@ export default function GroupDetailPage() {
         ),
       );
     };
+
+  const handleLocateAttraction = (attraction: Attraction) => {
+    setLocatedAttraction(attraction);
+  };
 
   if (isLoading) {
     return (
@@ -169,8 +177,13 @@ export default function GroupDetailPage() {
             <div style={{ height: "100%", minWidth: "600px" }}>
               <Map
                 location={{
-                  center: [group.coordinates[1], group.coordinates[0]],
-                  zoom: group.zoom,
+                  center: locatedAttraction
+                    ? [
+                        locatedAttraction.coordinates[1],
+                        locatedAttraction.coordinates[0],
+                      ]
+                    : [group.coordinates[1], group.coordinates[0]],
+                  zoom: locatedAttraction ? 14 : group.zoom,
                 }}
                 attractions={attractions}
                 onAttractionClick={(attraction) => {
@@ -192,6 +205,7 @@ export default function GroupDetailPage() {
                     attractions={attractions}
                     onDelete={handleDeleteAttraction}
                     onUpdate={handleUpdateAttraction}
+                    onLocate={handleLocateAttraction}
                   />
                 )}
               </div>
