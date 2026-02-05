@@ -195,7 +195,7 @@ export default function GroupDetailPage() {
               />
             </div>
 
-            <div className="flex flex-1 flex-col gap-4">
+            <div className="flex flex-1 flex-col gap-4 overflow-x-hidden">
               <GroupInfoCard group={group} />
 
               <div className="overflow-x-auto">
