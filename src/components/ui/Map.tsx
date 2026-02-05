@@ -5,17 +5,14 @@ import {
   YMapControls,
   YMapDefaultFeaturesLayer,
   YMapDefaultSchemeLayer,
+  YMapGeolocationControl,
   YMapListener,
   YMapScaleControl,
 } from "@/lib/ymaps";
 import { Attraction } from "@/types/attraction";
 import { FC, useContext, useEffect, useState } from "react";
 import { MarkerPin } from "./MarkerPin";
-import {
-  YMapCenterLocation,
-  YMapLocationRequest,
-  YMapZoomLocation,
-} from "ymaps3";
+import { YMapCenterLocation, YMapZoomLocation } from "ymaps3";
 import { useMapReady } from "@/hooks/useMapReady";
 import { ThemeProviderContext } from "@/contexts/ThemeContext";
 import { Minus, Plus } from "lucide-react";
@@ -64,6 +61,7 @@ export const Map: FC<MapPropsType> = ({
         <YMapScaleControl />
       </YMapControls>
       <YMapControls position="right" orientation="vertical">
+        <YMapGeolocationControl />
         <YMapControlButton
           onClick={onClickZoom("plus")}
           disabled={location.zoom === 20}

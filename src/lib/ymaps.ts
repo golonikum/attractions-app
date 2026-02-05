@@ -1,3 +1,7 @@
+import {
+  YMapGeolocationControlProps,
+  YMapZoomControlProps,
+} from "@yandex/ymaps3-types/packages/controls";
 import React, { FC, PropsWithChildren } from "react";
 import ReactDom from "react-dom";
 import type {
@@ -24,6 +28,8 @@ let YMapControls: FC<PropsWithChildren<YMapControlsProps>>;
 let YMapControlButton: FC<PropsWithChildren<YMapControlButtonProps>>;
 let YMapScaleControl: FC<YMapScaleControlProps>;
 let YMapListener: FC<YMapListenerProps>;
+let YMapGeolocationControl: FC<YMapGeolocationControlProps>;
+let YMapZoomControl: FC<YMapZoomControlProps>;
 
 export const DEFAULT_LOCATION: YMapCenterLocation & YMapZoomLocation = {
   center: [37.588144, 55.733842],
@@ -36,6 +42,11 @@ export async function initYMaps() {
     // Загружаем Yandex Maps API
     ymaps3 = await (window as any).ymaps3;
 
+    ymaps3.import.registerCdn(
+      "https://cdn.jsdelivr.net/npm/{package}",
+      "@yandex/ymaps3-default-ui-theme@latest",
+    );
+
     // Инициализируем reactify
     const [ymaps3React] = await Promise.all([
       ymaps3.import("@yandex/ymaps3-reactify"),
@@ -45,6 +56,9 @@ export async function initYMaps() {
     // Создаем reactify и экспортируем компоненты
     reactify = ymaps3React.reactify.bindTo(React, ReactDom);
     const components = reactify.module(ymaps3);
+    const themeComponents = reactify.module(
+      await ymaps3.import("@yandex/ymaps3-default-ui-theme"),
+    );
 
     YMap = components.YMap;
     YMapDefaultSchemeLayer = components.YMapDefaultSchemeLayer;
@@ -54,6 +68,8 @@ export async function initYMaps() {
     YMapScaleControl = components.YMapScaleControl;
     YMapMarker = components.YMapMarker;
     YMapListener = components.YMapListener;
+    YMapGeolocationControl = themeComponents.YMapGeolocationControl;
+    YMapZoomControl = themeComponents.YMapZoomControl;
 
     return true;
   } catch (error) {
@@ -73,4 +89,6 @@ export {
   YMapControlButton,
   YMapScaleControl,
   YMapListener,
+  YMapGeolocationControl,
+  YMapZoomControl,
 };
