@@ -72,7 +72,7 @@ export default function GroupsPage() {
     <ProtectedRoute>
       <Navigation />
       <div className="container mx-auto pt-20 px-4 pb-8">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-4">
           <h1 className="text-3xl font-bold"></h1>
           <NewGroupDialog
             handleSubmit={handleSubmit}
@@ -90,7 +90,7 @@ export default function GroupsPage() {
         ) : groups.length === 0 ? (
           <EmptyGroupsState onCreateGroup={() => setIsCreateDialogOpen(true)} />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {groups.map((group) => (
               <GroupCard
                 key={group.id}
