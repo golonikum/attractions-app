@@ -34,6 +34,20 @@ export const getAttractionsByGroupId = async (
   return data.attractions || [];
 };
 
+export const getAllAttractions = async (): Promise<Attraction[]> => {
+  const response = await fetch(`${API_URL}`, {
+    method: "GET",
+    headers: getAuthHeaders(),
+  });
+
+  if (!response.ok) {
+    throw new Error("Не удалось загрузить объекты");
+  }
+
+  const data = await response.json();
+  return data.attractions || [];
+};
+
 export const getAttractionById = async (
   id: string,
 ): Promise<Attraction | null> => {

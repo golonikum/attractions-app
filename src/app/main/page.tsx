@@ -3,8 +3,28 @@
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Navigation } from "@/components/Navigation";
 import { Map } from "@/components/ui/Map";
+import { useEffect, useState } from "react";
+import { getAllAttractions } from "@/services/attractionService";
+import { Attraction } from "@/types/attraction";
+import { toast } from "sonner";
 
 export default function MainPage() {
+  const [attractions, setAttractions] = useState<Attraction[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Загрузка объектов
+        const attractionsData = await getAllAttractions();
+        setAttractions(attractionsData);
+      } catch (error) {
+        toast.error("Не удалось загрузить объекты");
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <ProtectedRoute>
       <Navigation />
@@ -18,7 +38,7 @@ export default function MainPage() {
           style={{ height: "100%" }}
         >
           <div style={{ width: "100%", flex: "1 0 0" }}>
-            <Map />
+            <Map attractions={attractions} />
           </div>
         </div>
       </div>
