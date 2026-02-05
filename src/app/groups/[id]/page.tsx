@@ -147,7 +147,7 @@ export default function GroupDetailPage() {
     <ProtectedRoute>
       <Navigation />
       <div
-        className="container mx-auto pt-20 px-4 pb-8 flex flex-col gap-4"
+        className={`container mx-auto pt-20 px-4 pb-8 flex flex-col gap-4 ${isWideScreen ? "overflow-hidden" : ""}`}
         style={isWideScreen ? { height: "calc(100vh)" } : {}}
       >
         <div className="flex items-center">
@@ -173,7 +173,10 @@ export default function GroupDetailPage() {
         </div>
 
         {isWideScreen ? (
-          <div className="flex-1 flex flex-row gap-4">
+          <div
+            className="flex-1 flex flex-row gap-4"
+            style={{ height: "calc(100vh - 150px)" }}
+          >
             <div style={{ height: "100%", minWidth: "600px" }}>
               <Map
                 location={{
@@ -195,7 +198,7 @@ export default function GroupDetailPage() {
             <div className="flex flex-1 flex-col gap-4">
               <GroupInfoCard group={group} />
 
-              <div>
+              <div className="overflow-x-auto">
                 {attractions.length === 0 ? (
                   <EmptyAttractionsState
                     onAddAttraction={() => setIsAddAttractionDialogOpen(true)}

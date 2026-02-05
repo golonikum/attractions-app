@@ -8,7 +8,7 @@ interface GroupInfoCardProps {
 
 export function GroupInfoCard({ group }: GroupInfoCardProps) {
   return (
-    <Card>
+    <Card className="shrink-0">
       <CardHeader>
         <div className="flex gap-4 justify-between items-start">
           <CardTitle>{group.name}</CardTitle>
