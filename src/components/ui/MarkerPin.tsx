@@ -19,11 +19,13 @@ export const MarkerPin: FC<{
         <MapPin
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className={`h-8 w-8 text-muted-foreground shrink-0 relative ${
-            visited
-              ? "text-green-500 fill-green-200"
-              : "text-red-500 fill-red-200"
-          } ${isHovered || isActive ? "text-blue-500 fill-blue-200" : ""}`}
+          className={`h-8 w-8 text-muted-foreground shrink-0 relative hover:text-blue-500 hover:fill-blue-200 ${
+            isActive
+              ? "text-blue-500 fill-blue-200"
+              : visited
+                ? "text-green-500 fill-green-200"
+                : "text-red-500 fill-red-200"
+          }`}
           style={{ top: "-32px", left: "-16px", cursor: "pointer" }}
           onClick={onClick}
         />
