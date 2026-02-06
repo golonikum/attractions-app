@@ -42,7 +42,7 @@ export default function MainPage() {
 
         if (attractionId) {
           const attraction = attractionsData.find(
-            (item) => item.id === groupId,
+            (item) => item.id === attractionId,
           );
 
           if (attraction) {
