@@ -73,7 +73,18 @@ export const AttractionTableRow = ({
         className="px-6 py-4 cursor-pointer"
         onClick={handleAttractionClick(attraction)}
       >
-        <div className="text-sm text-gray-900 max-w-xs truncate">
+        <div
+          className="text-sm text-gray-900 max-w-xs truncate"
+          style={{
+            width: "100%",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            display: "-webkit-box",
+            boxOrient: "vertical",
+            lineClamp: 4,
+            wordBreak: "break-word",
+          }}
+        >
           {attraction.description || "Нет описания"}
         </div>
       </td>
