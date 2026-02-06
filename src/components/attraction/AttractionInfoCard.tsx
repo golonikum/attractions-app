@@ -1,11 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { MapPin, Calendar } from "lucide-react";
+import { Calendar } from "lucide-react";
 import { Attraction } from "@/types/attraction";
 import { Tag } from "@/components/ui/Tag";
 import { AttractionImage } from "./AttractionImage";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { OpenInYandexMapButton, ShowOnMapButton } from "../ui/buttons";
+import { useRouter } from "next/navigation";
 
 interface AttractionInfoCardProps {
   attraction: Attraction;
@@ -13,6 +13,7 @@ interface AttractionInfoCardProps {
 
 export function AttractionInfoCard({ attraction }: AttractionInfoCardProps) {
   const { isWideScreen } = useIsMobile();
+  const router = useRouter();
 
   return (
     <Card isFavorite={attraction.isFavorite} isVisited={attraction.isVisited}>
@@ -67,7 +68,11 @@ export function AttractionInfoCard({ attraction }: AttractionInfoCardProps) {
           )}
 
           <OpenInYandexMapButton attraction={attraction} />
-          <ShowOnMapButton onClick={() => {}} />
+          <ShowOnMapButton
+            onClick={() => {
+              router.push(`/main?attractionId=${attraction.id}`);
+            }}
+          />
         </div>
       </CardContent>
     </Card>

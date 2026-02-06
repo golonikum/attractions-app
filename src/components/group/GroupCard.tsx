@@ -72,7 +72,11 @@ export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
         onClick={handleCardClick}
       >
         <CardDescription className="mb-4">{group.description}</CardDescription>
-        <ShowOnMapButton onClick={() => {}} />
+        <ShowOnMapButton
+          onClick={() => {
+            router.push(`/main?groupId=${group.id}`);
+          }}
+        />
       </CardContent>
     </Card>
   );

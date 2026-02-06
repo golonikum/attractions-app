@@ -19,6 +19,7 @@ import {
   ShowOnMapButton,
 } from "../ui/buttons";
 import { AttractionImage } from "./AttractionImage";
+import { useRouter } from "next/navigation";
 
 // Используем тип Attraction из types/attraction.ts вместо интерфейса AttractionItem
 type AttractionItem = Attraction;
@@ -37,6 +38,7 @@ export function AttractionCard({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -92,7 +94,11 @@ export function AttractionCard({
 
         <div className="flex flex-col gap-4">
           <OpenInYandexMapButton attraction={attraction} />
-          <ShowOnMapButton onClick={() => {}} />
+          <ShowOnMapButton
+            onClick={() => {
+              router.push(`/main?attractionId=${attraction.id}`);
+            }}
+          />
         </div>
       </CardContent>
     </Card>

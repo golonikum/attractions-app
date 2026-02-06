@@ -26,7 +26,7 @@ import { NewGroupDialog } from "@/components/group/NewGroupDialog";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { BackButton } from "@/components/ui/buttons";
 import { Map } from "@/components/ui/Map";
-import { DEFAULT_LOCATION } from "@/lib/ymaps";
+import { DEFAULT_ATTRACTION_ZOOM } from "@/lib/ymaps";
 
 export default function GroupDetailPage() {
   const params = useParams();
@@ -186,7 +186,9 @@ export default function GroupDetailPage() {
                         locatedAttraction.coordinates[0],
                       ]
                     : [group.coordinates[1], group.coordinates[0]],
-                  zoom: locatedAttraction ? 16 : group.zoom,
+                  zoom: locatedAttraction
+                    ? DEFAULT_ATTRACTION_ZOOM
+                    : group.zoom,
                 }}
                 attractions={attractions}
                 onAttractionClick={(attraction) => {

@@ -36,6 +36,8 @@ export const DEFAULT_LOCATION: YMapCenterLocation & YMapZoomLocation = {
   zoom: 5,
 };
 
+export const DEFAULT_ATTRACTION_ZOOM = 16;
+
 // Функция для инициализации Yandex Maps
 export async function initYMaps() {
   try {
