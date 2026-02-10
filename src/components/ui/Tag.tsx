@@ -4,6 +4,7 @@ interface TagProps {
   text: string;
   variant?: "default" | "success" | "warning" | "error" | "info";
   className?: string;
+  onClick?: (e: any) => void;
 }
 
 const variantStyles = {
@@ -14,9 +15,15 @@ const variantStyles = {
   info: "bg-blue-100 text-blue-800",
 };
 
-export function Tag({ text, variant = "default", className = "" }: TagProps) {
+export function Tag({
+  text,
+  variant = "default",
+  className = "",
+  onClick,
+}: TagProps) {
   return (
     <span
+      onClick={onClick}
       className={`inline-block px-2 py-1 text-xs rounded-full ${variantStyles[variant]} ${className}`}
     >
       {text}
