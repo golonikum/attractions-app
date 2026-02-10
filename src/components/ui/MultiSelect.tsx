@@ -39,7 +39,7 @@ export function MultiSelect({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      console.log("handleClickOutside", !target.closest(".multi-select"));
+      // Проверяем, что клик был именно за пределами мультиселекта
       if (!target.closest(".multi-select")) {
         setIsOpen(false);
       }
@@ -51,7 +51,7 @@ export function MultiSelect({
 
   return (
     <div className={cn("w-full", className)}>
-      <div className="relative">
+      <div className="relative multi-select">
         {/* Кнопка триггера */}
         <Button
           variant="outline"
