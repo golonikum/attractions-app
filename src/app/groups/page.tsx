@@ -28,7 +28,7 @@ export default function GroupsPage() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const tagsParam = params.get("tag");
-    
+
     if (tagsParam) {
       setSelectedTags(tagsParam.split(","));
     }
@@ -37,14 +37,15 @@ export default function GroupsPage() {
   // Обновляем URL при изменении выбранных тегов
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    
+
     if (selectedTags.length > 0) {
       params.set("tag", selectedTags.join(","));
     } else {
       params.delete("tag");
     }
-    
+
     const newUrl = `${window.location.pathname}?${params.toString()}`;
+    console.log("newUrl", newUrl);
     window.history.replaceState({}, "", newUrl);
   }, [selectedTags]);
 
@@ -67,7 +68,7 @@ export default function GroupsPage() {
   // Получаем уникальные теги из всех групп
   const allTags = useMemo(() => {
     const tags = new Set<string>();
-    groups.forEach(group => {
+    groups.forEach((group) => {
       if (group.tag) {
         tags.add(group.tag);
       }
@@ -110,8 +111,8 @@ export default function GroupsPage() {
     if (selectedTags.length === 0) {
       return groups;
     }
-    
-    return groups.filter(group => {
+
+    return groups.filter((group) => {
       if (!group.tag) return false;
       return selectedTags.includes(group.tag);
     });
@@ -145,11 +146,13 @@ export default function GroupsPage() {
             <Loader2 className="h-8 w-8 animate-spin" />
           </div>
         ) : filteredGroups.length === 0 ? (
-          <EmptyGroupsState 
+          <EmptyGroupsState
             onCreateGroup={() => setIsCreateDialogOpen(true)}
-            message={selectedTags.length > 0 
-              ? "Нет групп с выбранными тегами" 
-              : "Нет доступных групп"}
+            message={
+              selectedTags.length > 0
+                ? "Нет групп с выбранными тегами"
+                : "Нет доступных групп"
+            }
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

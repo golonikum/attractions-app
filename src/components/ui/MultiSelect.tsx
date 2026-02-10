@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "./button";
 import { Tag } from "./Tag";
@@ -24,14 +23,15 @@ export function MultiSelect({
   const [searchValue, setSearchValue] = useState("");
 
   // Фильтрация опций на основе поискового запроса
-  const filteredOptions = options.filter(option =>
-    option.toLowerCase().includes(searchValue.toLowerCase())
+  const filteredOptions = options.filter((option) =>
+    option.toLowerCase().includes(searchValue.toLowerCase()),
   );
 
   const handleOptionClick = (option: string) => {
     const newSelected = selectedOptions.includes(option)
-      ? selectedOptions.filter(item => item !== option)
+      ? selectedOptions.filter((item) => item !== option)
       : [...selectedOptions, option];
+    console.log("newSelected", newSelected);
     onSelectionChange(newSelected);
   };
 
@@ -63,7 +63,7 @@ export function MultiSelect({
             placeholder
           ) : (
             <div className="flex flex-wrap gap-1">
-              {selectedOptions.map(option => (
+              {selectedOptions.map((option) => (
                 <Tag
                   key={option}
                   text={option}
@@ -97,7 +97,7 @@ export function MultiSelect({
               {/* Список опций */}
               <div className="max-h-60 overflow-y-auto">
                 {filteredOptions.length > 0 ? (
-                  filteredOptions.map(option => (
+                  filteredOptions.map((option) => (
                     <div
                       key={option}
                       className="relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
@@ -112,7 +112,9 @@ export function MultiSelect({
                     </div>
                   ))
                 ) : (
-                  <div className="py-1.5 text-center text-sm">Нет вариантов</div>
+                  <div className="py-1.5 text-center text-sm">
+                    Нет вариантов
+                  </div>
                 )}
               </div>
             </div>
