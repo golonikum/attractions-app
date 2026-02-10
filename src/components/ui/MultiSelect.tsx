@@ -101,7 +101,11 @@ export function MultiSelect({
                     <div
                       key={option}
                       className="relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
-                      onClick={() => handleOptionClick(option)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        console.log("handleOptionClick", option);
+                        handleOptionClick(option);
+                      }}
                     >
                       <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
                         {selectedOptions.includes(option) && (
