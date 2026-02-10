@@ -39,6 +39,7 @@ export function MultiSelect({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
+      console.log("handleClickOutside", !target.closest(".multi-select"));
       if (!target.closest(".multi-select")) {
         setIsOpen(false);
       }
