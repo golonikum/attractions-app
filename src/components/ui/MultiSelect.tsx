@@ -22,7 +22,7 @@ export function MultiSelect({
 }: MultiSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const { isWideScreen } = useIsMobile();
+  const { isMobile } = useIsMobile();
 
   // Фильтрация опций на основе поискового запроса
   const filteredOptions = options.filter((option) =>
@@ -59,7 +59,7 @@ export function MultiSelect({
             variant="outline"
             role="combobox"
             aria-expanded={isOpen}
-            className={`w-full justify-between h-10 px-3 py-2 overflow-hidden ${isWideScreen ? "max-w-100" : ""}`}
+            className={`w-full justify-between h-10 px-3 py-2 overflow-hidden ${!isMobile ? "max-w-100" : ""}`}
             onClick={() => setIsOpen(!isOpen)}
           >
             {selectedOptions.length === 0 ? (
