@@ -122,7 +122,7 @@ export default function GroupsPage() {
   // Фильтрация групп по выбранным тегам и поисковому запросу
   const filteredGroups = useMemo(() => {
     let result = groups;
-    
+
     // Фильтрация по тегам
     if (selectedTags.length > 0) {
       result = result.filter((group) => {
@@ -130,15 +130,15 @@ export default function GroupsPage() {
         return selectedTags.includes(group.tag);
       });
     }
-    
+
     // Фильтрация по поисковому запросу
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
-      result = result.filter((group) => 
-        group.name.toLowerCase().includes(query)
+      result = result.filter((group) =>
+        group.name.toLowerCase().includes(query),
       );
     }
-    
+
     return result;
   }, [groups, selectedTags, searchQuery]);
 
@@ -152,8 +152,8 @@ export default function GroupsPage() {
             <div className="w-full">
               <input
                 type="text"
-                placeholder="Поиск по названию группы..."
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Поиск по названию"
+                className="w-full h-10 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
