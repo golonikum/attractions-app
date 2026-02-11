@@ -49,7 +49,7 @@ export function MultiSelect({
   }, []);
 
   return (
-    <div className={cn("w-full", className)}>
+    <div className={cn("flex-1 shrink-0", className)}>
       <div className="relative multi-select">
         {/* Кнопка триггера */}
         <div className="relative w-full">
@@ -57,13 +57,13 @@ export function MultiSelect({
             variant="outline"
             role="combobox"
             aria-expanded={isOpen}
-            className="w-full justify-between h-10 px-3 py-2 overflow-hidden"
+            className="w-full max-w-400 justify-between h-10 px-3 py-2 overflow-hidden"
             onClick={() => setIsOpen(!isOpen)}
           >
             {selectedOptions.length === 0 ? (
               <span className="truncate">{placeholder}</span>
             ) : (
-              <div className="flex flex-wrap gap-1 max-w-full overflow-hidden">
+              <div className="flex gap-1 max-w-full overflow-hidden">
                 {selectedOptions.map((option) => (
                   <Tag
                     key={option}

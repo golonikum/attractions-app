@@ -149,7 +149,7 @@ export default function GroupsPage() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
           {/* Фильтры по тегам и поиск */}
           <div className="w-full space-y-4 md:space-y-0 md:space-x-4 md:flex md:flex-row md:w-auto md:items-center">
-            <div className="w-full">
+            <div className="flex-1 shrink-0">
               <input
                 type="text"
                 placeholder="Поиск по названию"
