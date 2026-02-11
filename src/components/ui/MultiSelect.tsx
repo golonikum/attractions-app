@@ -52,33 +52,35 @@ export function MultiSelect({
     <div className={cn("w-full", className)}>
       <div className="relative multi-select">
         {/* Кнопка триггера */}
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={isOpen}
-          className="w-full justify-between h-10 px-3 py-2"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {selectedOptions.length === 0 ? (
-            placeholder
-          ) : (
-            <div className="flex flex-wrap gap-1">
-              {selectedOptions.map((option) => (
-                <Tag
-                  key={option}
-                  text={option}
-                  variant="default"
-                  className="cursor-pointer"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleOptionClick(option);
-                  }}
-                />
-              ))}
-            </div>
-          )}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
+        <div className="relative w-full">
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={isOpen}
+            className="w-full justify-between h-10 px-3 py-2 overflow-hidden"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {selectedOptions.length === 0 ? (
+              <span className="truncate">{placeholder}</span>
+            ) : (
+              <div className="flex flex-wrap gap-1 max-w-full overflow-hidden">
+                {selectedOptions.map((option) => (
+                  <Tag
+                    key={option}
+                    text={option}
+                    variant="default"
+                    className="cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleOptionClick(option);
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50 flex-shrink-0" />
+          </Button>
+        </div>
 
         {/* Список опций */}
         {isOpen && (
