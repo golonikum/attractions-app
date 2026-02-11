@@ -3,6 +3,7 @@ import { Button } from "./button";
 import { Tag } from "./Tag";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface MultiSelectProps {
   options: string[];
@@ -21,6 +22,7 @@ export function MultiSelect({
 }: MultiSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const { isWideScreen } = useIsMobile();
 
   // Фильтрация опций на основе поискового запроса
   const filteredOptions = options.filter((option) =>
@@ -57,7 +59,7 @@ export function MultiSelect({
             variant="outline"
             role="combobox"
             aria-expanded={isOpen}
-            className="w-full max-w-400 justify-between h-10 px-3 py-2 overflow-hidden"
+            className={`w-full justify-between h-10 px-3 py-2 overflow-hidden ${isWideScreen ? "max-w-100" : ""}`}
             onClick={() => setIsOpen(!isOpen)}
           >
             {selectedOptions.length === 0 ? (
