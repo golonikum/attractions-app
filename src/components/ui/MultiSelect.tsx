@@ -31,7 +31,6 @@ export function MultiSelect({
     const newSelected = selectedOptions.includes(option)
       ? selectedOptions.filter((item) => item !== option)
       : [...selectedOptions, option];
-    console.log("newSelected", newSelected);
     onSelectionChange(newSelected);
   };
 
@@ -104,7 +103,6 @@ export function MultiSelect({
                       className="relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
                       onClick={(e) => {
                         e.stopPropagation();
-                        console.log("handleOptionClick", option);
                         handleOptionClick(option);
                       }}
                     >

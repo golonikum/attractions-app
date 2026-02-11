@@ -23,31 +23,44 @@ export default function GroupsPage() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // Получаем теги из URL параметров
+  // Получаем параметры из URL
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const tagsParam = params.get("tag");
+    const searchParam = params.get("search");
 
     if (tagsParam) {
       setSelectedTags(tagsParam.split(","));
     }
+
+    if (searchParam) {
+      setSearchQuery(searchParam);
+    }
   }, []);
 
-  // Обновляем URL при изменении выбранных тегов
+  // Обновляем URL при изменении фильтров
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
 
+    // Обработка тегов
     if (selectedTags.length > 0) {
       params.set("tag", selectedTags.join(","));
     } else {
       params.delete("tag");
     }
 
+    // Обработка поиска
+    if (searchQuery.trim()) {
+      params.set("search", searchQuery.trim());
+    } else {
+      params.delete("search");
+    }
+
     const newUrl = `${window.location.pathname}?${params.toString()}`;
-    console.log("newUrl", newUrl);
     window.history.replaceState({}, "", newUrl);
-  }, [selectedTags]);
+  }, [selectedTags, searchQuery]);
 
   // Загрузка групп при монтировании компонента
   useEffect(() => {
@@ -106,25 +119,45 @@ export default function GroupsPage() {
     }
   };
 
-  // Фильтрация групп по выбранным тегам
+  // Фильтрация групп по выбранным тегам и поисковому запросу
   const filteredGroups = useMemo(() => {
-    if (selectedTags.length === 0) {
-      return groups;
+    let result = groups;
+    
+    // Фильтрация по тегам
+    if (selectedTags.length > 0) {
+      result = result.filter((group) => {
+        if (!group.tag) return false;
+        return selectedTags.includes(group.tag);
+      });
     }
-
-    return groups.filter((group) => {
-      if (!group.tag) return false;
-      return selectedTags.includes(group.tag);
-    });
-  }, [groups, selectedTags]);
+    
+    // Фильтрация по поисковому запросу
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      result = result.filter((group) => 
+        group.name.toLowerCase().includes(query)
+      );
+    }
+    
+    return result;
+  }, [groups, selectedTags, searchQuery]);
 
   return (
     <ProtectedRoute>
       <Navigation />
       <div className="container mx-auto pt-20 px-4 pb-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
-          {/* Фильтры по тегам */}
-          <div className="w-full md:w-auto">
+          {/* Фильтры по тегам и поиск */}
+          <div className="w-full space-y-4 md:space-y-0 md:space-x-4 md:flex md:flex-row md:w-auto md:items-center">
+            <div className="w-full">
+              <input
+                type="text"
+                placeholder="Поиск по названию группы..."
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
             <MultiSelect
               options={allTags}
               selectedOptions={selectedTags}
@@ -149,8 +182,8 @@ export default function GroupsPage() {
           <EmptyGroupsState
             onCreateGroup={() => setIsCreateDialogOpen(true)}
             message={
-              selectedTags.length > 0
-                ? "Нет групп с выбранными тегами"
+              selectedTags.length > 0 || searchQuery.trim()
+                ? "Нет групп, соответствующих фильтрам"
                 : "Нет доступных групп"
             }
           />
