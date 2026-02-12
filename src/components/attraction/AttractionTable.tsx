@@ -19,18 +19,20 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import { useCallback } from "react";
+import { CSSProperties, useCallback } from "react";
 // import { Dispatch, SetStateAction } from "react";
 
 type AttractionTableProps = Omit<AttractionTableRowProps, "attraction"> & {
   attractions: Attraction[];
   // setAttractions: Dispatch<SetStateAction<Attraction[]>>;
   onOrderChanged: (attractions: Attraction[]) => void;
+  isDisabled?: boolean;
 };
 
 export function AttractionTable({
   attractions,
   // setAttractions,
+  isDisabled,
   onOrderChanged,
   onDelete,
   onUpdate,
@@ -55,6 +57,15 @@ export function AttractionTable({
     [attractions, onOrderChanged],
   );
 
+  const style: CSSProperties = isDisabled
+    ? {
+        pointerEvents: "none",
+        opacity: 0.6,
+        cursor: "not-allowed",
+        userSelect: "none",
+      }
+    : {};
+
   return (
     <DndContext
       sensors={sensors}
@@ -67,7 +78,7 @@ export function AttractionTable({
         strategy={verticalListSortingStrategy}
       >
         <div className="hidden md:block overflow-x-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
+          <table className="min-w-full divide-y divide-gray-200" style={style}>
             <thead className="bg-gray-50">
               <tr>
                 <th style={{ width: "50px" }}></th>

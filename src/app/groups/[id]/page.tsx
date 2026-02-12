@@ -34,6 +34,7 @@ export default function GroupDetailPage() {
   const router = useRouter();
   const groupId = params.id as string;
 
+  const [isOrderChanging, setIsOrderChanging] = useState(false);
   const [group, setGroup] = useState<Group | null>(null);
   const [attractions, setAttractions] = useState<Attraction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -117,10 +118,17 @@ export default function GroupDetailPage() {
   const handleUpdateOrder = async (attractions: Attraction[]) => {
     setAttractions(attractions);
 
-    await updateOrder(
-      groupId,
-      attractions.map(({ id, order }) => ({ id, order: order! })),
-    );
+    try {
+      setIsOrderChanging(true);
+      await updateOrder(
+        groupId,
+        attractions.map(({ id }, index) => ({ id, order: index + 1 })),
+      );
+    } catch (e) {
+      toast.error("Не поменять порядок");
+    } finally {
+      setIsOrderChanging(false);
+    }
   };
 
   if (isLoading) {
@@ -218,6 +226,7 @@ export default function GroupDetailPage() {
                 ) : (
                   <AttractionTable
                     attractions={attractions}
+                    isDisabled={isOrderChanging}
                     onOrderChanged={handleUpdateOrder}
                     onDelete={handleDeleteAttraction}
                     onUpdate={handleUpdateAttraction}
