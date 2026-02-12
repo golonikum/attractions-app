@@ -110,3 +110,20 @@ export const deleteAttraction = async (id: string): Promise<void> => {
     throw new Error("Не удалось удалить объект");
   }
 };
+
+export const updateOrder = async (
+  groupId: string,
+  attractions: { id: string; order: number }[],
+) => {
+  const response = await fetch("/api/order", {
+    method: "PUT",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ groupId, attractions }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Ошибка обновления порядка");
+  }
+
+  return response.json();
+};

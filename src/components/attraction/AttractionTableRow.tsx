@@ -9,6 +9,24 @@ import {
   ShowOnMapButton,
 } from "../ui/buttons";
 import { ConfirmDialog } from "../ui/ConfirmDialog";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
 
 export type AttractionTableRowProps = {
   attraction: Attraction;
@@ -29,6 +47,21 @@ export const AttractionTableRow = ({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: attraction.id });
+
+  const style: React.CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.8 : 1,
+    zIndex: isDragging ? 1 : 0,
+  };
 
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -46,9 +79,13 @@ export const AttractionTableRow = ({
 
   return (
     <tr
-      key={attraction.id}
       className={attraction.isVisited ? "bg-green-50" : ""}
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
     >
+      <td className="px-6 py-4 cursor-move">☰</td>
       <td
         className="px-6 py-4 whitespace-nowrap cursor-pointer"
         onClick={handleAttractionClick(attraction)}

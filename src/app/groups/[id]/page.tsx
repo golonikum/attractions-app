@@ -20,6 +20,7 @@ import {
   createAttraction,
   deleteAttraction,
   updateAttraction,
+  updateOrder,
 } from "@/services/attractionService";
 import { NewAttractionDialog } from "@/components/attraction/NewAttractionDialog";
 import { NewGroupDialog } from "@/components/group/NewGroupDialog";
@@ -111,6 +112,15 @@ export default function GroupDetailPage() {
 
   const handleLocateAttraction = (attraction: Attraction) => {
     setLocatedAttraction(attraction);
+  };
+
+  const handleUpdateOrder = async (attractions: Attraction[]) => {
+    setAttractions(attractions);
+
+    await updateOrder(
+      groupId,
+      attractions.map(({ id, order }) => ({ id, order: order! })),
+    );
   };
 
   if (isLoading) {
@@ -208,6 +218,7 @@ export default function GroupDetailPage() {
                 ) : (
                   <AttractionTable
                     attractions={attractions}
+                    onOrderChanged={handleUpdateOrder}
                     onDelete={handleDeleteAttraction}
                     onUpdate={handleUpdateAttraction}
                     onLocate={handleLocateAttraction}
