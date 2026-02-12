@@ -59,7 +59,7 @@ export function MultiSelect({
             variant="outline"
             role="combobox"
             aria-expanded={isOpen}
-            className={`w-full justify-between h-10 px-3 py-2 overflow-hidden ${!isMobile ? "max-w-100" : ""}`}
+            className={`w-full justify-between h-10 px-3 py-2 overflow-hidden font-normal ${!isMobile ? "max-w-100" : ""}`}
             onClick={() => setIsOpen(!isOpen)}
           >
             {selectedOptions.length === 0 ? (

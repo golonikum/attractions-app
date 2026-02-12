@@ -86,7 +86,7 @@ export default function GroupsPage() {
         tags.add(group.tag);
       }
     });
-    return Array.from(tags);
+    return Array.from(tags).sort();
   }, [groups]);
 
   // Обработчик отправки формы создания группы
