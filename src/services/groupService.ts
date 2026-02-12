@@ -1,6 +1,6 @@
-
 import { getCookie } from "@/lib/clientCookies";
 import { Group, CreateGroupRequest, UpdateGroupRequest } from "@/types/group";
+import { fetchProxy } from "./fetchProxy";
 
 const API_URL = "/api/groups";
 
@@ -15,7 +15,7 @@ const getAuthHeaders = () => {
 
 // Get all groups for the current user
 export const getAllGroups = async (): Promise<Group[]> => {
-  const response = await fetch(API_URL, {
+  const response = await fetchProxy(API_URL, {
     method: "GET",
     headers: getAuthHeaders(),
   });
@@ -30,7 +30,7 @@ export const getAllGroups = async (): Promise<Group[]> => {
 
 // Get a specific group by ID
 export const getGroupById = async (id: string): Promise<Group> => {
-  const response = await fetch(`${API_URL}/${id}`, {
+  const response = await fetchProxy(`${API_URL}/${id}`, {
     method: "GET",
     headers: getAuthHeaders(),
   });
@@ -44,7 +44,9 @@ export const getGroupById = async (id: string): Promise<Group> => {
 };
 
 // Create a new group
-export const createGroup = async (groupData: CreateGroupRequest): Promise<Group> => {
+export const createGroup = async (
+  groupData: CreateGroupRequest,
+): Promise<Group> => {
   const response = await fetch(API_URL, {
     method: "POST",
     headers: getAuthHeaders(),
@@ -60,7 +62,10 @@ export const createGroup = async (groupData: CreateGroupRequest): Promise<Group>
 };
 
 // Update an existing group
-export const updateGroup = async (id: string, groupData: UpdateGroupRequest): Promise<Group> => {
+export const updateGroup = async (
+  id: string,
+  groupData: UpdateGroupRequest,
+): Promise<Group> => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
     headers: getAuthHeaders(),

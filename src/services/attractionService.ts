@@ -3,6 +3,7 @@ import {
   CreateAttractionRequest,
   UpdateAttractionRequest,
 } from "@/types/attraction";
+import { fetchProxy } from "./fetchProxy";
 
 const API_URL = "/api/attractions";
 
@@ -21,7 +22,7 @@ const getAuthHeaders = () => {
 export const getAttractionsByGroupId = async (
   groupId: string,
 ): Promise<Attraction[]> => {
-  const response = await fetch(`${API_URL}?groupId=${groupId}`, {
+  const response = await fetchProxy(`${API_URL}?groupId=${groupId}`, {
     method: "GET",
     headers: getAuthHeaders(),
   });
@@ -35,7 +36,7 @@ export const getAttractionsByGroupId = async (
 };
 
 export const getAllAttractions = async (): Promise<Attraction[]> => {
-  const response = await fetch(`${API_URL}`, {
+  const response = await fetchProxy(`${API_URL}`, {
     method: "GET",
     headers: getAuthHeaders(),
   });
@@ -51,7 +52,7 @@ export const getAllAttractions = async (): Promise<Attraction[]> => {
 export const getAttractionById = async (
   id: string,
 ): Promise<Attraction | null> => {
-  const response = await fetch(`${API_URL}/${id}`, {
+  const response = await fetchProxy(`${API_URL}/${id}`, {
     method: "GET",
     headers: getAuthHeaders(),
   });
