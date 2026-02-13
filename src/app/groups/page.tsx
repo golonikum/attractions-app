@@ -134,8 +134,10 @@ export default function GroupsPage() {
     // Фильтрация по поисковому запросу
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
-      result = result.filter((group) =>
-        group.name.toLowerCase().includes(query),
+      result = result.filter(
+        (group) =>
+          group.name.toLowerCase().includes(query) ||
+          group.description.toLowerCase().includes(query),
       );
     }
 
