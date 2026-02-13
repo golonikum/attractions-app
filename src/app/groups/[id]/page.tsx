@@ -216,7 +216,7 @@ export default function GroupDetailPage() {
             </div>
 
             <div className="flex flex-1 flex-col gap-4 overflow-x-hidden">
-              <GroupInfoCard group={group} />
+              <GroupInfoCard group={group} attractions={attractions} />
 
               <div className="overflow-x-auto">
                 {attractions.length === 0 ? (
@@ -238,7 +238,7 @@ export default function GroupDetailPage() {
           </div>
         ) : (
           <>
-            <GroupInfoCard group={group} />
+            <GroupInfoCard group={group} attractions={attractions} />
 
             <div>
               {attractions.length === 0 ? (

@@ -24,7 +24,7 @@ export function Tag({
   return (
     <span
       onClick={onClick}
-      className={`inline-block px-2 py-1 text-xs rounded-full ${variantStyles[variant]} ${className}`}
+      className={`inline-block px-2 py-1 text-xs rounded-full w-fit text-center ${variantStyles[variant]} ${className}`}
     >
       {text}
     </span>

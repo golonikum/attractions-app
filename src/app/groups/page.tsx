@@ -166,6 +166,12 @@ export default function GroupsPage() {
               onSelectionChange={setSelectedTags}
               placeholder="Фильтровать по тегам"
             />
+            <div className="flex-1 shrink-0">
+              Найдено{" "}
+              <span className={filteredGroups.length ? "font-bold" : ""}>
+                {filteredGroups.length}
+              </span>
+            </div>
           </div>
           <NewGroupDialog
             handleSubmit={handleSubmit}

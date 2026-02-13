@@ -54,10 +54,10 @@ export function AttractionCard({
       </div>
       <CardHeader>
         <div className="flex justify-between items-start">
-          <div className="flex-1">
+          <div className="flex-1 flex flex-col gap-2">
             <div className="flex justify-between items-start">
               <Link href={`/attractions/${attraction.id}`}>
-                <CardTitle className="text-lg cursor-pointer">
+                <CardTitle className="text-lg/5 cursor-pointer">
                   {attraction.name}
                 </CardTitle>
               </Link>

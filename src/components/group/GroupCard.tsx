@@ -41,8 +41,11 @@ export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
     <Card className="overflow-hidden flex flex-col">
       <CardHeader>
         <div className="flex justify-between items-start space-x-1">
-          <div className="flex-1 cursor-pointer" onClick={handleCardClick}>
-            <CardTitle className="text-lg">{group.name}</CardTitle>
+          <div
+            className="flex-1 flex flex-col gap-2 cursor-pointer"
+            onClick={handleCardClick}
+          >
+            <CardTitle className="text-lg/5">{group.name}</CardTitle>
             {group.tag && <Tag text={group.tag} />}
           </div>
           <NewGroupDialog
