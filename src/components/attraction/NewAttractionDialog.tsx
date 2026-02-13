@@ -1,5 +1,4 @@
-import { Loader2, Star } from "lucide-react";
-import { Button } from "../ui/button";
+import { Star } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -16,7 +15,13 @@ import { NotesManager } from "../ui/NotesManager";
 import { useState, useEffect } from "react";
 import { CreateAttractionRequest, Attraction } from "@/types/attraction";
 import { toast } from "sonner";
-import { AddButton, EditButton } from "../ui/buttons";
+import {
+  AddButton,
+  CancelFormButton,
+  EditButton,
+  SubmitFormButton,
+} from "../ui/buttons";
+import { DEFAULT_COORDINATES } from "@/lib/constants";
 
 interface NewAttractionDialogProps {
   isOpen: boolean;
@@ -29,6 +34,23 @@ interface NewAttractionDialogProps {
   attractionsCount?: number;
 }
 
+const getInitialAttractionFormState = (
+  groupId?: string,
+  attractionsCount = 0,
+) => ({
+  groupId: groupId || "",
+  name: "",
+  category: "",
+  description: "",
+  imageUrl: "",
+  yaMapUrl: "",
+  isVisited: false,
+  isFavorite: false,
+  coordinates: DEFAULT_COORDINATES,
+  order: attractionsCount + 1,
+  notes: [],
+});
+
 export const NewAttractionDialog = ({
   isOpen,
   setIsOpen,
@@ -39,19 +61,9 @@ export const NewAttractionDialog = ({
   attraction,
   attractionsCount = 0,
 }: NewAttractionDialogProps) => {
-  const [formData, setFormData] = useState<CreateAttractionRequest>({
-    groupId: groupId || "",
-    name: "",
-    category: "",
-    description: "",
-    imageUrl: "",
-    yaMapUrl: "",
-    isVisited: false,
-    isFavorite: false,
-    coordinates: [55.755819, 37.617644], // [долгота, широта] по умолчанию (Москва)
-    order: attractionsCount + 1,
-    notes: [],
-  });
+  const [formData, setFormData] = useState<CreateAttractionRequest>(
+    getInitialAttractionFormState(groupId, attractionsCount),
+  );
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,19 +75,7 @@ export const NewAttractionDialog = ({
       setIsOpen(false);
 
       // Сброс формы
-      setFormData({
-        groupId: groupId || "",
-        name: "",
-        category: "",
-        description: "",
-        imageUrl: "",
-        yaMapUrl: "",
-        isVisited: false,
-        isFavorite: false,
-        coordinates: [55.755819, 37.617644], // [долгота, широта] по умолчанию (Москва)
-        order: 1,
-        notes: [],
-      });
+      setFormData(getInitialAttractionFormState(groupId, attractionsCount));
     } catch (error) {
       toast.error(`Не удалось ${attraction ? "обновить" : "создать"} объект`);
     } finally {
@@ -245,25 +245,8 @@ export const NewAttractionDialog = ({
           </div>
 
           <div className="flex justify-end space-x-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setIsOpen(false)}
-            >
-              Отмена
-            </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {attraction ? "Сохранение..." : "Создание..."}
-                </>
-              ) : attraction ? (
-                "Сохранить"
-              ) : (
-                "Создать"
-              )}
-            </Button>
+            <CancelFormButton onClick={() => setIsOpen(false)} />
+            <SubmitFormButton isSubmitting={isSubmitting} id={attraction?.id} />
           </div>
         </form>
       </DialogContent>

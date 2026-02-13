@@ -1,5 +1,3 @@
-import { Loader2 } from "lucide-react";
-import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
@@ -15,7 +13,21 @@ import { CoordinatesInput } from "../ui/CoordinatesInput";
 import { useEffect, useState } from "react";
 import { CreateGroupRequest, Group } from "@/types/group";
 import { toast } from "sonner";
-import { AddButton, EditButton } from "../ui/buttons";
+import {
+  AddButton,
+  CancelFormButton,
+  EditButton,
+  SubmitFormButton,
+} from "../ui/buttons";
+import { DEFAULT_COORDINATES } from "@/lib/constants";
+
+const initialGroupFormState = {
+  name: "",
+  description: "",
+  tag: "",
+  coordinates: DEFAULT_COORDINATES,
+  zoom: 10,
+};
 
 export const NewGroupDialog = ({
   isOpen,
@@ -32,13 +44,9 @@ export const NewGroupDialog = ({
   setIsSubmitting: (isSubmitting: boolean) => void;
   groupData?: Group;
 }) => {
-  const [formData, setFormData] = useState<CreateGroupRequest>({
-    name: "",
-    description: "",
-    tag: "",
-    coordinates: [55.755819, 37.617644],
-    zoom: 10,
-  });
+  const [formData, setFormData] = useState<CreateGroupRequest>(
+    initialGroupFormState,
+  );
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,13 +59,7 @@ export const NewGroupDialog = ({
 
       // Сброс формы
       if (!groupData) {
-        setFormData({
-          name: "",
-          description: "",
-          tag: "",
-          coordinates: [55.755819, 37.617644],
-          zoom: 10,
-        });
+        setFormData(initialGroupFormState);
       }
     } catch (error) {
       toast.error(`Не удалось ${groupData ? "обновить" : "создать"} группу`);
@@ -68,7 +70,6 @@ export const NewGroupDialog = ({
 
   useEffect(() => {
     if (groupData) {
-      // TODO
       setFormData({
         name: groupData.name,
         description: groupData.description,
@@ -157,25 +158,8 @@ export const NewGroupDialog = ({
             />
           </div>
           <div className="flex justify-end space-x-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setIsOpen(false)}
-            >
-              Отмена
-            </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {groupData ? "Сохранение..." : "Создание..."}
-                </>
-              ) : groupData ? (
-                "Сохранить"
-              ) : (
-                "Создать"
-              )}
-            </Button>
+            <CancelFormButton onClick={() => setIsOpen(false)} />
+            <SubmitFormButton isSubmitting={isSubmitting} id={groupData?.id} />
           </div>
         </form>
       </DialogContent>

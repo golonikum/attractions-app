@@ -5,8 +5,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { MapPin, Image } from "lucide-react";
 import { ConfirmDialog } from "../ui/ConfirmDialog";
 import { NewAttractionDialog } from "./NewAttractionDialog";
 import { useState } from "react";

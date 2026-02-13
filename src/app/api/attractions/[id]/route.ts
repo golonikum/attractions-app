@@ -1,48 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { verifyToken } from "@/lib/serverAuth";
+import { withAuth } from "@/lib/serverAuth";
 
 // Get a specific attraction by ID
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  try {
-    // Verify authentication token
-    const token = request.cookies.get("token")?.value;
-    if (!token) {
-      return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
-    }
-
-    const decoded = verifyToken(token);
-    if (!decoded || !decoded.id) {
-      return NextResponse.json(
-        { error: "Недействительный токен" },
-        { status: 401 },
-      );
-    }
-
+  return await withAuth(request, async (userId) => {
     // Fetch the attraction
     const { id } = await params;
     const attraction = await prisma.attraction.findFirst({
       where: {
         id,
-        userId: decoded.id,
+        userId,
       },
     });
 
     if (!attraction) {
-      return NextResponse.json({ error: "Объект не найдена" }, { status: 404 });
+      return NextResponse.json({ error: "Объект не найден" }, { status: 404 });
     }
 
     return NextResponse.json({ attraction });
-  } catch (error) {
-    console.error("Error fetching attraction:", error);
-    return NextResponse.json(
-      { error: "Внутренняя ошибка сервера" },
-      { status: 500 },
-    );
-  }
+  });
 }
 
 // Update a specific attraction by ID
@@ -50,21 +30,7 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  try {
-    // Verify authentication token
-    const token = request.cookies.get("token")?.value;
-    if (!token) {
-      return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
-    }
-
-    const decoded = verifyToken(token);
-    if (!decoded || !decoded.id) {
-      return NextResponse.json(
-        { error: "Недействительный токен" },
-        { status: 401 },
-      );
-    }
-
+  return await withAuth(request, async (userId) => {
     // Parse request body
     const {
       groupId,
@@ -85,7 +51,7 @@ export async function PUT(
     const existingAttraction = await prisma.attraction.findFirst({
       where: {
         id,
-        userId: decoded.id,
+        userId,
       },
     });
 
@@ -127,13 +93,7 @@ export async function PUT(
     });
 
     return NextResponse.json({ attraction: updatedAttraction });
-  } catch (error) {
-    console.error("Error updating attraction:", error);
-    return NextResponse.json(
-      { error: "Внутренняя ошибка сервера" },
-      { status: 500 },
-    );
-  }
+  });
 }
 
 // Delete a specific attraction by ID
@@ -141,27 +101,13 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  try {
-    // Verify authentication token
-    const token = request.cookies.get("token")?.value;
-    if (!token) {
-      return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
-    }
-
-    const decoded = verifyToken(token);
-    if (!decoded || !decoded.id) {
-      return NextResponse.json(
-        { error: "Недействительный токен" },
-        { status: 401 },
-      );
-    }
-
+  return await withAuth(request, async (userId) => {
     // Check if the attraction exists and belongs to the user
     const { id } = await params;
     const existingAttraction = await prisma.attraction.findFirst({
       where: {
         id,
-        userId: decoded.id,
+        userId,
       },
     });
 
@@ -175,11 +121,5 @@ export async function DELETE(
     });
 
     return NextResponse.json({ message: "Объект успешно удалена" });
-  } catch (error) {
-    console.error("Error deleting attraction:", error);
-    return NextResponse.json(
-      { error: "Внутренняя ошибка сервера" },
-      { status: 500 },
-    );
-  }
+  });
 }

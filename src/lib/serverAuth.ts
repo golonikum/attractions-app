@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User as PrismaUser } from "@prisma/client";
 import { User } from "@/types/user";
+import { NextRequest, NextResponse } from "next/server";
 
 const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret";
 
@@ -12,7 +13,7 @@ export async function hashPassword(password: string): Promise<string> {
 
 export async function verifyPassword(
   password: string,
-  hashedPassword: string
+  hashedPassword: string,
 ): Promise<boolean> {
   return bcrypt.compare(password, hashedPassword);
 }
@@ -22,25 +23,6 @@ export function generateToken(user: PrismaUser): string {
     expiresIn: "7d",
   });
 }
-
-// export async function verifyPassword(
-//   email: string,
-//   password: string
-// ): Promise<boolean> {
-//   return email === process.env.ADMIN_NAME && password === process.env.ADMIN_PWD;
-// }
-
-// export function generateToken({
-//   email,
-//   password,
-// }: {
-//   email: string;
-//   password: string;
-// }): string {
-//   return jwt.sign({ id: password, email }, JWT_SECRET, {
-//     expiresIn: "7d",
-//   });
-// }
 
 export function verifyToken(token: string): User | null {
   try {
@@ -66,3 +48,43 @@ export async function verifyTokenFromCookie() {
     return null;
   }
 }
+
+export const getUserId = (request: NextRequest) => {
+  let error;
+
+  // Verify authentication token
+  const token = request.cookies.get("token")?.value;
+  if (!token) {
+    error = NextResponse.json({ error: "Не авторизован" }, { status: 401 });
+  }
+
+  const decoded = token ? verifyToken(token) : null;
+  if (!decoded || !decoded.id) {
+    error = NextResponse.json(
+      { error: "Недействительный токен" },
+      { status: 401 },
+    );
+  }
+
+  return { error, userId: decoded?.id };
+};
+
+export const withAuth = async (
+  request: NextRequest,
+  cb: (userId: string) => Promise<NextResponse>,
+) => {
+  try {
+    const { error, userId } = getUserId(request);
+    if (error) {
+      return error;
+    }
+
+    return await cb(userId!);
+  } catch (error) {
+    console.error("Error doing request to DB:", error);
+    return NextResponse.json(
+      { error: "Внутренняя ошибка сервера" },
+      { status: 500 },
+    );
+  }
+};
