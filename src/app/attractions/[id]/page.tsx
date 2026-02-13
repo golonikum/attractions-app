@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { Navigation } from "@/components/Navigation";
 import { Attraction, CreateAttractionRequest } from "@/types/attraction";
 import {
   getAttractionById,
@@ -78,7 +77,7 @@ export default function AttractionDetailPage() {
     } catch (error) {
       toast.error("Не удалось удалить объект");
     }
-  }, [group]);
+  }, [group, attractionId, router]);
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
@@ -95,7 +94,6 @@ export default function AttractionDetailPage() {
   if (isLoading) {
     return (
       <ProtectedRoute>
-        <Navigation />
         <div className="container mx-auto pt-20 px-4 pb-8">
           <div className="flex justify-center items-center h-64">
             <Loader2 className="h-8 w-8 animate-spin" />
@@ -108,7 +106,6 @@ export default function AttractionDetailPage() {
   if (!attraction) {
     return (
       <ProtectedRoute>
-        <Navigation />
         <div className="container mx-auto pt-20 px-4 pb-8">
           <div className="text-center py-12">
             <h2 className="text-2xl font-bold">Объект не найден</h2>
@@ -120,7 +117,6 @@ export default function AttractionDetailPage() {
 
   return (
     <ProtectedRoute>
-      <Navigation />
       <div className="container mx-auto pt-20 px-4 pb-8 flex flex-col gap-4">
         <div className="flex items-center gap-2">
           {group && <BackButton route={`/groups/${group.id}`} />}

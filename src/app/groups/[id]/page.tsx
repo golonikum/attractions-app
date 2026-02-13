@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { Navigation } from "@/components/Navigation";
 import { CreateGroupRequest, Group } from "@/types/group";
 import { getGroupById, updateGroup } from "@/services/groupService";
 import { Button } from "@/components/ui/button";
@@ -13,7 +12,6 @@ import { AttractionCard } from "@/components/attraction/AttractionCard";
 import { AttractionTable } from "@/components/attraction/AttractionTable";
 import { EmptyAttractionsState } from "@/components/group/EmptyAttractionsState";
 import { GroupInfoCard } from "@/components/group/GroupInfoCard";
-
 import { Attraction, CreateAttractionRequest } from "@/types/attraction";
 import {
   getAttractionsByGroupId,
@@ -125,7 +123,7 @@ export default function GroupDetailPage() {
         attractions.map(({ id }, index) => ({ id, order: index + 1 })),
       );
     } catch (e) {
-      toast.error("Не поменять порядок");
+      toast.error("Не получилось поменять порядок");
     } finally {
       setIsOrderChanging(false);
     }
@@ -134,7 +132,6 @@ export default function GroupDetailPage() {
   if (isLoading) {
     return (
       <ProtectedRoute>
-        <Navigation />
         <div className="container mx-auto pt-20 px-4 pb-8">
           <div className="flex justify-center items-center h-64">
             <Loader2 className="h-8 w-8 animate-spin" />
@@ -147,7 +144,6 @@ export default function GroupDetailPage() {
   if (!group) {
     return (
       <ProtectedRoute>
-        <Navigation />
         <div className="container mx-auto pt-20 px-4 pb-8">
           <div className="text-center py-12">
             <h2 className="text-2xl font-bold">Группа не найдена</h2>
@@ -163,7 +159,6 @@ export default function GroupDetailPage() {
 
   return (
     <ProtectedRoute>
-      <Navigation />
       <div
         className={`container mx-auto pt-20 px-4 pb-8 flex flex-col gap-4 ${isWideScreen ? "overflow-hidden" : ""}`}
         style={isWideScreen ? { height: "calc(100vh)" } : {}}

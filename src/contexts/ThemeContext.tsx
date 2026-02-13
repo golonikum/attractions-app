@@ -8,8 +8,6 @@ type ThemeProviderProps = {
   children: React.ReactNode;
   defaultTheme?: Theme;
   storageKey?: string;
-  attribute?: string;
-  disableTransitionOnChange?: boolean;
 };
 
 type ThemeProviderState = {
@@ -29,15 +27,13 @@ export function ThemeProvider({
   children,
   defaultTheme = "light",
   storageKey = "ui-theme",
-  attribute = "class",
-  disableTransitionOnChange = false,
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(
     () =>
       (typeof window !== "undefined" &&
         (localStorage?.getItem(storageKey) as Theme)) ||
-      defaultTheme
+      defaultTheme,
   );
 
   useEffect(() => {

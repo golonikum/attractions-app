@@ -60,8 +60,10 @@ export const Map: FC<MapPropsType> = ({
       <YMapControls position="left top">
         <YMapScaleControl />
       </YMapControls>
-      <YMapControls position="right" orientation="vertical">
+      <YMapControls position="right top">
         <YMapGeolocationControl />
+      </YMapControls>
+      <YMapControls position="right" orientation="vertical">
         <YMapControlButton
           onClick={onClickZoom("plus")}
           disabled={location.zoom === 20}

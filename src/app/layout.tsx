@@ -73,11 +73,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          disableTransitionOnChange
-        >
+        <ThemeProvider defaultTheme="light">
           <AuthContextProvider>
             <PWALayout>
               <Suspense>{children}</Suspense>

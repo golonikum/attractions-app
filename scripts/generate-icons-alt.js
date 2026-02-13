@@ -1,6 +1,5 @@
 const { writeFileSync } = require("fs");
 const { createCanvas, loadImage } = require("canvas");
-const path = require("path");
 
 // Create a simple icon using SVG
 const svgIcon = `<svg fill="#000000" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -41,28 +40,32 @@ console.log("Generated icon.svg");
 try {
   // Generate PNG icons using canvas
   const sizes = [192, 512];
-  
+
   async function generateIcons() {
     for (const size of sizes) {
       const canvas = createCanvas(size, size);
-      const ctx = canvas.getContext('2d');
-      
+      const ctx = canvas.getContext("2d");
+
       // Load the SVG and draw it to canvas
       const img = await loadImage(Buffer.from(svgIcon));
       ctx.drawImage(img, 0, 0, size, size);
-      
+
       // Save the PNG
-      const buffer = canvas.toBuffer('image/png');
+      const buffer = canvas.toBuffer("image/png");
       writeFileSync(`public/icon-${size}x${size}.png`, buffer);
       console.log(`Generated icon-${size}x${size}.png`);
     }
   }
-  
-  generateIcons().catch(err => {
+
+  generateIcons().catch((err) => {
     console.error("Error generating icons with canvas:", err);
-    console.log("SVG icon was generated successfully. Please manually convert it to PNG if needed.");
+    console.log(
+      "SVG icon was generated successfully. Please manually convert it to PNG if needed.",
+    );
   });
 } catch (err) {
   console.error("Canvas not available:", err);
-  console.log("SVG icon was generated successfully. Please manually convert it to PNG if needed.");
+  console.log(
+    "SVG icon was generated successfully. Please manually convert it to PNG if needed.",
+  );
 }

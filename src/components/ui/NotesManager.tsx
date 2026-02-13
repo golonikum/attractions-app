@@ -12,7 +12,7 @@ interface NotesManagerProps {
 
 export function NotesManager({ notes, onChange }: NotesManagerProps) {
   const [newNote, setNewNote] = useState<NoteType>({
-    date: new Date().toISOString().split("T")[0], // YYYY-MM-DD // TODO
+    date: new Date().toISOString().split("T")[0], // YYYY-MM-DD
     note: "",
   });
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { Navigation } from "@/components/Navigation";
 import { Map } from "@/components/ui/Map";
 import { useEffect, useState } from "react";
 import { getAllAttractions } from "@/services/attractionService";
@@ -62,8 +61,6 @@ export default function MainPage() {
 
   return (
     <ProtectedRoute>
-      <Navigation />
-
       <div
         className="container mx-auto pt-20 px-4 pb-8"
         style={{ height: "calc(100vh)" }}

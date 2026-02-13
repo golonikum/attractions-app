@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { Navigation } from "@/components/Navigation";
 import { Group, CreateGroupRequest } from "@/types/group";
 import {
   getAllGroups,
@@ -146,7 +145,6 @@ export default function GroupsPage() {
 
   return (
     <ProtectedRoute>
-      <Navigation />
       <div className="container mx-auto pt-20 px-4 pb-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
           {/* Фильтры по тегам и поиск */}
