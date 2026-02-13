@@ -154,7 +154,7 @@ export default function GroupsPage() {
             <div className="flex-1 shrink-0">
               <input
                 type="text"
-                placeholder="Поиск по названию"
+                placeholder="Поиск..."
                 className="w-full h-10 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
