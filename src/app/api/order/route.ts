@@ -1,23 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { verifyToken } from "@/lib/serverAuth";
+import { withAuth } from "@/lib/serverAuth";
 
 export async function PUT(request: NextRequest) {
-  try {
-    // Verify authentication token
-    const token = request.cookies.get("token")?.value;
-    if (!token) {
-      return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
-    }
-
-    const decoded = verifyToken(token);
-    if (!decoded || !decoded.id) {
-      return NextResponse.json(
-        { error: "Недействительный токен" },
-        { status: 401 },
-      );
-    }
-
+  return await withAuth(request, async () => {
     const { groupId, attractions } = await request.json();
 
     // Валидация входных данных
@@ -62,19 +48,5 @@ export async function PUT(request: NextRequest) {
       },
       { status: 200 },
     );
-  } catch (error) {
-    console.error("Ошибка обновления порядка:", error);
-
-    if (error instanceof Error) {
-      return NextResponse.json(
-        { error: "Ошибка сервера: " + error.message },
-        { status: 500 },
-      );
-    }
-
-    return NextResponse.json(
-      { error: "Неизвестная ошибка сервера" },
-      { status: 500 },
-    );
-  }
+  });
 }

@@ -1,33 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { verifyToken } from "@/lib/serverAuth";
+import { withAuth } from "@/lib/serverAuth";
 
 // Get a specific group by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
-  try {
-    // Verify authentication token
-    const token = request.cookies.get("token")?.value;
-    if (!token) {
-      return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
-    }
-
-    const decoded = verifyToken(token);
-    if (!decoded || !decoded.id) {
-      return NextResponse.json(
-        { error: "Недействительный токен" },
-        { status: 401 }
-      );
-    }
-
+  return await withAuth(request, async (userId) => {
     // Fetch the group
     const { id } = await params;
     const group = await prisma.group.findFirst({
       where: {
         id,
-        userId: decoded.id,
+        userId,
       },
     });
 
@@ -36,35 +22,15 @@ export async function GET(
     }
 
     return NextResponse.json({ group });
-  } catch (error) {
-    console.error("Error fetching group:", error);
-    return NextResponse.json(
-      { error: "Внутренняя ошибка сервера" },
-      { status: 500 }
-    );
-  }
+  });
 }
 
 // Update a specific group by ID
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
-  try {
-    // Verify authentication token
-    const token = request.cookies.get("token")?.value;
-    if (!token) {
-      return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
-    }
-
-    const decoded = verifyToken(token);
-    if (!decoded || !decoded.id) {
-      return NextResponse.json(
-        { error: "Недействительный токен" },
-        { status: 401 }
-      );
-    }
-
+  return await withAuth(request, async (userId) => {
     // Parse request body
     const { name, description, tag, coordinates, zoom } = await request.json();
 
@@ -73,7 +39,7 @@ export async function PUT(
     const existingGroup = await prisma.group.findFirst({
       where: {
         id,
-        userId: decoded.id,
+        userId,
       },
     });
 
@@ -91,7 +57,7 @@ export async function PUT(
           error:
             "Неверный формат координат. Ожидается массив [долгота, широта]",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -109,41 +75,21 @@ export async function PUT(
     });
 
     return NextResponse.json({ group: updatedGroup });
-  } catch (error) {
-    console.error("Error updating group:", error);
-    return NextResponse.json(
-      { error: "Внутренняя ошибка сервера" },
-      { status: 500 }
-    );
-  }
+  });
 }
 
 // Delete a specific group by ID
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
-  try {
-    // Verify authentication token
-    const token = request.cookies.get("token")?.value;
-    if (!token) {
-      return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
-    }
-
-    const decoded = verifyToken(token);
-    if (!decoded || !decoded.id) {
-      return NextResponse.json(
-        { error: "Недействительный токен" },
-        { status: 401 }
-      );
-    }
-
+  return await withAuth(request, async (userId) => {
     // Check if the group exists and belongs to the user
     const { id } = await params;
     const existingGroup = await prisma.group.findFirst({
       where: {
         id,
-        userId: decoded.id,
+        userId,
       },
     });
 
@@ -157,11 +103,5 @@ export async function DELETE(
     });
 
     return NextResponse.json({ message: "Группа успешно удалена" });
-  } catch (error) {
-    console.error("Error deleting group:", error);
-    return NextResponse.json(
-      { error: "Внутренняя ошибка сервера" },
-      { status: 500 }
-    );
-  }
+  });
 }

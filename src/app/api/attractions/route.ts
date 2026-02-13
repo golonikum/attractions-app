@@ -1,30 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { verifyToken } from "@/lib/serverAuth";
+import { withAuth } from "@/lib/serverAuth";
 
 // Get all attractions for the authenticated user
 export async function GET(request: NextRequest) {
-  try {
-    // Verify authentication token
-    const token = request.cookies.get("token")?.value;
-    if (!token) {
-      return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
-    }
-
-    const decoded = verifyToken(token);
-    if (!decoded || !decoded.id) {
-      return NextResponse.json(
-        { error: "Недействительный токен" },
-        { status: 401 },
-      );
-    }
-
+  return await withAuth(request, async (userId) => {
     // Parse query parameters
     const { searchParams } = new URL(request.url);
     const groupId = searchParams.get("groupId");
 
     // Fetch attractions based on groupId or all attractions for the user
-    const whereClause: any = { userId: decoded.id };
+    const whereClause: any = { userId };
 
     if (groupId) {
       // If groupId is provided, get attractions for that group
@@ -37,32 +23,12 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json({ attractions });
-  } catch (error) {
-    console.error("Error fetching attractions:", error);
-    return NextResponse.json(
-      { error: "Внутренняя ошибка сервера" },
-      { status: 500 },
-    );
-  }
+  });
 }
 
 // Create a new attraction
 export async function POST(request: NextRequest) {
-  try {
-    // Verify authentication token
-    const token = request.cookies.get("token")?.value;
-    if (!token) {
-      return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
-    }
-
-    const decoded = verifyToken(token);
-    if (!decoded || !decoded.id) {
-      return NextResponse.json(
-        { error: "Недействительный токен" },
-        { status: 401 },
-      );
-    }
-
+  return await withAuth(request, async (userId) => {
     // Parse request body
     const {
       groupId,
@@ -99,7 +65,7 @@ export async function POST(request: NextRequest) {
     const group = await prisma.group.findFirst({
       where: {
         id: groupId,
-        userId: decoded.id,
+        userId,
       },
     });
 
@@ -110,7 +76,7 @@ export async function POST(request: NextRequest) {
     // Create the attraction
     const attraction = await prisma.attraction.create({
       data: {
-        userId: decoded.id,
+        userId,
         groupId,
         name,
         category,
@@ -126,11 +92,5 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ attraction }, { status: 201 });
-  } catch (error) {
-    console.error("Error creating attraction:", error);
-    return NextResponse.json(
-      { error: "Внутренняя ошибка сервера" },
-      { status: 500 },
-    );
-  }
+  });
 }
