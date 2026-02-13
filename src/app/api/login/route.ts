@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     if (!email || !password) {
       return NextResponse.json(
         { error: "Электронная почта и пароль обязательны" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -21,23 +21,21 @@ export async function POST(request: NextRequest) {
     if (!user) {
       return NextResponse.json(
         { error: "Неверные учетные данные" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
     // Verify the password
-    // const isValid = await verifyPassword(email, password);
     const isValid = await verifyPassword(password, user.password);
 
     if (!isValid) {
       return NextResponse.json(
         { error: "Неверные учетные данные" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
     // Generate a JWT token
-    // const token = generateToken({ email, password });
     const token = generateToken(user);
 
     // Create response with user info (but not the token)
@@ -65,7 +63,7 @@ export async function POST(request: NextRequest) {
     console.error("Login error:", error);
     return NextResponse.json(
       { error: "Внутренняя ошибка сервера" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -1,23 +1,14 @@
+import { fetchProxy } from "@/lib/fetchProxy";
+import { getAuthHeaders } from "@/lib/getAuthHeaders";
 import {
   Attraction,
   CreateAttractionRequest,
   UpdateAttractionRequest,
 } from "@/types/attraction";
-import { fetchProxy } from "./fetchProxy";
 
 const API_URL = "/api/attractions";
 
 // Get authorization header
-const getAuthHeaders = () => {
-  const token =
-    typeof document !== "undefined"
-      ? document.cookie.match(/(^|;)token=([^;]*)/)?.[2]
-      : null;
-  return {
-    "Content-Type": "application/json",
-    ...(token && { Authorization: `Bearer ${token}` }),
-  };
-};
 
 export const getAttractionsByGroupId = async (
   groupId: string,

@@ -1,5 +1,4 @@
 import {
-  DEFAULT_LOCATION,
   YMap,
   YMapControlButton,
   YMapControls,
@@ -16,6 +15,7 @@ import { YMapCenterLocation, YMapZoomLocation } from "ymaps3";
 import { useMapReady } from "@/hooks/useMapReady";
 import { ThemeProviderContext } from "@/contexts/ThemeContext";
 import { Minus, Plus } from "lucide-react";
+import { DEFAULT_LOCATION } from "@/lib/constants";
 
 type MapPropsType = {
   attractions?: Attraction[];

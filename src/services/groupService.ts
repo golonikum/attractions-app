@@ -1,17 +1,8 @@
-import { getCookie } from "@/lib/clientCookies";
+import { fetchProxy } from "@/lib/fetchProxy";
+import { getAuthHeaders } from "@/lib/getAuthHeaders";
 import { Group, CreateGroupRequest, UpdateGroupRequest } from "@/types/group";
-import { fetchProxy } from "./fetchProxy";
 
 const API_URL = "/api/groups";
-
-// Get authorization header
-const getAuthHeaders = () => {
-  const token = getCookie("token");
-  return {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
-  };
-};
 
 // Get all groups for the current user
 export const getAllGroups = async (): Promise<Group[]> => {

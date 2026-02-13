@@ -8,7 +8,7 @@ import { Attraction } from "@/types/attraction";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getAllGroups } from "@/services/groupService";
-import { DEFAULT_ATTRACTION_ZOOM, DEFAULT_LOCATION } from "@/lib/ymaps";
+import { DEFAULT_ATTRACTION_ZOOM, DEFAULT_LOCATION } from "@/lib/constants";
 
 export default function MainPage() {
   const [attractions, setAttractions] = useState<Attraction[]>([]);

@@ -13,8 +13,6 @@ import type {
   YMapDefaultFeaturesLayerProps,
   YMapProps,
   YMapListenerProps,
-  YMapCenterLocation,
-  YMapZoomLocation,
 } from "ymaps3";
 
 // Инициализация Yandex Maps
@@ -30,13 +28,6 @@ let YMapScaleControl: FC<YMapScaleControlProps>;
 let YMapListener: FC<YMapListenerProps>;
 let YMapGeolocationControl: FC<YMapGeolocationControlProps>;
 let YMapZoomControl: FC<YMapZoomControlProps>;
-
-export const DEFAULT_LOCATION: YMapCenterLocation & YMapZoomLocation = {
-  center: [37.588144, 55.733842],
-  zoom: 5,
-};
-
-export const DEFAULT_ATTRACTION_ZOOM = 16;
 
 // Функция для инициализации Yandex Maps
 export async function initYMaps() {

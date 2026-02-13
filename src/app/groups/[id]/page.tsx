@@ -23,8 +23,8 @@ import { NewGroupDialog } from "@/components/group/NewGroupDialog";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { BackButton, ShowOnMapButton } from "@/components/ui/buttons";
 import { Map } from "@/components/ui/Map";
-import { DEFAULT_ATTRACTION_ZOOM } from "@/lib/ymaps";
 import { LoadingStub, NotFoundStub } from "@/components/ui/stubs";
+import { DEFAULT_ATTRACTION_ZOOM } from "@/lib/constants";
 
 export default function GroupDetailPage() {
   const params = useParams();
