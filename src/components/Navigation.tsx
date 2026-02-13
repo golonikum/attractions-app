@@ -60,10 +60,10 @@ export function Navigation() {
             </div>
           )}
           <div className="flex h-16 items-center space-x-4">
+            <ThemeToggle />
             <Button onClick={() => logout()} variant="outline">
               Выйти
             </Button>
-            <ThemeToggle />
           </div>
         </div>
         {isMobile && isMenuOpen && (
