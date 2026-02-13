@@ -20,7 +20,10 @@ export async function GET(request: NextRequest) {
     // Fetch all groups for the user
     const groups = await prisma.group.findMany({
       where: { userId: decoded.id },
-      orderBy: { updatedAt: "desc" },
+      orderBy: [
+        { tag: "asc" },
+        { name: "asc" },
+      ],
     });
 
     return NextResponse.json({ groups });
