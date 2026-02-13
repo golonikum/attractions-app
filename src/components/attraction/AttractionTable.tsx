@@ -9,6 +9,7 @@ import {
   DragEndEvent,
   KeyboardSensor,
   MouseSensor,
+  PointerSensor,
   TouchSensor,
   useSensor,
   useSensors,
@@ -39,9 +40,11 @@ export function AttractionTable({
   onLocate,
 }: AttractionTableProps) {
   const sensors = useSensors(
-    useSensor(MouseSensor),
-    useSensor(TouchSensor),
-    useSensor(KeyboardSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8, // нужно сдвинуть на 8px, чтобы начать drag
+      },
+    }),
   );
 
   const handleDragEnd = useCallback(
