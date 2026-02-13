@@ -5,9 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { CreateGroupRequest, Group } from "@/types/group";
 import { getGroupById, updateGroup } from "@/services/groupService";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Loader2, ArrowLeft } from "lucide-react";
 import { AttractionCard } from "@/components/attraction/AttractionCard";
 import { AttractionTable } from "@/components/attraction/AttractionTable";
 import { EmptyAttractionsState } from "@/components/group/EmptyAttractionsState";
@@ -26,6 +24,7 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { BackButton, ShowOnMapButton } from "@/components/ui/buttons";
 import { Map } from "@/components/ui/Map";
 import { DEFAULT_ATTRACTION_ZOOM } from "@/lib/ymaps";
+import { LoadingStub, NotFoundStub } from "@/components/ui/stubs";
 
 export default function GroupDetailPage() {
   const params = useParams();
@@ -130,31 +129,11 @@ export default function GroupDetailPage() {
   };
 
   if (isLoading) {
-    return (
-      <ProtectedRoute>
-        <div className="container mx-auto pt-20 px-4 pb-8">
-          <div className="flex justify-center items-center h-64">
-            <Loader2 className="h-8 w-8 animate-spin" />
-          </div>
-        </div>
-      </ProtectedRoute>
-    );
+    return <LoadingStub />;
   }
 
   if (!group) {
-    return (
-      <ProtectedRoute>
-        <div className="container mx-auto pt-20 px-4 pb-8">
-          <div className="text-center py-12">
-            <h2 className="text-2xl font-bold">Группа не найдена</h2>
-            <Button className="mt-4" onClick={() => router.push("/groups")}>
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Вернуться к списку групп
-            </Button>
-          </div>
-        </div>
-      </ProtectedRoute>
-    );
+    return <NotFoundStub message="Группа не найдена" />;
   }
 
   return (

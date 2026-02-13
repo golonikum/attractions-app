@@ -10,7 +10,6 @@ import {
   deleteAttraction,
 } from "@/services/attractionService";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
 import { NewAttractionDialog } from "@/components/attraction/NewAttractionDialog";
 import { AttractionInfoCard } from "@/components/attraction/AttractionInfoCard";
 import { Group } from "@/types/group";
@@ -23,6 +22,7 @@ import {
   ShowOnMapButton,
 } from "@/components/ui/buttons";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { LoadingStub, NotFoundStub } from "@/components/ui/stubs";
 
 export default function AttractionDetailPage() {
   const params = useParams();
@@ -92,27 +92,11 @@ export default function AttractionDetailPage() {
   };
 
   if (isLoading) {
-    return (
-      <ProtectedRoute>
-        <div className="container mx-auto pt-20 px-4 pb-8">
-          <div className="flex justify-center items-center h-64">
-            <Loader2 className="h-8 w-8 animate-spin" />
-          </div>
-        </div>
-      </ProtectedRoute>
-    );
+    return <LoadingStub />;
   }
 
   if (!attraction) {
-    return (
-      <ProtectedRoute>
-        <div className="container mx-auto pt-20 px-4 pb-8">
-          <div className="text-center py-12">
-            <h2 className="text-2xl font-bold">Объект не найден</h2>
-          </div>
-        </div>
-      </ProtectedRoute>
-    );
+    return <NotFoundStub message="Объект не найден" />;
   }
 
   return (

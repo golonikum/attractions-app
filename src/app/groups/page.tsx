@@ -10,11 +10,11 @@ import {
   updateGroup,
 } from "@/services/groupService";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
 import { NewGroupDialog } from "@/components/group/NewGroupDialog";
 import { GroupCard } from "@/components/group/GroupCard";
 import { EmptyGroupsState } from "@/components/group/EmptyGroupsState";
 import { MultiSelect } from "@/components/ui/MultiSelect";
+import { LoadingStub } from "@/components/ui/stubs";
 
 export default function GroupsPage() {
   const [groups, setGroups] = useState<Group[]>([]);
@@ -143,6 +143,10 @@ export default function GroupsPage() {
     return result;
   }, [groups, selectedTags, searchQuery]);
 
+  if (isLoading) {
+    return <LoadingStub />;
+  }
+
   return (
     <ProtectedRoute>
       <div className="container mx-auto pt-20 px-4 pb-8">
@@ -180,11 +184,7 @@ export default function GroupsPage() {
           />
         </div>
 
-        {isLoading ? (
-          <div className="flex justify-center items-center h-64">
-            <Loader2 className="h-8 w-8 animate-spin" />
-          </div>
-        ) : filteredGroups.length === 0 ? (
+        {filteredGroups.length === 0 ? (
           <EmptyGroupsState
             onCreateGroup={() => setIsCreateDialogOpen(true)}
             message={
