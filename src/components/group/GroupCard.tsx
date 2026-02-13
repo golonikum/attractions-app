@@ -5,8 +5,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { CreateGroupRequest, Group } from "@/types/group";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -14,6 +12,7 @@ import { useState } from "react";
 import { Tag } from "../ui/Tag";
 import { RemoveButton, ShowOnMapButton } from "../ui/buttons";
 import { NewGroupDialog } from "./NewGroupDialog";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface GroupCardProps {
   group: Group;
@@ -23,6 +22,7 @@ interface GroupCardProps {
 
 export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
   const router = useRouter();
+  const { isWideScreen } = useIsMobile();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,6 +37,10 @@ export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
     setIsDeleteDialogOpen(true);
   };
 
+  const handleLocate = () => {
+    router.push(`/main?groupId=${group.id}`);
+  };
+
   return (
     <Card className="overflow-hidden flex flex-col">
       <CardHeader>
@@ -48,6 +52,9 @@ export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
             <CardTitle className="text-lg/5">{group.name}</CardTitle>
             {group.tag && <Tag text={group.tag} />}
           </div>
+          {isWideScreen && (
+            <ShowOnMapButton onClick={handleLocate} view="icon" />
+          )}
           <NewGroupDialog
             groupData={group}
             handleSubmit={onUpdate}
@@ -74,12 +81,8 @@ export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
         className="cursor-pointer flex flex-col gap-4 justify-between flex-1"
         onClick={handleCardClick}
       >
-        <CardDescription className="mb-4">{group.description}</CardDescription>
-        <ShowOnMapButton
-          onClick={() => {
-            router.push(`/main?groupId=${group.id}`);
-          }}
-        />
+        <CardDescription>{group.description}</CardDescription>
+        {!isWideScreen && <ShowOnMapButton onClick={handleLocate} />}
       </CardContent>
     </Card>
   );

@@ -39,14 +39,6 @@ export function AttractionInfoCard({ attraction }: AttractionInfoCardProps) {
             <p className="text-gray-600">{attraction.description}</p>
           )}
 
-          <div className="flex justify-between text-sm text-gray-500">
-            <span>
-              Координаты: {attraction.coordinates[0].toFixed(4)},{" "}
-              {attraction.coordinates[1].toFixed(4)}
-            </span>
-            <span>Порядок: {attraction.order}</span>
-          </div>
-
           {attraction.notes && attraction.notes.length > 0 && (
             <div>
               <h4 className="font-medium mb-2 flex items-center">
@@ -67,12 +59,16 @@ export function AttractionInfoCard({ attraction }: AttractionInfoCardProps) {
             </div>
           )}
 
-          <OpenInYandexMapButton attraction={attraction} />
-          <ShowOnMapButton
-            onClick={() => {
-              router.push(`/main?attractionId=${attraction.id}`);
-            }}
-          />
+          {!isWideScreen && (
+            <>
+              <OpenInYandexMapButton attraction={attraction} />
+              <ShowOnMapButton
+                onClick={() => {
+                  router.push(`/main?attractionId=${attraction.id}`);
+                }}
+              />
+            </>
+          )}
         </div>
       </CardContent>
     </Card>

@@ -7,10 +7,7 @@ import {
   closestCenter,
   DndContext,
   DragEndEvent,
-  KeyboardSensor,
-  MouseSensor,
   PointerSensor,
-  TouchSensor,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -21,18 +18,15 @@ import {
 } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { CSSProperties, useCallback } from "react";
-// import { Dispatch, SetStateAction } from "react";
 
 type AttractionTableProps = Omit<AttractionTableRowProps, "attraction"> & {
   attractions: Attraction[];
-  // setAttractions: Dispatch<SetStateAction<Attraction[]>>;
   onOrderChanged: (attractions: Attraction[]) => void;
   isDisabled?: boolean;
 };
 
 export function AttractionTable({
   attractions,
-  // setAttractions,
   isDisabled,
   onOrderChanged,
   onDelete,

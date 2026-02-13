@@ -26,6 +26,7 @@ interface NewAttractionDialogProps {
   setIsSubmitting: (isSubmitting: boolean) => void;
   groupId?: string;
   attraction?: Attraction;
+  attractionsCount?: number;
 }
 
 export const NewAttractionDialog = ({
@@ -36,6 +37,7 @@ export const NewAttractionDialog = ({
   setIsSubmitting,
   groupId,
   attraction,
+  attractionsCount = 0,
 }: NewAttractionDialogProps) => {
   const [formData, setFormData] = useState<CreateAttractionRequest>({
     groupId: groupId || "",
@@ -47,7 +49,7 @@ export const NewAttractionDialog = ({
     isVisited: false,
     isFavorite: false,
     coordinates: [55.755819, 37.617644], // [долгота, широта] по умолчанию (Москва)
-    order: 1,
+    order: attractionsCount + 1,
     notes: [],
   });
 

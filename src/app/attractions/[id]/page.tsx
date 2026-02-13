@@ -17,13 +17,20 @@ import { AttractionInfoCard } from "@/components/attraction/AttractionInfoCard";
 import { Group } from "@/types/group";
 import { getGroupById } from "@/services/groupService";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
-import { BackButton, RemoveButton } from "@/components/ui/buttons";
+import {
+  BackButton,
+  OpenInYandexMapButton,
+  RemoveButton,
+  ShowOnMapButton,
+} from "@/components/ui/buttons";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 export default function AttractionDetailPage() {
   const params = useParams();
   const router = useRouter();
   const attractionId = params.id as string;
 
+  const { isWideScreen } = useIsMobile();
   const [attraction, setAttraction] = useState<Attraction | null>(null);
   const [group, setGroup] = useState<Group | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -119,6 +126,17 @@ export default function AttractionDetailPage() {
           {group && <BackButton route={`/groups/${group.id}`} />}
 
           <div className="ml-auto flex space-x-1">
+            {isWideScreen && (
+              <>
+                <ShowOnMapButton
+                  view="icon"
+                  onClick={() => {
+                    router.push(`/main?attractionId=${attraction.id}`);
+                  }}
+                />
+                <OpenInYandexMapButton view="icon" attraction={attraction} />
+              </>
+            )}
             <NewAttractionDialog
               attraction={attraction}
               isOpen={isEditDialogOpen}

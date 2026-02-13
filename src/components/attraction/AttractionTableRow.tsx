@@ -11,22 +11,6 @@ import {
 import { ConfirmDialog } from "../ui/ConfirmDialog";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import {
-  arrayMove,
-  SortableContext,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-} from "@dnd-kit/core";
 
 export type AttractionTableRowProps = {
   attraction: Attraction;
@@ -115,7 +99,7 @@ export const AttractionTableRow = ({
         </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-        <div className="flex space-x-2">
+        <div className="flex space-x-1">
           <ShowOnMapButton onClick={onLocateAttractionClick} view="icon" />
           <OpenInYandexMapButton attraction={attraction} view="icon" />
           <NewAttractionDialog

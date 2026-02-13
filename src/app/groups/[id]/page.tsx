@@ -25,7 +25,7 @@ import {
 import { NewAttractionDialog } from "@/components/attraction/NewAttractionDialog";
 import { NewGroupDialog } from "@/components/group/NewGroupDialog";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { BackButton } from "@/components/ui/buttons";
+import { BackButton, ShowOnMapButton } from "@/components/ui/buttons";
 import { Map } from "@/components/ui/Map";
 import { DEFAULT_ATTRACTION_ZOOM } from "@/lib/ymaps";
 
@@ -171,6 +171,12 @@ export default function GroupDetailPage() {
         <div className="flex items-center">
           <BackButton route="/groups" />
           <div className="ml-auto flex space-x-1">
+            <ShowOnMapButton
+              view="icon"
+              onClick={() => {
+                router.push(`/main?groupId=${groupId}`);
+              }}
+            />
             <NewGroupDialog
               groupData={group}
               handleSubmit={handleSubmit}
@@ -186,6 +192,7 @@ export default function GroupDetailPage() {
               isSubmitting={isSubmittingAttraction}
               setIsSubmitting={setIsSubmittingAttraction}
               groupId={groupId}
+              attractionsCount={attractions.length}
             />
           </div>
         </div>
