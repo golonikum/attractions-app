@@ -215,7 +215,7 @@ export default function GalleryPage() {
             }
           />
         ) : (
-          <div>
+          <div className={isMobile ? "mobile" : ""}>
             {/* TODO {isMobile ? (
               <Gallery photos={mobilePhotos} />
             ) : (

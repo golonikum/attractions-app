@@ -702,7 +702,7 @@
 }
 
 /* CUSTOM */
-.image-gallery-content.image-gallery-thumbnails-left:not(.fullscreen) .image-gallery-slide .image-gallery-image, 
-.image-gallery-content.image-gallery-thumbnails-right:not(.fullscreen) .image-gallery-slide .image-gallery-image {
+div:not(.mobile) .image-gallery-content.image-gallery-thumbnails-left:not(.fullscreen) .image-gallery-slide .image-gallery-image, 
+div:not(.mobile) .image-gallery-content.image-gallery-thumbnails-right:not(.fullscreen) .image-gallery-slide .image-gallery-image {
   max-height: calc(100vh - 170px) !important;
 }
