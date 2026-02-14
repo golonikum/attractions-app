@@ -12,6 +12,7 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 const navItems = [
   { href: "/main", label: "Карта" },
   { href: "/groups", label: "Города" },
+  { href: "/gallery", label: "Галерея" },
 ];
 
 export function Navigation() {
