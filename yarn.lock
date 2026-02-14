@@ -3974,15 +3974,6 @@ prop-types@^15.8.1:
     object-assign "^4.1.1"
     react-is "^16.13.1"
 
-prop-types@~15.7.2:
-  version "15.7.2"
-  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
-  integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
-  dependencies:
-    loose-envify "^1.4.0"
-    object-assign "^4.1.1"
-    react-is "^16.8.1"
-
 proto-list@~1.2.1:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/proto-list/-/proto-list-1.2.4.tgz#212d5bfe1318306a420f6402b8e26ff39647a849"
@@ -4074,18 +4065,10 @@ react-image-gallery@2.0.8:
   resolved "https://registry.yarnpkg.com/react-image-gallery/-/react-image-gallery-2.0.8.tgz#b463c868a1486d8f6653d7d82efdfe0e7ab2d4ea"
   integrity sha512-zI7Z8Zj4vGwYrF0iwQFSbIfT38tShlq1Phv9w/vjadlB4pWRgtr7RMcPTm44Ye2heTA3SorMevEAd3C8CEJ8fg==
 
-react-is@^16.13.1, react-is@^16.8.1:
+react-is@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
-
-react-photo-gallery@6.3.4:
-  version "6.3.4"
-  resolved "https://registry.yarnpkg.com/react-photo-gallery/-/react-photo-gallery-6.3.4.tgz#0bda4d9060fe08bc350066a84c7854e636dabcf6"
-  integrity sha512-G3Trhk/DiGWQHV3ZtP9cNdaIT9ujybp/nNpzHrQLd3nijWaJqqGuGp73y+S3H5zx3DxQKlaOraTX9mdkXC08eA==
-  dependencies:
-    prop-types "~15.7.2"
-    resize-observer-polyfill "^1.5.0"
 
 react-remove-scroll-bar@^2.3.7:
   version "2.3.8"
@@ -4180,11 +4163,6 @@ regexp.prototype.flags@^1.5.3, regexp.prototype.flags@^1.5.4:
     get-proto "^1.0.1"
     gopd "^1.2.0"
     set-function-name "^2.0.2"
-
-resize-observer-polyfill@^1.5.0:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
-  integrity sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==
 
 resolve-from@^4.0.0:
   version "4.0.0"

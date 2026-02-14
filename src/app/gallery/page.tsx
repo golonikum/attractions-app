@@ -12,7 +12,6 @@ import { Attraction } from "@/types/attraction";
 import { getAllAttractions } from "@/services/attractionService";
 import ImageGallery from "react-image-gallery";
 import "../gallery.css";
-// import Gallery from "react-photo-gallery"; // TODO
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 export default function GalleryPage() {
@@ -206,7 +205,7 @@ export default function GalleryPage() {
           </div>
         </div>
 
-        {photos.length === 0 ? (
+        {photos.length === 0 ? ( // TODO
           <EmptyGroupsState
             message={
               selectedTags.length > 0
@@ -216,17 +215,6 @@ export default function GalleryPage() {
           />
         ) : (
           <div className={isMobile ? "mobile" : ""}>
-            {/* TODO {isMobile ? (
-              <Gallery photos={mobilePhotos} />
-            ) : (
-              <ImageGallery
-                items={photos}
-                lazyLoad={true}
-                showThumbnails={true}
-                thumbnailPosition="left"
-                showBullets
-              />
-            )} */}
             <ImageGallery
               items={photos}
               lazyLoad={true}

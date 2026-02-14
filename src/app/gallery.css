@@ -706,3 +706,8 @@ div:not(.mobile) .image-gallery-content.image-gallery-thumbnails-left:not(.fulls
 div:not(.mobile) .image-gallery-content.image-gallery-thumbnails-right:not(.fullscreen) .image-gallery-slide .image-gallery-image {
   max-height: calc(100vh - 170px) !important;
 }
+.image-gallery {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
