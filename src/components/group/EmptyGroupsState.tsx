@@ -6,6 +6,7 @@ interface EmptyGroupsStateProps {
   message?: string;
 }
 
+// TODO: duplication
 export function EmptyGroupsState({
   onCreateGroup,
   message,

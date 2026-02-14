@@ -12,33 +12,39 @@ import { Attraction } from "@/types/attraction";
 import { getAllAttractions } from "@/services/attractionService";
 import ImageGallery from "react-image-gallery";
 import "../gallery.css";
-import Gallery from "react-photo-gallery";
-import Image from "next/image";
+// import Gallery from "react-photo-gallery"; // TODO
 import { useIsMobile } from "@/hooks/useIsMobile";
-
-interface Photo {
-  src: string;
-  width: number;
-  height: number;
-  alt?: string;
-}
 
 export default function GalleryPage() {
   const [groups, setGroups] = useState<Group[]>([]);
   const [attractions, setAttractions] = useState<Attraction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const { isMobile } = useIsMobile();
 
   // Получаем параметры из URL
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const tagsParam = params.get("tag");
+    const groupsParam = params.get("group");
+    const categoriesParam = params.get("category");
 
     if (tagsParam) {
       setSelectedTags(tagsParam.split(","));
     }
+
+    if (groupsParam) {
+      setSelectedGroups(groupsParam.split(","));
+    }
+
+    if (categoriesParam) {
+      setSelectedCategories(categoriesParam.split(","));
+    }
   }, []);
+
+  // TODO: вынести в хуки
 
   // Обновляем URL при изменении фильтров
   useEffect(() => {
@@ -51,9 +57,23 @@ export default function GalleryPage() {
       params.delete("tag");
     }
 
+    // Обработка групп
+    if (selectedGroups.length > 0) {
+      params.set("group", selectedGroups.join(","));
+    } else {
+      params.delete("group");
+    }
+
+    // Обработка категорий
+    if (selectedCategories.length > 0) {
+      params.set("category", selectedCategories.join(","));
+    } else {
+      params.delete("category");
+    }
+
     const newUrl = `${window.location.pathname}?${params.toString()}`;
     window.history.replaceState({}, "", newUrl);
-  }, [selectedTags]);
+  }, [selectedTags, selectedGroups, selectedCategories]);
 
   // Загрузка данных при монтировании компонента
   useEffect(() => {
@@ -87,7 +107,26 @@ export default function GalleryPage() {
     return Array.from(tags).sort();
   }, [groups]);
 
-  // Фильтрация групп по выбранным тегам и поисковому запросу
+  const allGroups = useMemo(() => {
+    return groups
+      .filter(
+        (item) =>
+          !selectedTags.length || (item.tag && selectedTags.includes(item.tag)),
+      )
+      .map((item) => item.name);
+  }, [groups, selectedTags]);
+
+  const allCategories = useMemo(() => {
+    const categories = new Set<string>();
+    attractions.forEach((item) => {
+      if (item.category) {
+        categories.add(item.category);
+      }
+    });
+    return Array.from(categories).sort();
+  }, [attractions]);
+
+  // Фильтрация
   const { photos, mobilePhotos } = useMemo(() => {
     let filteredGroups = groups;
 
@@ -99,9 +138,21 @@ export default function GalleryPage() {
       });
     }
 
+    // Фильтрация по группам
+    if (selectedGroups.length > 0) {
+      filteredGroups = filteredGroups.filter((group) => {
+        return selectedGroups.includes(group.name);
+      });
+    }
+
     const groupsIds = filteredGroups.map((group) => group.id);
     const result = attractions
       .filter((item) => groupsIds.includes(item.groupId))
+      .filter(
+        (item) =>
+          !selectedCategories.length ||
+          (item.category && selectedCategories.includes(item.category)),
+      )
       .filter((item) => !!item.imageUrl)
       .map((item) => ({
         original: item.imageUrl!,
@@ -117,7 +168,7 @@ export default function GalleryPage() {
     }));
 
     return { photos: result, mobilePhotos: mobileResult };
-  }, [groups, attractions, selectedTags]);
+  }, [groups, attractions, , selectedTags, selectedGroups, selectedCategories]);
 
   if (isLoading) {
     return <LoadingStub />;
@@ -127,13 +178,24 @@ export default function GalleryPage() {
     <ProtectedRoute>
       <div className="container mx-auto pt-20 px-4 pb-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
-          {/* Фильтры по тегам и поиск */}
           <div className="w-full space-y-4 md:space-y-0 md:space-x-4 md:flex md:flex-row md:w-auto md:items-center">
             <MultiSelect
               options={allTags}
               selectedOptions={selectedTags}
               onSelectionChange={setSelectedTags}
-              placeholder="Фильтровать по тегам"
+              placeholder="Фильтровать по регионам"
+            />
+            <MultiSelect
+              options={allGroups}
+              selectedOptions={selectedGroups}
+              onSelectionChange={setSelectedGroups}
+              placeholder="Фильтровать по городам"
+            />
+            <MultiSelect
+              options={allCategories}
+              selectedOptions={selectedCategories}
+              onSelectionChange={setSelectedCategories}
+              placeholder="Фильтровать по категориям"
             />
             <div className="flex-1 shrink-0">
               Найдено{" "}
@@ -154,7 +216,7 @@ export default function GalleryPage() {
           />
         ) : (
           <div>
-            {isMobile ? (
+            {/* TODO {isMobile ? (
               <Gallery photos={mobilePhotos} />
             ) : (
               <ImageGallery
@@ -164,23 +226,17 @@ export default function GalleryPage() {
                 thumbnailPosition="left"
                 showBullets
               />
-            )}
+            )} */}
+            <ImageGallery
+              items={photos}
+              lazyLoad={true}
+              showThumbnails={!isMobile}
+              thumbnailPosition={isMobile ? "bottom" : "left"}
+              showBullets={!isMobile}
+            />
           </div>
         )}
       </div>
     </ProtectedRoute>
   );
 }
-
-const ImageRender = ({ photo, index }: { photo: Photo; index: number }) => (
-  <Image
-    key={index}
-    src={photo.src}
-    alt={photo.alt || `Фото ${index}`}
-    width={photo.width * 100} // Масштабируем для Next/Image
-    height={photo.height * 100}
-    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-    className="rounded-lg shadow-md hover:scale-105 transition-transform duration-300 object-cover"
-    placeholder="blur" // Опционально
-  />
-);

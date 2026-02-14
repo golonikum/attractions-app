@@ -124,7 +124,7 @@ export const NewGroupDialog = ({
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="tag">Тег (необязательно)</Label>
+            <Label htmlFor="tag">Регион (необязательно)</Label>
             <Input
               id="tag"
               value={formData.tag || ""}

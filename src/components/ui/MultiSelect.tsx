@@ -17,7 +17,7 @@ export function MultiSelect({
   options,
   selectedOptions,
   onSelectionChange,
-  placeholder = "Выберите теги...",
+  placeholder = "Выберите...",
   className,
 }: MultiSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,7 +51,10 @@ export function MultiSelect({
   }, []);
 
   return (
-    <div className={cn("flex-1 shrink-0", className)}>
+    <div
+      className={cn("flex-1 shrink-0", className)}
+      // style={{ minWidth: "236px" }}
+    >
       <div className="relative multi-select">
         {/* Кнопка триггера */}
         <div className="relative w-full">
@@ -59,7 +62,7 @@ export function MultiSelect({
             variant="outline"
             role="combobox"
             aria-expanded={isOpen}
-            className={`w-full justify-between h-10 px-3 py-2 overflow-hidden font-normal ${!isMobile ? "max-w-100" : ""}`}
+            className={`w-full justify-between h-10 px-3 py-2 overflow-hidden font-normal ${!isMobile ? "max-w-100 min-w-60" : ""}`}
             onClick={() => setIsOpen(!isOpen)}
           >
             {selectedOptions.length === 0 ? (

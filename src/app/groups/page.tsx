@@ -166,7 +166,7 @@ export default function GroupsPage() {
               options={allTags}
               selectedOptions={selectedTags}
               onSelectionChange={setSelectedTags}
-              placeholder="Фильтровать по тегам"
+              placeholder="Фильтровать по регионам"
             />
             <div className="flex-1 shrink-0">
               Найдено{" "}
