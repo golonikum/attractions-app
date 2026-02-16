@@ -12,7 +12,7 @@ import {
 import { toast } from "sonner";
 import { NewGroupDialog } from "@/components/group/NewGroupDialog";
 import { GroupCard } from "@/components/group/GroupCard";
-import { EmptyGroupsState } from "@/components/group/EmptyGroupsState";
+import { EmptyListState } from "@/components/group/EmptyListState";
 import { MultiSelect } from "@/components/ui/MultiSelect";
 import { LoadingStub } from "@/components/ui/stubs";
 
@@ -147,6 +147,8 @@ export default function GroupsPage() {
     return <LoadingStub />;
   }
 
+  const hasFilters = selectedTags.length > 0 || searchQuery.trim();
+
   return (
     <ProtectedRoute>
       <div className="container mx-auto pt-20 px-4 pb-8">
@@ -185,13 +187,19 @@ export default function GroupsPage() {
         </div>
 
         {filteredGroups.length === 0 ? (
-          <EmptyGroupsState
-            onCreateGroup={() => setIsCreateDialogOpen(true)}
+          <EmptyListState
+            onButtonClick={() => setIsCreateDialogOpen(true)}
             message={
-              selectedTags.length > 0 || searchQuery.trim()
+              hasFilters
                 ? "Нет групп, соответствующих фильтрам"
                 : "Нет доступных групп"
             }
+            description={
+              hasFilters
+                ? "Попробуйте изменить фильтры или создайте новую группу."
+                : "У вас пока нет созданных групп. Создайте свою первую группу, чтобы начать добавлять объекта."
+            }
+            buttonLabel="Создать группу"
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

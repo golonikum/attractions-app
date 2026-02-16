@@ -5,7 +5,6 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Group } from "@/types/group";
 import { getAllGroups } from "@/services/groupService";
 import { toast } from "sonner";
-import { EmptyGroupsState } from "@/components/group/EmptyGroupsState";
 import { MultiSelect } from "@/components/ui/MultiSelect";
 import { LoadingStub } from "@/components/ui/stubs";
 import { Attraction } from "@/types/attraction";
@@ -13,6 +12,7 @@ import { getAllAttractions } from "@/services/attractionService";
 import ImageGallery from "react-image-gallery";
 import "../gallery.css";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { EmptyListState } from "@/components/group/EmptyListState";
 
 export default function GalleryPage() {
   const [groups, setGroups] = useState<Group[]>([]);
@@ -112,7 +112,8 @@ export default function GalleryPage() {
         (item) =>
           !selectedTags.length || (item.tag && selectedTags.includes(item.tag)),
       )
-      .map((item) => item.name);
+      .map((item) => item.name)
+      .sort();
   }, [groups, selectedTags]);
 
   const allCategories = useMemo(() => {
@@ -126,7 +127,7 @@ export default function GalleryPage() {
   }, [attractions]);
 
   // Фильтрация
-  const { photos, mobilePhotos } = useMemo(() => {
+  const photos = useMemo(() => {
     let filteredGroups = groups;
 
     // Фильтрация по тегам
@@ -160,13 +161,7 @@ export default function GalleryPage() {
         description: `${filteredGroups.find((group) => group.id === item.groupId)?.name}: ${item.name}`,
       }));
 
-    const mobileResult = result.map((item) => ({
-      src: item.original,
-      width: 1,
-      height: 1,
-    }));
-
-    return { photos: result, mobilePhotos: mobileResult };
+    return result;
   }, [groups, attractions, , selectedTags, selectedGroups, selectedCategories]);
 
   if (isLoading) {
@@ -206,7 +201,7 @@ export default function GalleryPage() {
         </div>
 
         {photos.length === 0 ? ( // TODO
-          <EmptyGroupsState
+          <EmptyListState
             message={
               selectedTags.length > 0
                 ? "Нет фотографий, соответствующих фильтрам"

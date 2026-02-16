@@ -8,7 +8,6 @@ import { getGroupById, updateGroup } from "@/services/groupService";
 import { toast } from "sonner";
 import { AttractionCard } from "@/components/attraction/AttractionCard";
 import { AttractionTable } from "@/components/attraction/AttractionTable";
-import { EmptyAttractionsState } from "@/components/group/EmptyAttractionsState";
 import { GroupInfoCard } from "@/components/group/GroupInfoCard";
 import { Attraction, CreateAttractionRequest } from "@/types/attraction";
 import {
@@ -25,6 +24,7 @@ import { BackButton, ShowOnMapButton } from "@/components/ui/buttons";
 import { Map } from "@/components/ui/Map";
 import { LoadingStub, NotFoundStub } from "@/components/ui/stubs";
 import { DEFAULT_ATTRACTION_ZOOM } from "@/lib/constants";
+import { EmptyListState } from "@/components/group/EmptyListState";
 
 export default function GroupDetailPage() {
   const params = useParams();
@@ -136,6 +136,15 @@ export default function GroupDetailPage() {
     return <NotFoundStub message="Группа не найдена" />;
   }
 
+  const emptyState = (
+    <EmptyListState
+      buttonLabel="Добавить объект"
+      onButtonClick={() => setIsAddAttractionDialogOpen(true)}
+      message="Нет объектов"
+      description="У этой группы пока нет объектов. Добавьте первый, чтобы начать."
+    />
+  );
+
   return (
     <ProtectedRoute>
       <div
@@ -201,9 +210,7 @@ export default function GroupDetailPage() {
 
               <div className="overflow-x-auto">
                 {attractions.length === 0 ? (
-                  <EmptyAttractionsState
-                    onAddAttraction={() => setIsAddAttractionDialogOpen(true)}
-                  />
+                  emptyState
                 ) : (
                   <AttractionTable
                     attractions={attractions}
@@ -223,9 +230,7 @@ export default function GroupDetailPage() {
 
             <div>
               {attractions.length === 0 ? (
-                <EmptyAttractionsState
-                  onAddAttraction={() => setIsAddAttractionDialogOpen(true)}
-                />
+                emptyState
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {attractions.map((attraction) => (
