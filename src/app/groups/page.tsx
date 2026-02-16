@@ -15,51 +15,17 @@ import { GroupCard } from "@/components/group/GroupCard";
 import { EmptyListState } from "@/components/group/EmptyListState";
 import { MultiSelect } from "@/components/ui/MultiSelect";
 import { LoadingStub } from "@/components/ui/stubs";
+import { useQueryParams } from "@/hooks/useQueryParams";
+import { useFiltersInitialOptions } from "@/hooks/useFiltersInitialOptions";
+import { useQuerySearch } from "@/hooks/useQuerySearch";
 
 export default function GroupsPage() {
   const [groups, setGroups] = useState<Group[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
-
-  // Получаем параметры из URL
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const tagsParam = params.get("tag");
-    const searchParam = params.get("search");
-
-    if (tagsParam) {
-      setSelectedTags(tagsParam.split(","));
-    }
-
-    if (searchParam) {
-      setSearchQuery(searchParam);
-    }
-  }, []);
-
-  // Обновляем URL при изменении фильтров
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-
-    // Обработка тегов
-    if (selectedTags.length > 0) {
-      params.set("tag", selectedTags.join(","));
-    } else {
-      params.delete("tag");
-    }
-
-    // Обработка поиска
-    if (searchQuery.trim()) {
-      params.set("search", searchQuery.trim());
-    } else {
-      params.delete("search");
-    }
-
-    const newUrl = `${window.location.pathname}?${params.toString()}`;
-    window.history.replaceState({}, "", newUrl);
-  }, [selectedTags, searchQuery]);
+  const { selectedTag, setSelectedTag } = useQueryParams(["tag"]);
+  const { searchQuery, setSearchQuery } = useQuerySearch(selectedTag);
 
   // Загрузка групп при монтировании компонента
   useEffect(() => {
@@ -78,15 +44,11 @@ export default function GroupsPage() {
   }, []);
 
   // Получаем уникальные теги из всех групп
-  const allTags = useMemo(() => {
-    const tags = new Set<string>();
-    groups.forEach((group) => {
-      if (group.tag) {
-        tags.add(group.tag);
-      }
-    });
-    return Array.from(tags).sort();
-  }, [groups]);
+  const { allTags } = useFiltersInitialOptions({
+    groups,
+    attractions: [],
+    selectedTag,
+  });
 
   // Обработчик отправки формы создания группы
   const handleSubmit = async (formData: CreateGroupRequest) => {
@@ -123,10 +85,10 @@ export default function GroupsPage() {
     let result = groups;
 
     // Фильтрация по тегам
-    if (selectedTags.length > 0) {
+    if (selectedTag.length > 0) {
       result = result.filter((group) => {
         if (!group.tag) return false;
-        return selectedTags.includes(group.tag);
+        return selectedTag.includes(group.tag);
       });
     }
 
@@ -141,13 +103,13 @@ export default function GroupsPage() {
     }
 
     return result;
-  }, [groups, selectedTags, searchQuery]);
+  }, [groups, selectedTag, searchQuery]);
 
   if (isLoading) {
     return <LoadingStub />;
   }
 
-  const hasFilters = selectedTags.length > 0 || searchQuery.trim();
+  const hasFilters = selectedTag.length > 0 || searchQuery.trim();
 
   return (
     <ProtectedRoute>
@@ -166,8 +128,8 @@ export default function GroupsPage() {
             </div>
             <MultiSelect
               options={allTags}
-              selectedOptions={selectedTags}
-              onSelectionChange={setSelectedTags}
+              selectedOptions={selectedTag}
+              onSelectionChange={setSelectedTag}
               placeholder="Фильтровать по регионам"
             />
             <div className="flex-1 shrink-0">
