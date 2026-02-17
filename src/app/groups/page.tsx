@@ -190,12 +190,12 @@ export default function GroupsPage() {
                 location={{
                   center: locatedGroup
                     ? [locatedGroup.coordinates[1], locatedGroup.coordinates[0]]
-                    : [DEFAULT_LOCATION.center[1], DEFAULT_LOCATION.center[0]],
+                    : DEFAULT_LOCATION.center,
                   zoom: locatedGroup
                     ? locatedGroup.zoom
                     : DEFAULT_LOCATION.zoom,
                 }}
-                items={groups}
+                items={filteredGroups}
                 onItemClick={(id) => {
                   router.push(`/groups/${id}`);
                 }}
