@@ -148,6 +148,7 @@ export default function GalleryPage() {
               showThumbnails={!isMobile}
               thumbnailPosition={isMobile ? "bottom" : "left"}
               showBullets={!isMobile && photos.length < 30}
+              slideInterval={5000}
             />
           </div>
         )}
