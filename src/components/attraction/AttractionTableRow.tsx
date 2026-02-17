@@ -87,10 +87,7 @@ export const AttractionTableRow = ({
         <div className="text-sm font-medium text-gray-900">
           {attraction.name}
         </div>
-        {attraction.category && (
-          <Tag text={attraction.category} />
-          // <div className="text-sm text-gray-500">{attraction.category}</div>
-        )}
+        {attraction.category && <Tag text={attraction.category} />}
       </td>
       <td
         className="px-6 py-4 cursor-pointer"

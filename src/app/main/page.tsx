@@ -71,9 +71,9 @@ export default function MainPage() {
         >
           <div style={{ width: "100%", flex: "1 0 0" }}>
             <Map
-              attractions={attractions}
-              onAttractionClick={(attraction) => {
-                router.push(`/attractions/${attraction.id}`);
+              items={attractions}
+              onItemClick={(id) => {
+                router.push(`/attractions/${id}`);
               }}
               location={location}
             />

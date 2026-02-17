@@ -16,17 +16,18 @@ import { useMapReady } from "@/hooks/useMapReady";
 import { ThemeProviderContext } from "@/contexts/ThemeContext";
 import { Minus, Plus } from "lucide-react";
 import { DEFAULT_LOCATION } from "@/lib/constants";
+import { Group } from "@/types/group";
 
 type MapPropsType = {
-  attractions?: Attraction[];
+  items?: Attraction[] | Group[];
   location?: YMapCenterLocation & YMapZoomLocation;
-  onAttractionClick?: (attraction: Attraction) => void;
+  onItemClick?: (id: string) => void;
 };
 
 export const Map: FC<MapPropsType> = ({
-  attractions,
+  items,
   location: defaultLocation = DEFAULT_LOCATION,
-  onAttractionClick,
+  onItemClick,
 }) => {
   const { isMapReady } = useMapReady();
   const { theme } = useContext(ThemeProviderContext);
@@ -77,18 +78,18 @@ export const Map: FC<MapPropsType> = ({
           <Minus />
         </YMapControlButton>
       </YMapControls>
-      {attractions?.map((attraction) => {
+      {items?.map((item) => {
         const isActive =
-          Math.abs(location.center[0] - attraction.coordinates[1]) < 0.00001 &&
-          Math.abs(location.center[1] - attraction.coordinates[0]) < 0.00001;
+          Math.abs(location.center[0] - item.coordinates[1]) < 0.00001 &&
+          Math.abs(location.center[1] - item.coordinates[0]) < 0.00001;
 
         return (
           <MarkerPin
-            key={attraction.id}
-            coordinates={[attraction.coordinates[1], attraction.coordinates[0]]}
-            visited={attraction.isVisited}
-            title={attraction.name}
-            onClick={() => onAttractionClick?.(attraction)}
+            key={item.id}
+            coordinates={[item.coordinates[1], item.coordinates[0]]}
+            visited={(item as Attraction).isVisited ? true : false}
+            title={item.name}
+            onClick={() => onItemClick?.(item.id)}
             isActive={isActive}
           />
         );

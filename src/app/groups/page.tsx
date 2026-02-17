@@ -18,14 +18,22 @@ import { LoadingStub } from "@/components/ui/stubs";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { useFiltersInitialOptions } from "@/hooks/useFiltersInitialOptions";
 import { useQuerySearch } from "@/hooks/useQuerySearch";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import { Map } from "@/components/ui/Map";
+import { GroupTable } from "@/components/group/GroupTable";
+import { DEFAULT_LOCATION } from "@/lib/constants";
+import { useRouter } from "next/navigation";
 
 export default function GroupsPage() {
+  const router = useRouter();
   const [groups, setGroups] = useState<Group[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { selectedTag, setSelectedTag } = useQueryParams(["tag"]);
   const { searchQuery, setSearchQuery } = useQuerySearch(selectedTag);
+  const { isWideScreen } = useIsMobile();
+  const [locatedGroup, setLocatedGroup] = useState<Group | null>(null);
 
   // Загрузка групп при монтировании компонента
   useEffect(() => {
@@ -80,6 +88,10 @@ export default function GroupsPage() {
     }
   };
 
+  const handleLocateGroup = (group: Group) => {
+    setLocatedGroup(group);
+  };
+
   // Фильтрация групп по выбранным тегам и поисковому запросу
   const filteredGroups = useMemo(() => {
     let result = groups;
@@ -111,10 +123,30 @@ export default function GroupsPage() {
 
   const hasFilters = selectedTag.length > 0 || searchQuery.trim();
 
+  const emptyState = (
+    <EmptyListState
+      onButtonClick={() => setIsCreateDialogOpen(true)}
+      message={
+        hasFilters
+          ? "Нет групп, соответствующих фильтрам"
+          : "Нет доступных групп"
+      }
+      description={
+        hasFilters
+          ? "Попробуйте изменить фильтры или создайте новую группу."
+          : "У вас пока нет созданных групп. Создайте свою первую группу, чтобы начать добавлять объекта."
+      }
+      buttonLabel="Создать группу"
+    />
+  );
+
   return (
     <ProtectedRoute>
-      <div className="container mx-auto pt-20 px-4 pb-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+      <div
+        className={`container mx-auto pt-20 px-4 pb-8 flex flex-col gap-4 ${isWideScreen ? "overflow-hidden" : ""}`}
+        style={isWideScreen ? { height: "calc(100vh)" } : {}}
+      >
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           {/* Фильтры по тегам и поиск */}
           <div className="w-full space-y-4 md:space-y-0 md:space-x-4 md:flex md:flex-row md:w-auto md:items-center">
             <div className="flex-1 shrink-0">
@@ -148,21 +180,43 @@ export default function GroupsPage() {
           />
         </div>
 
-        {filteredGroups.length === 0 ? (
-          <EmptyListState
-            onButtonClick={() => setIsCreateDialogOpen(true)}
-            message={
-              hasFilters
-                ? "Нет групп, соответствующих фильтрам"
-                : "Нет доступных групп"
-            }
-            description={
-              hasFilters
-                ? "Попробуйте изменить фильтры или создайте новую группу."
-                : "У вас пока нет созданных групп. Создайте свою первую группу, чтобы начать добавлять объекта."
-            }
-            buttonLabel="Создать группу"
-          />
+        {isWideScreen ? (
+          <div
+            className="flex-1 flex flex-row gap-4"
+            style={{ height: "calc(100vh - 150px)" }}
+          >
+            <div style={{ height: "100%", minWidth: "600px" }}>
+              <Map
+                location={{
+                  center: locatedGroup
+                    ? [locatedGroup.coordinates[1], locatedGroup.coordinates[0]]
+                    : [DEFAULT_LOCATION.center[1], DEFAULT_LOCATION.center[0]],
+                  zoom: locatedGroup
+                    ? locatedGroup.zoom
+                    : DEFAULT_LOCATION.zoom,
+                }}
+                items={groups}
+                onItemClick={(id) => {
+                  router.push(`/groups/${id}`);
+                }}
+              />
+            </div>
+
+            <div className="overflow-x-auto flex-1">
+              {filteredGroups.length === 0 ? (
+                emptyState
+              ) : (
+                <GroupTable
+                  groups={filteredGroups}
+                  onDelete={handleDeleteGroup}
+                  onUpdate={getHandleUpdate}
+                  onLocate={handleLocateGroup}
+                />
+              )}
+            </div>
+          </div>
+        ) : filteredGroups.length === 0 ? (
+          emptyState
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredGroups.map((group) => (

@@ -198,9 +198,9 @@ export default function GroupDetailPage() {
                     ? DEFAULT_ATTRACTION_ZOOM
                     : group.zoom,
                 }}
-                attractions={attractions}
-                onAttractionClick={(attraction) => {
-                  router.push(`/attractions/${attraction.id}`);
+                items={attractions}
+                onItemClick={(id) => {
+                  router.push(`/attractions/${id}`);
                 }}
               />
             </div>

@@ -1,0 +1,53 @@
+import { GroupTableRow, GroupTableRowProps } from "./GroupTableRow";
+import { Group } from "@/types/group";
+
+type GroupTableProps = Omit<GroupTableRowProps, "group"> & {
+  groups: Group[];
+};
+
+export function GroupTable({
+  groups,
+  onDelete,
+  onUpdate,
+  onLocate,
+}: GroupTableProps) {
+  return (
+    <div className="hidden md:block overflow-x-hidden">
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
+          <tr>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Название
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Описание
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Действия
+            </th>
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {groups.map((group) => (
+            <GroupTableRow
+              key={group.id}
+              group={group}
+              onDelete={onDelete}
+              onUpdate={onUpdate}
+              onLocate={onLocate}
+            />
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
