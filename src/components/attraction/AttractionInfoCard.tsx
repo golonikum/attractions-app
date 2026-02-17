@@ -36,7 +36,7 @@ export function AttractionInfoCard({ attraction }: AttractionInfoCardProps) {
 
         <div className="flex flex-col gap-4">
           {attraction.description && (
-            <p className="text-gray-600 whitespace-pre">
+            <p className="text-gray-600 whitespace-pre-wrap">
               {attraction.description}
             </p>
           )}
