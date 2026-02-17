@@ -31,7 +31,7 @@ export function Navigation() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-1001 border-b bg-background">
-      <div className="container mx-auto px-4">
+      <div className="container lg:max-w-full mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {isMobile ? (
             <Button

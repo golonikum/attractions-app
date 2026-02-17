@@ -148,7 +148,7 @@ export default function GroupDetailPage() {
   return (
     <ProtectedRoute>
       <div
-        className={`container mx-auto pt-20 px-4 pb-8 flex flex-col gap-4 ${isWideScreen ? "overflow-hidden" : ""}`}
+        className={`container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4 ${isWideScreen ? "overflow-hidden" : ""}`}
         style={isWideScreen ? { height: "calc(100vh)" } : {}}
       >
         <div className="flex items-center">

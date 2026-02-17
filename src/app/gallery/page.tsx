@@ -102,7 +102,7 @@ export default function GalleryPage() {
 
   return (
     <ProtectedRoute>
-      <div className="container mx-auto pt-20 px-4 pb-8">
+      <div className="container lg:max-w-full mx-auto pt-20 px-4 pb-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
           <div className="w-full space-y-4 md:space-y-0 md:space-x-4 md:flex md:flex-row md:w-auto md:items-center">
             <MultiSelect

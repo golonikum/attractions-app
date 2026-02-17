@@ -62,7 +62,7 @@ export default function MainPage() {
   return (
     <ProtectedRoute>
       <div
-        className="container mx-auto pt-20 px-4 pb-8"
+        className="container lg:max-w-full mx-auto pt-20 px-4 pb-8"
         style={{ height: "calc(100vh)" }}
       >
         <div

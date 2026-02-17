@@ -101,7 +101,7 @@ export default function AttractionDetailPage() {
 
   return (
     <ProtectedRoute>
-      <div className="container mx-auto pt-20 px-4 pb-8 flex flex-col gap-4">
+      <div className="container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4">
         <div className="flex items-center gap-2">
           {group && <BackButton route={`/groups/${group.id}`} />}
 
