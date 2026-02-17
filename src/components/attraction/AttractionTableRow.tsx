@@ -11,6 +11,7 @@ import {
 import { ConfirmDialog } from "../ui/ConfirmDialog";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { Tag } from "../ui/Tag";
 
 export type AttractionTableRowProps = {
   attraction: Attraction;
@@ -87,7 +88,8 @@ export const AttractionTableRow = ({
           {attraction.name}
         </div>
         {attraction.category && (
-          <div className="text-sm text-gray-500">{attraction.category}</div>
+          <Tag text={attraction.category} />
+          // <div className="text-sm text-gray-500">{attraction.category}</div>
         )}
       </td>
       <td
