@@ -102,6 +102,15 @@ export const NewAttractionDialog = ({
     }
   }, [attraction]);
 
+  useEffect(() => {
+    if (isOpen && !attraction) {
+      setFormData((data) => ({
+        ...data,
+        order: attractionsCount + 1,
+      }));
+    }
+  }, [isOpen, attraction, attractionsCount]);
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
