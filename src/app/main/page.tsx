@@ -3,61 +3,47 @@
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Map } from "@/components/ui/Map";
 import { useEffect, useState } from "react";
-import { getAllAttractions } from "@/services/attractionService";
-import { Attraction } from "@/types/attraction";
-import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getAllGroups } from "@/services/groupService";
 import { DEFAULT_ATTRACTION_ZOOM, DEFAULT_LOCATION } from "@/lib/constants";
+import { useGetAllGroups } from "@/hooks/useGetAllGroups";
+import { useGetAllAttractions } from "@/hooks/useGetAllAttractions";
 
 export default function MainPage() {
-  const [attractions, setAttractions] = useState<Attraction[]>([]);
   const router = useRouter();
   const searchParams = useSearchParams();
   const [location, setLocation] = useState(DEFAULT_LOCATION);
+  const { groups } = useGetAllGroups();
+  const { attractions } = useGetAllAttractions();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Загрузка объектов
-        const groupsData = await getAllGroups();
-        const attractionsData = await getAllAttractions();
-        setAttractions(attractionsData);
+    if (attractions.length && groups.length) {
+      const groupId = searchParams.get("groupId");
 
-        const groupId = searchParams.get("groupId");
+      if (groupId) {
+        const group = groups.find((item) => item.id === groupId);
 
-        if (groupId) {
-          const group = groupsData.find((item) => item.id === groupId);
-
-          if (group) {
-            setLocation({
-              zoom: group.zoom,
-              center: [group.coordinates[1], group.coordinates[0]],
-            });
-          }
+        if (group) {
+          setLocation({
+            zoom: group.zoom,
+            center: [group.coordinates[1], group.coordinates[0]],
+          });
         }
-
-        const attractionId = searchParams.get("attractionId");
-
-        if (attractionId) {
-          const attraction = attractionsData.find(
-            (item) => item.id === attractionId,
-          );
-
-          if (attraction) {
-            setLocation({
-              zoom: DEFAULT_ATTRACTION_ZOOM,
-              center: [attraction.coordinates[1], attraction.coordinates[0]],
-            });
-          }
-        }
-      } catch (error) {
-        toast.error("Не удалось загрузить объекты");
       }
-    };
 
-    fetchData();
-  }, []);
+      const attractionId = searchParams.get("attractionId");
+
+      if (attractionId) {
+        const attraction = attractions.find((item) => item.id === attractionId);
+
+        if (attraction) {
+          setLocation({
+            zoom: DEFAULT_ATTRACTION_ZOOM,
+            center: [attraction.coordinates[1], attraction.coordinates[0]],
+          });
+        }
+      }
+    }
+  }, [groups, attractions, searchParams]);
 
   return (
     <ProtectedRoute>

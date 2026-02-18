@@ -1,27 +1,20 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { Group } from "@/types/group";
-import { getAllGroups } from "@/services/groupService";
-import { toast } from "sonner";
 import { MultiSelect } from "@/components/ui/MultiSelect";
 import { LoadingStub } from "@/components/ui/stubs";
-import { Attraction } from "@/types/attraction";
-import { getAllAttractions } from "@/services/attractionService";
 import ImageGallery from "react-image-gallery";
 import "../gallery.css";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { EmptyListState } from "@/components/group/EmptyListState";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { useFiltersInitialOptions } from "@/hooks/useFiltersInitialOptions";
+import { useGetAllGroups } from "@/hooks/useGetAllGroups";
+import { useGetAllAttractions } from "@/hooks/useGetAllAttractions";
 
 export default function GalleryPage() {
-  const [groups, setGroups] = useState<Group[]>([]);
-  const [attractions, setAttractions] = useState<Attraction[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const { isMobile } = useIsMobile();
-
   const {
     selectedTag,
     setSelectedTag,
@@ -30,28 +23,10 @@ export default function GalleryPage() {
     selectedCategory,
     setSelectedCategory,
   } = useQueryParams(["tag", "group", "category"]);
-
-  // Загрузка данных при монтировании компонента
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [groupsData, attractionsData] = await Promise.all([
-          await getAllGroups(),
-          await getAllAttractions(),
-        ]);
-
-        setGroups(groupsData);
-        setAttractions(attractionsData);
-      } catch (error) {
-        toast.error("Не удалось загрузить данные");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
+  const { groups, isLoading: isLoadingGroups } = useGetAllGroups();
+  const { attractions, isLoading: isLoadingAttractions } =
+    useGetAllAttractions();
+  const isLoading = isLoadingGroups || isLoadingAttractions;
   const { allCategories, allGroups, allTags } = useFiltersInitialOptions({
     groups,
     attractions,
@@ -94,7 +69,7 @@ export default function GalleryPage() {
       }));
 
     return result;
-  }, [groups, attractions, , selectedTag, selectedGroup, selectedCategory]);
+  }, [groups, attractions, selectedTag, selectedGroup, selectedCategory]);
 
   if (isLoading) {
     return <LoadingStub />;

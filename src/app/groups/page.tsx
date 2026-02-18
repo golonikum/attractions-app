@@ -1,14 +1,9 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Group, CreateGroupRequest } from "@/types/group";
-import {
-  getAllGroups,
-  createGroup,
-  deleteGroup,
-  updateGroup,
-} from "@/services/groupService";
+import { createGroup, deleteGroup, updateGroup } from "@/services/groupService";
 import { toast } from "sonner";
 import { NewGroupDialog } from "@/components/group/NewGroupDialog";
 import { GroupCard } from "@/components/group/GroupCard";
@@ -22,33 +17,17 @@ import { Map } from "@/components/ui/Map";
 import { GroupTable } from "@/components/group/GroupTable";
 import { DEFAULT_GROUP_ZOOM, DEFAULT_LOCATION } from "@/lib/constants";
 import { useRouter } from "next/navigation";
+import { useGetAllGroups } from "@/hooks/useGetAllGroups";
 
 export default function GroupsPage() {
   const router = useRouter();
-  const [groups, setGroups] = useState<Group[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { selectedTag, setSelectedTag, searchQuery, setSearchQuery } =
     useQueryParams(["tag"] as const);
   const { isWideScreen } = useIsMobile();
   const [locatedGroup, setLocatedGroup] = useState<Group | null>(null);
-
-  // Загрузка групп при монтировании компонента
-  useEffect(() => {
-    const fetchGroups = async () => {
-      try {
-        const data = await getAllGroups();
-        setGroups(data);
-      } catch (error) {
-        toast.error("Не удалось загрузить группы");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchGroups();
-  }, []);
+  const { groups, setGroups, isLoading } = useGetAllGroups();
 
   // Получаем уникальные теги из всех групп
   const { allTags } = useFiltersInitialOptions({
