@@ -152,7 +152,7 @@ export default function GroupDetailPage() {
         style={isWideScreen ? { height: "calc(100vh)" } : {}}
       >
         <div className="flex items-center">
-          <BackButton route="/groups" />
+          <BackButton />
           <div className="ml-auto flex space-x-1">
             <ShowOnMapButton
               view="icon"

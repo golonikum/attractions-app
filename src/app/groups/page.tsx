@@ -17,7 +17,6 @@ import { MultiSelect } from "@/components/ui/MultiSelect";
 import { LoadingStub } from "@/components/ui/stubs";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { useFiltersInitialOptions } from "@/hooks/useFiltersInitialOptions";
-import { useQuerySearch } from "@/hooks/useQuerySearch";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { Map } from "@/components/ui/Map";
 import { GroupTable } from "@/components/group/GroupTable";
@@ -30,8 +29,8 @@ export default function GroupsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { selectedTag, setSelectedTag } = useQueryParams(["tag"]);
-  const { searchQuery, setSearchQuery } = useQuerySearch(selectedTag);
+  const { selectedTag, setSelectedTag, searchQuery, setSearchQuery } =
+    useQueryParams(["tag"] as const);
   const { isWideScreen } = useIsMobile();
   const [locatedGroup, setLocatedGroup] = useState<Group | null>(null);
 

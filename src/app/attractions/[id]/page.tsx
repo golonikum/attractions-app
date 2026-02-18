@@ -103,7 +103,7 @@ export default function AttractionDetailPage() {
     <ProtectedRoute>
       <div className="container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4">
         <div className="flex items-center gap-2">
-          {group && <BackButton route={`/groups/${group.id}`} />}
+          {group && <BackButton />}
 
           <div className="ml-auto flex space-x-1">
             {isWideScreen && (
