@@ -21,7 +21,7 @@ import { useQuerySearch } from "@/hooks/useQuerySearch";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { Map } from "@/components/ui/Map";
 import { GroupTable } from "@/components/group/GroupTable";
-import { DEFAULT_LOCATION } from "@/lib/constants";
+import { DEFAULT_GROUP_ZOOM, DEFAULT_LOCATION } from "@/lib/constants";
 import { useRouter } from "next/navigation";
 
 export default function GroupsPage() {
@@ -192,7 +192,7 @@ export default function GroupsPage() {
                     ? [locatedGroup.coordinates[1], locatedGroup.coordinates[0]]
                     : DEFAULT_LOCATION.center,
                   zoom: locatedGroup
-                    ? locatedGroup.zoom
+                    ? DEFAULT_GROUP_ZOOM
                     : DEFAULT_LOCATION.zoom,
                 }}
                 items={filteredGroups}
