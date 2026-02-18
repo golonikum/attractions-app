@@ -16,7 +16,10 @@ type SearchQuerySetters = {
 };
 
 const getInitStateFromUrl = <T extends readonly string[]>(names: T) => {
-  const params = new URLSearchParams(window.location.search);
+  const params =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search)
+      : { get: () => "" };
   const newState: Record<string, string[]> = {};
   const searchParam = params.get("search");
 
