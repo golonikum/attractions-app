@@ -19,8 +19,16 @@ export function GroupTable({
             <th
               scope="col"
               className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              style={{ width: "150px" }}
             >
               Название
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              style={{ width: "220px" }}
+            >
+              Регион
             </th>
             <th
               scope="col"
@@ -31,6 +39,7 @@ export function GroupTable({
             <th
               scope="col"
               className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              style={{ width: "180px" }}
             >
               Действия
             </th>

@@ -45,6 +45,11 @@ export const GroupTableRow = ({
         onClick={handleGroupClick(group)}
       >
         <div className="text-sm font-medium text-gray-900">{group.name}</div>
+      </td>
+      <td
+        className="px-6 py-4 cursor-pointer"
+        onClick={handleGroupClick(group)}
+      >
         {group.tag && <Tag text={group.tag} />}
       </td>
       <td

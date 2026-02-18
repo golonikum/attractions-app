@@ -185,7 +185,7 @@ export default function GroupsPage() {
             className="flex-1 flex flex-row gap-4"
             style={{ height: "calc(100vh - 150px)" }}
           >
-            <div style={{ height: "100%", minWidth: "600px" }}>
+            <div style={{ height: "100%", minWidth: "700px" }}>
               <Map
                 location={{
                   center: locatedGroup
