@@ -70,9 +70,9 @@ export const AttractionTableRow = ({
       {...attributes}
       {...listeners}
     >
-      <td className="px-6 py-4 cursor-move">☰</td>
+      <td className="px-4 py-2  cursor-move">☰</td>
       <td
-        className="px-6 py-4 whitespace-nowrap cursor-pointer"
+        className="px-4 py-2  whitespace-nowrap cursor-pointer"
         onClick={handleAttractionClick(attraction)}
       >
         <AttractionImage
@@ -81,7 +81,7 @@ export const AttractionTableRow = ({
         />
       </td>
       <td
-        className="px-6 py-4 cursor-pointer"
+        className="px-4 py-2  cursor-pointer"
         onClick={handleAttractionClick(attraction)}
       >
         <div className="text-sm font-medium text-gray-900">
@@ -90,14 +90,14 @@ export const AttractionTableRow = ({
         {attraction.category && <Tag text={attraction.category} />}
       </td>
       <td
-        className="px-6 py-4 cursor-pointer"
+        className="px-4 py-2  cursor-pointer"
         onClick={handleAttractionClick(attraction)}
       >
-        <div className="text-sm text-gray-900 max-w-xs line-clamp-4">
+        <div className="text-sm text-gray-900 line-clamp-4">
           {attraction.description || "Нет описания"}
         </div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+      <td className="px-4 py-2  whitespace-nowrap text-sm font-medium">
         <div className="flex space-x-1">
           <ShowOnMapButton onClick={onLocateAttractionClick} view="icon" />
           <OpenInYandexMapButton attraction={attraction} view="icon" />

@@ -41,26 +41,26 @@ export const GroupTableRow = ({
   return (
     <tr>
       <td
-        className="px-6 py-4 cursor-pointer"
+        className="px-4 py-2  cursor-pointer"
         onClick={handleGroupClick(group)}
       >
         <div className="text-sm font-medium text-gray-900">{group.name}</div>
       </td>
       <td
-        className="px-6 py-4 cursor-pointer"
+        className="px-4 py-2  cursor-pointer"
         onClick={handleGroupClick(group)}
       >
         {group.tag && <Tag text={group.tag} />}
       </td>
       <td
-        className="px-6 py-4 cursor-pointer"
+        className="px-4 py-2  cursor-pointer"
         onClick={handleGroupClick(group)}
       >
-        <div className="text-sm text-gray-900 max-w-xs line-clamp-4">
+        <div className="text-sm text-gray-900 line-clamp-4">
           {group.description || "Нет описания"}
         </div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+      <td className="px-4 py-2  whitespace-nowrap text-sm font-medium">
         <div className="flex space-x-1">
           <ShowOnMapButton onClick={onLocateClick} view="icon" />
           <NewGroupDialog
