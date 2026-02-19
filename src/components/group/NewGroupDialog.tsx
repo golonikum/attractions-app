@@ -36,6 +36,7 @@ export const NewGroupDialog = ({
   isSubmitting,
   setIsSubmitting,
   groupData,
+  selectedTag = "",
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
@@ -43,6 +44,7 @@ export const NewGroupDialog = ({
   isSubmitting: boolean;
   setIsSubmitting: (isSubmitting: boolean) => void;
   groupData?: Group;
+  selectedTag?: string;
 }) => {
   const [formData, setFormData] = useState<CreateGroupRequest>(
     initialGroupFormState,
@@ -127,7 +129,7 @@ export const NewGroupDialog = ({
             <Label htmlFor="tag">Регион (необязательно)</Label>
             <Input
               id="tag"
-              value={formData.tag || ""}
+              value={formData.tag || selectedTag}
               onChange={(e) =>
                 setFormData({ ...formData, tag: e.target.value })
               }

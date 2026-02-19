@@ -155,6 +155,7 @@ export default function GroupsPage() {
             setIsOpen={setIsCreateDialogOpen}
             isSubmitting={isSubmitting}
             setIsSubmitting={setIsSubmitting}
+            selectedTag={selectedTag.length === 1 ? selectedTag[0] : undefined}
           />
         </div>
 
