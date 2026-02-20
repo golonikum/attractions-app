@@ -82,6 +82,15 @@ export const NewGroupDialog = ({
     }
   }, [groupData]);
 
+  useEffect(() => {
+    if (isOpen && !groupData && selectedTag) {
+      setFormData({
+        ...formData,
+        tag: selectedTag,
+      });
+    }
+  }, [isOpen, selectedTag, groupData, formData]);
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
