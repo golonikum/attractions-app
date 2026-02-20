@@ -84,12 +84,12 @@ export const NewGroupDialog = ({
 
   useEffect(() => {
     if (isOpen && !groupData && selectedTag) {
-      setFormData({
-        ...formData,
+      setFormData((data) => ({
+        ...data,
         tag: selectedTag,
-      });
+      }));
     }
-  }, [isOpen, selectedTag, groupData, formData]);
+  }, [isOpen, selectedTag, groupData]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
