@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { Group, CreateGroupRequest } from "@/types/group";
+import { Group, CreateGroupRequest, GroupWithAttractions } from "@/types/group";
 import { createGroup, deleteGroup, updateGroup } from "@/services/groupService";
 import { toast } from "sonner";
 import { NewGroupDialog } from "@/components/group/NewGroupDialog";
@@ -18,6 +18,7 @@ import { GroupTable } from "@/components/group/GroupTable";
 import { DEFAULT_GROUP_ZOOM, DEFAULT_LOCATION } from "@/lib/constants";
 import { useRouter } from "next/navigation";
 import { useGetAllGroups } from "@/hooks/useGetAllGroups";
+import { useGetAllAttractions } from "@/hooks/useGetAllAttractions";
 
 export default function GroupsPage() {
   const router = useRouter();
@@ -27,7 +28,10 @@ export default function GroupsPage() {
     useQueryParams(["tag"] as const);
   const { isWideScreen } = useIsMobile();
   const [locatedGroup, setLocatedGroup] = useState<Group | null>(null);
-  const { groups, setGroups, isLoading } = useGetAllGroups();
+  const { groups, setGroups, isLoading: isGroupsLoading } = useGetAllGroups();
+  const { attractions, isLoading: isAttractionsLoading } =
+    useGetAllAttractions();
+  const isLoading = isGroupsLoading || isAttractionsLoading;
 
   // Получаем уникальные теги из всех групп
   const { allTags } = useFiltersInitialOptions({
@@ -71,7 +75,7 @@ export default function GroupsPage() {
   };
 
   // Фильтрация групп по выбранным тегам и поисковому запросу
-  const filteredGroups = useMemo(() => {
+  const filteredGroups: GroupWithAttractions[] = useMemo(() => {
     let result = groups;
 
     // Фильтрация по тегам
@@ -92,8 +96,13 @@ export default function GroupsPage() {
       );
     }
 
-    return result;
-  }, [groups, selectedTag, searchQuery]);
+    return result.map((item) => ({
+      ...item,
+      attractions: attractions.filter(
+        (attraction) => attraction.groupId === item.id,
+      ),
+    }));
+  }, [groups, selectedTag, searchQuery, attractions]);
 
   if (isLoading) {
     return <LoadingStub />;
@@ -164,7 +173,7 @@ export default function GroupsPage() {
             className="flex-1 flex flex-row gap-4"
             style={{ height: "calc(100vh - 150px)" }}
           >
-            <div style={{ height: "100%", minWidth: "700px" }}>
+            <div style={{ height: "100%", minWidth: "800px" }}>
               <Map
                 location={{
                   center: locatedGroup

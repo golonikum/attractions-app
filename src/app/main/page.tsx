@@ -7,13 +7,16 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { DEFAULT_ATTRACTION_ZOOM, DEFAULT_LOCATION } from "@/lib/constants";
 import { useGetAllGroups } from "@/hooks/useGetAllGroups";
 import { useGetAllAttractions } from "@/hooks/useGetAllAttractions";
+import { LoadingStub } from "@/components/ui/stubs";
 
 export default function MainPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [location, setLocation] = useState(DEFAULT_LOCATION);
-  const { groups } = useGetAllGroups();
-  const { attractions } = useGetAllAttractions();
+  const { groups, isLoading: isGroupsLoading } = useGetAllGroups();
+  const { attractions, isLoading: isAttractionsLoading } =
+    useGetAllAttractions();
+  const isLoading = isGroupsLoading || isAttractionsLoading;
 
   useEffect(() => {
     if (attractions.length && groups.length) {
@@ -44,6 +47,10 @@ export default function MainPage() {
       }
     }
   }, [groups, attractions, searchParams]);
+
+  if (isLoading) {
+    return <LoadingStub />;
+  }
 
   return (
     <ProtectedRoute>

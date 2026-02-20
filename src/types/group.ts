@@ -1,3 +1,5 @@
+import { Attraction } from "./attraction";
+
 export interface Group {
   id: string;
   userId: string;
@@ -8,6 +10,10 @@ export interface Group {
   zoom: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface GroupWithAttractions extends Group {
+  attractions: Attraction[];
 }
 
 export interface CreateGroupRequest {

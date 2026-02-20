@@ -16,10 +16,11 @@ import { useMapReady } from "@/hooks/useMapReady";
 import { ThemeProviderContext } from "@/contexts/ThemeContext";
 import { Minus, Plus } from "lucide-react";
 import { DEFAULT_LOCATION } from "@/lib/constants";
-import { Group } from "@/types/group";
+import { GroupWithAttractions } from "@/types/group";
+import { isAttraction } from "@/lib/utils";
 
 type MapPropsType = {
-  items?: Attraction[] | Group[];
+  items?: Attraction[] | GroupWithAttractions[];
   location?: YMapCenterLocation & YMapZoomLocation;
   onItemClick?: (id: string) => void;
 };
@@ -83,11 +84,15 @@ export const Map: FC<MapPropsType> = ({
           Math.abs(location.center[0] - item.coordinates[1]) < 0.00001 &&
           Math.abs(location.center[1] - item.coordinates[0]) < 0.00001;
 
+        const isVisited = isAttraction(item)
+          ? item.isVisited
+          : item.attractions.some((attraction) => attraction.isVisited);
+
         return (
           <MarkerPin
             key={item.id}
             coordinates={[item.coordinates[1], item.coordinates[0]]}
-            visited={(item as Attraction).isVisited ? true : false}
+            visited={isVisited}
             title={item.name}
             onClick={() => onItemClick?.(item.id)}
             isActive={isActive}
