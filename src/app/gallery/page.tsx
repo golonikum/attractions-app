@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { MultiSelect } from "@/components/ui/MultiSelect";
-import { LoadingStub } from "@/components/ui/stubs";
+import { FoundCountStub, LoadingStub } from "@/components/ui/stubs";
 import ImageGallery from "react-image-gallery";
 import "../gallery.css";
 import { useIsMobile } from "@/hooks/useIsMobile";
@@ -98,12 +98,14 @@ export default function GalleryPage() {
               onSelectionChange={setSelectedCategory}
               placeholder="Фильтровать по категориям"
             />
-            <div className="flex-1 shrink-0">
-              Найдено{" "}
-              <span className={photos.length ? "font-bold" : ""}>
-                {photos.length}
-              </span>
-            </div>
+            <FoundCountStub
+              count={photos.length}
+              hasFilters={
+                selectedCategory.length > 0 ||
+                selectedGroup.length > 0 ||
+                selectedTag.length > 0
+              }
+            />
           </div>
         </div>
 

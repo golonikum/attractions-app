@@ -6,12 +6,18 @@ import { AttractionImage } from "./AttractionImage";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { OpenInYandexMapButton, ShowOnMapButton } from "../ui/buttons";
 import { useRouter } from "next/navigation";
+import { Group } from "@/types/group";
+import { Button } from "../ui/button";
 
 interface AttractionInfoCardProps {
   attraction: Attraction;
+  group: Group | null;
 }
 
-export function AttractionInfoCard({ attraction }: AttractionInfoCardProps) {
+export function AttractionInfoCard({
+  attraction,
+  group,
+}: AttractionInfoCardProps) {
   const { isWideScreen } = useIsMobile();
   const router = useRouter();
 
@@ -19,7 +25,17 @@ export function AttractionInfoCard({ attraction }: AttractionInfoCardProps) {
     <Card isFavorite={attraction.isFavorite} isVisited={attraction.isVisited}>
       <CardHeader>
         <div className="flex gap-4 justify-between items-start">
-          <CardTitle>{attraction.name}</CardTitle>
+          <CardTitle className="flex flex-col gap-2 flex-start">
+            {attraction.name}{" "}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => router.push(`/groups/${group?.id}`)}
+              className="mr-4 cursor-pointer w-fit"
+            >
+              {group?.name}
+            </Button>
+          </CardTitle>
           {attraction.category && (
             <Tag text={attraction.category} variant="default" />
           )}

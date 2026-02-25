@@ -9,7 +9,7 @@ import { NewGroupDialog } from "@/components/group/NewGroupDialog";
 import { GroupCard } from "@/components/group/GroupCard";
 import { EmptyListState } from "@/components/group/EmptyListState";
 import { MultiSelect } from "@/components/ui/MultiSelect";
-import { LoadingStub } from "@/components/ui/stubs";
+import { FoundCountStub, LoadingStub } from "@/components/ui/stubs";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { useFiltersInitialOptions } from "@/hooks/useFiltersInitialOptions";
 import { useIsMobile } from "@/hooks/useIsMobile";
@@ -151,12 +151,10 @@ export default function GroupsPage() {
               onSelectionChange={setSelectedTag}
               placeholder="Фильтровать по регионам"
             />
-            <div className="flex-1 shrink-0">
-              Найдено{" "}
-              <span className={filteredGroups.length ? "font-bold" : ""}>
-                {filteredGroups.length}
-              </span>
-            </div>
+            <FoundCountStub
+              count={filteredGroups.length}
+              hasFilters={selectedTag.length > 0 || !!searchQuery.trim()}
+            />
           </div>
           <NewGroupDialog
             handleSubmit={handleSubmit}

@@ -129,7 +129,7 @@ export default function AttractionDetailPage() {
           </div>
         </div>
 
-        <AttractionInfoCard attraction={attraction} />
+        <AttractionInfoCard attraction={attraction} group={group} />
 
         <ConfirmDialog
           isOpen={isDeleteDialogOpen}
