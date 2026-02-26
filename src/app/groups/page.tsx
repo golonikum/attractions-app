@@ -15,20 +15,34 @@ import { useFiltersInitialOptions } from "@/hooks/useFiltersInitialOptions";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { Map } from "@/components/ui/Map";
 import { GroupTable } from "@/components/group/GroupTable";
-import { DEFAULT_GROUP_ZOOM, DEFAULT_LOCATION } from "@/lib/constants";
+import { DEFAULT_GROUP_ZOOM } from "@/lib/constants";
 import { useRouter } from "next/navigation";
 import { useGetAllGroups } from "@/hooks/useGetAllGroups";
 import { useGetAllAttractions } from "@/hooks/useGetAllAttractions";
+import { useLocation } from "@/hooks/useLocation";
 
 export default function GroupsPage() {
   const router = useRouter();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { selectedTag, setSelectedTag, searchQuery, setSearchQuery } =
-    useQueryParams(["tag"] as const);
+  const {
+    selectedTag,
+    setSelectedTag,
+    searchQuery,
+    setSearchQuery,
+    selectedZoom,
+    setSelectedZoom,
+    selectedCoordinates,
+    setSelectedCoordinates,
+  } = useQueryParams(["tag", "zoom", "coordinates"] as const);
   const { isWideScreen } = useIsMobile();
-  const [locatedGroup, setLocatedGroup] = useState<Group | null>(null);
   const { groups, setGroups, isLoading: isGroupsLoading } = useGetAllGroups();
+  const { location, setLocation } = useLocation({
+    selectedZoom,
+    setSelectedZoom,
+    selectedCoordinates,
+    setSelectedCoordinates,
+  });
   const { attractions, isLoading: isAttractionsLoading } =
     useGetAllAttractions();
   const isLoading = isGroupsLoading || isAttractionsLoading;
@@ -71,7 +85,10 @@ export default function GroupsPage() {
   };
 
   const handleLocateGroup = (group: Group) => {
-    setLocatedGroup(group);
+    setLocation({
+      zoom: DEFAULT_GROUP_ZOOM,
+      center: [group.coordinates[1], group.coordinates[0]],
+    });
   };
 
   // Фильтрация групп по выбранным тегам и поисковому запросу
@@ -173,14 +190,8 @@ export default function GroupsPage() {
           >
             <div style={{ height: "100%", minWidth: "800px" }}>
               <Map
-                location={{
-                  center: locatedGroup
-                    ? [locatedGroup.coordinates[1], locatedGroup.coordinates[0]]
-                    : DEFAULT_LOCATION.center,
-                  zoom: locatedGroup
-                    ? DEFAULT_GROUP_ZOOM
-                    : DEFAULT_LOCATION.zoom,
-                }}
+                location={location}
+                setLocation={setLocation}
                 items={filteredGroups}
                 onItemClick={(id) => {
                   router.push(`/groups/${id}`);

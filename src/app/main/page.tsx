@@ -2,18 +2,31 @@
 
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Map } from "@/components/ui/Map";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { DEFAULT_ATTRACTION_ZOOM, DEFAULT_LOCATION } from "@/lib/constants";
+import { DEFAULT_ATTRACTION_ZOOM } from "@/lib/constants";
 import { useGetAllGroups } from "@/hooks/useGetAllGroups";
 import { useGetAllAttractions } from "@/hooks/useGetAllAttractions";
 import { LoadingStub } from "@/components/ui/stubs";
+import { useQueryParams } from "@/hooks/useQueryParams";
+import { useLocation } from "@/hooks/useLocation";
 
 export default function MainPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [location, setLocation] = useState(DEFAULT_LOCATION);
   const { groups, isLoading: isGroupsLoading } = useGetAllGroups();
+  const {
+    selectedZoom,
+    setSelectedZoom,
+    selectedCoordinates,
+    setSelectedCoordinates,
+  } = useQueryParams(["zoom", "coordinates"] as const);
+  const { location, setLocation } = useLocation({
+    selectedZoom,
+    setSelectedZoom,
+    selectedCoordinates,
+    setSelectedCoordinates,
+  });
   const { attractions, isLoading: isAttractionsLoading } =
     useGetAllAttractions();
   const isLoading = isGroupsLoading || isAttractionsLoading;
@@ -69,6 +82,7 @@ export default function MainPage() {
                 router.push(`/attractions/${id}`);
               }}
               location={location}
+              setLocation={setLocation}
             />
           </div>
         </div>

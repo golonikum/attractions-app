@@ -9,7 +9,7 @@ import {
   YMapScaleControl,
 } from "@/lib/ymaps";
 import { Attraction } from "@/types/attraction";
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext } from "react";
 import { MarkerPin } from "./MarkerPin";
 import { YMapCenterLocation, YMapZoomLocation } from "ymaps3";
 import { useMapReady } from "@/hooks/useMapReady";
@@ -22,21 +22,25 @@ import { isAttraction } from "@/lib/utils";
 type MapPropsType = {
   items?: Attraction[] | GroupWithAttractions[];
   location?: YMapCenterLocation & YMapZoomLocation;
+  setLocation: React.Dispatch<
+    React.SetStateAction<YMapCenterLocation & YMapZoomLocation>
+  >;
   onItemClick?: (id: string) => void;
 };
 
 export const Map: FC<MapPropsType> = ({
   items,
-  location: defaultLocation = DEFAULT_LOCATION,
+  location = DEFAULT_LOCATION,
+  setLocation,
   onItemClick,
 }) => {
   const { isMapReady } = useMapReady();
   const { theme } = useContext(ThemeProviderContext);
-  const [location, setLocation] = useState(defaultLocation);
+  // const [location, setLocation] = useState(defaultLocation);
 
-  useEffect(() => {
-    setLocation(defaultLocation);
-  }, [defaultLocation]);
+  // useEffect(() => {
+  //   setLocation(defaultLocation);
+  // }, [defaultLocation]);
 
   const onClickZoom = (operation: "plus" | "minus") => () => {
     setLocation((val) => ({

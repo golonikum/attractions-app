@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { CreateGroupRequest, Group } from "@/types/group";
 import { getGroupById, updateGroup } from "@/services/groupService";
@@ -25,12 +25,28 @@ import { Map } from "@/components/ui/Map";
 import { LoadingStub, NotFoundStub } from "@/components/ui/stubs";
 import { DEFAULT_ATTRACTION_ZOOM } from "@/lib/constants";
 import { EmptyListState } from "@/components/group/EmptyListState";
+import { useQueryParams } from "@/hooks/useQueryParams";
+import { useLocation } from "@/hooks/useLocation";
 
 export default function GroupDetailPage() {
-  const params = useParams();
   const router = useRouter();
-  const groupId = params.id as string;
 
+  // UGLYHACK: to avoid useParams re-rendering
+  const pathNames = document.location.pathname.split("/");
+  const groupId = pathNames[pathNames.length - 1];
+
+  const {
+    selectedZoom,
+    setSelectedZoom,
+    selectedCoordinates,
+    setSelectedCoordinates,
+  } = useQueryParams(["zoom", "coordinates"] as const);
+  const { location, setLocation } = useLocation({
+    selectedZoom,
+    setSelectedZoom,
+    selectedCoordinates,
+    setSelectedCoordinates,
+  });
   const [isOrderChanging, setIsOrderChanging] = useState(false);
   const [group, setGroup] = useState<Group | null>(null);
   const [attractions, setAttractions] = useState<Attraction[]>([]);
@@ -41,9 +57,6 @@ export default function GroupDetailPage() {
     useState(false);
   const [isSubmittingAttraction, setIsSubmittingAttraction] = useState(false);
   const { isWideScreen } = useIsMobile();
-  const [locatedAttraction, setLocatedAttraction] = useState<Attraction | null>(
-    null,
-  );
 
   // Загрузка данных группы при монтировании компонента
   useEffect(() => {
@@ -51,6 +64,10 @@ export default function GroupDetailPage() {
       try {
         const groupData = await getGroupById(groupId);
         setGroup(groupData);
+        setLocation({
+          center: [groupData.coordinates[1], groupData.coordinates[0]],
+          zoom: groupData.zoom,
+        });
 
         // Загрузка объектов для группы
         const attractionsData = await getAttractionsByGroupId(groupId);
@@ -109,7 +126,10 @@ export default function GroupDetailPage() {
     };
 
   const handleLocateAttraction = (attraction: Attraction) => {
-    setLocatedAttraction(attraction);
+    setLocation({
+      center: [attraction.coordinates[1], attraction.coordinates[0]],
+      zoom: DEFAULT_ATTRACTION_ZOOM,
+    });
   };
 
   const handleUpdateOrder = async (attractions: Attraction[]) => {
@@ -187,17 +207,8 @@ export default function GroupDetailPage() {
           >
             <div style={{ height: "100%", minWidth: "600px" }}>
               <Map
-                location={{
-                  center: locatedAttraction
-                    ? [
-                        locatedAttraction.coordinates[1],
-                        locatedAttraction.coordinates[0],
-                      ]
-                    : [group.coordinates[1], group.coordinates[0]],
-                  zoom: locatedAttraction
-                    ? DEFAULT_ATTRACTION_ZOOM
-                    : group.zoom,
-                }}
+                location={location}
+                setLocation={setLocation}
                 items={attractions}
                 onItemClick={(id) => {
                   router.push(`/attractions/${id}`);
