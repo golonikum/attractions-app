@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import { useLocation } from "@/hooks/useLocation";
 import { useUpdateRequests } from "@/hooks/useUpdateRequests";
 import { useData } from "@/contexts/DataContext";
+import { toast } from "sonner";
 
 export default function GroupsPage() {
   const router = useRouter();
@@ -66,7 +67,12 @@ export default function GroupsPage() {
 
   // Обработчик удаления группы
   const handleDeleteGroup = async (id: string) => {
-    await deleteGroup(id);
+    try {
+      await deleteGroup(id);
+      toast.success("Группа успешно удалена");
+    } catch (error) {
+      toast.error("Не удалось удалить группу");
+    }
   };
 
   const handleLocateGroup = (group: Group) => {

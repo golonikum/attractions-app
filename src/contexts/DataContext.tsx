@@ -16,6 +16,7 @@ type DataProviderState = {
   setGroups: Dispatch<SetStateAction<Group[]>>;
   attractions: Attraction[];
   isAttractionsLoading: boolean;
+  setAttractions: Dispatch<SetStateAction<Attraction[]>>;
   reload: (props?: {
     groups?: boolean;
     attractions?: boolean;
@@ -28,6 +29,7 @@ const initialState: DataProviderState = {
   setGroups: () => {},
   attractions: [],
   isAttractionsLoading: false,
+  setAttractions: () => {},
   reload: () => Promise.resolve(),
 };
 
@@ -37,6 +39,7 @@ export const DataProviderContext =
 export function DataProvider({ children, ...props }: DataProviderProps) {
   const {
     attractions,
+    setAttractions,
     fetchData: fetchAttractions,
     isLoading: isAttractionsLoading,
   } = useGetAllAttractions();
@@ -53,6 +56,7 @@ export function DataProvider({ children, ...props }: DataProviderProps) {
     setGroups,
     attractions,
     isAttractionsLoading,
+    setAttractions,
     reload: async ({ groups, attractions } = {}) => {
       if (groups) {
         await fetchGroups();

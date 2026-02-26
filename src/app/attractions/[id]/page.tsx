@@ -4,11 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Attraction, CreateAttractionRequest } from "@/types/attraction";
-import {
-  getAttractionById,
-  updateAttraction,
-  deleteAttraction,
-} from "@/services/attractionService";
+import { getAttractionById } from "@/services/attractionService";
 import { toast } from "sonner";
 import { NewAttractionDialog } from "@/components/attraction/NewAttractionDialog";
 import { AttractionInfoCard } from "@/components/attraction/AttractionInfoCard";
@@ -24,6 +20,7 @@ import {
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { LoadingStub, NotFoundStub } from "@/components/ui/stubs";
 import { locateItemOnMainMap } from "@/lib/locateItemOnMainMap";
+import { useUpdateRequests } from "@/hooks/useUpdateRequests";
 
 export default function AttractionDetailPage() {
   const params = useParams();
@@ -36,6 +33,7 @@ export default function AttractionDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { deleteAttraction, updateAttraction } = useUpdateRequests();
 
   // Загрузка данных достопримечательности при монтировании компонента
   useEffect(() => {

@@ -12,9 +12,6 @@ import { GroupInfoCard } from "@/components/group/GroupInfoCard";
 import { Attraction, CreateAttractionRequest } from "@/types/attraction";
 import {
   getAttractionsByGroupId,
-  createAttraction,
-  deleteAttraction,
-  updateAttraction,
   updateOrder,
 } from "@/services/attractionService";
 import { NewAttractionDialog } from "@/components/attraction/NewAttractionDialog";
@@ -28,6 +25,7 @@ import { EmptyListState } from "@/components/group/EmptyListState";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { useLocation } from "@/hooks/useLocation";
 import { locateItemOnMainMap } from "@/lib/locateItemOnMainMap";
+import { useUpdateRequests } from "@/hooks/useUpdateRequests";
 
 export default function GroupDetailPage() {
   const router = useRouter();
@@ -60,6 +58,8 @@ export default function GroupDetailPage() {
     useState(false);
   const [isSubmittingAttraction, setIsSubmittingAttraction] = useState(false);
   const { isWideScreen } = useIsMobile();
+  const { createAttraction, deleteAttraction, updateAttraction } =
+    useUpdateRequests();
 
   const loadAttractions = useCallback(async () => {
     const attractionsData = await getAttractionsByGroupId(groupId);
@@ -102,8 +102,10 @@ export default function GroupDetailPage() {
   const handleDeleteAttraction = async (id: string) => {
     try {
       await deleteAttraction(id);
-      setAttractions(attractions.filter((attraction) => attraction.id !== id));
-      toast.success("Объект успешно удалена");
+      setAttractions((attractions) =>
+        attractions.filter((attraction) => attraction.id !== id),
+      );
+      toast.success("Объект успешно удален");
     } catch (error) {
       toast.error("Не удалось удалить объект");
     }

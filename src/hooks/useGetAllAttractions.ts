@@ -27,5 +27,6 @@ export const useGetAllAttractions = () => {
     isLoading,
     attractions,
     fetchData,
+    setAttractions,
   };
 };
