@@ -5,4 +5,5 @@ export * from "./EditButton";
 export * from "./OpenInYandexMapButton";
 export * from "./RemoveButton";
 export * from "./ShowOnMapButton";
+export * from "./ShowDescriptionButton";
 export * from "./SubmitFormButton";

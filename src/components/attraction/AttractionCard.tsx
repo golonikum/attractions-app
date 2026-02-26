@@ -14,6 +14,7 @@ import { Tag } from "../ui/Tag";
 import {
   OpenInYandexMapButton,
   RemoveButton,
+  ShowDescriptionButton,
   ShowOnMapButton,
 } from "../ui/buttons";
 import { AttractionImage } from "./AttractionImage";
@@ -37,6 +38,7 @@ export function AttractionCard({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDescriptionHidden, setIsDescriptionHidden] = useState(true);
   const router = useRouter();
 
   const handleDeleteClick = (e: React.MouseEvent) => {
@@ -86,10 +88,17 @@ export function AttractionCard({
           />
         </div>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4 justify-between">
-        {attraction.description && (
-          <CardDescription>{attraction.description}</CardDescription>
-        )}
+      <CardContent className="flex flex-col gap-6 justify-between">
+        {attraction.description &&
+          (isDescriptionHidden ? (
+            <ShowDescriptionButton
+              onClick={() => setIsDescriptionHidden(false)}
+            />
+          ) : (
+            <CardDescription className="whitespace-pre-wrap">
+              {attraction.description}
+            </CardDescription>
+          ))}
 
         <div className="flex flex-col gap-4">
           <OpenInYandexMapButton attraction={attraction} />
