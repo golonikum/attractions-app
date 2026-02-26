@@ -98,7 +98,7 @@ export const AttractionTableRow = ({
         </div>
       </td>
       <td className="px-4 py-2  whitespace-nowrap text-sm font-medium">
-        <div className="flex space-x-1">
+        <div className="flex justify-end space-x-1">
           <ShowOnMapButton onClick={onLocateAttractionClick} view="icon" />
           <OpenInYandexMapButton attraction={attraction} view="icon" />
           <NewAttractionDialog
