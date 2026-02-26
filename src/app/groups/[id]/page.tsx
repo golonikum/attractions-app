@@ -35,6 +35,8 @@ export default function GroupDetailPage() {
   const pathNames = document.location.pathname.split("/");
   const groupId = pathNames[pathNames.length - 1];
 
+  console.log(groupId);
+
   const {
     selectedZoom,
     setSelectedZoom,
@@ -80,7 +82,9 @@ export default function GroupDetailPage() {
       }
     };
 
-    fetchGroupData();
+    if (groupId !== "groups") {
+      fetchGroupData();
+    }
   }, [groupId, router]);
 
   // Обработчик отправки формы редактирования группы
