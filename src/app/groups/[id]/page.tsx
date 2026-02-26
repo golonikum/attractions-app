@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { CreateGroupRequest, Group } from "@/types/group";
@@ -50,7 +50,7 @@ export default function GroupDetailPage() {
     selectedCoordinates,
     setSelectedCoordinates,
   });
-  const [isOrderChanging, setIsOrderChanging] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [group, setGroup] = useState<Group | null>(null);
   const [attractions, setAttractions] = useState<Attraction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -60,6 +60,11 @@ export default function GroupDetailPage() {
     useState(false);
   const [isSubmittingAttraction, setIsSubmittingAttraction] = useState(false);
   const { isWideScreen } = useIsMobile();
+
+  const loadAttractions = useCallback(async () => {
+    const attractionsData = await getAttractionsByGroupId(groupId);
+    setAttractions(attractionsData);
+  }, [groupId]);
 
   // Загрузка данных группы при монтировании компонента
   useEffect(() => {
@@ -73,8 +78,7 @@ export default function GroupDetailPage() {
         });
 
         // Загрузка объектов для группы
-        const attractionsData = await getAttractionsByGroupId(groupId);
-        setAttractions(attractionsData);
+        await loadAttractions();
       } catch (error) {
         toast.error("Не удалось загрузить данные группы");
         router.push("/groups");
@@ -121,13 +125,11 @@ export default function GroupDetailPage() {
    */
   const handleUpdateAttraction =
     (id: string) => async (updateData: CreateAttractionRequest) => {
-      const updatedAttraction = await updateAttraction(id, updateData);
+      setIsUpdating(true);
+      await updateAttraction(id, updateData);
       // Update the attractions state with the new data
-      setAttractions(
-        attractions.map((attraction) =>
-          attraction.id === id ? updatedAttraction : attraction,
-        ),
-      );
+      await loadAttractions();
+      setIsUpdating(false);
     };
 
   const handleLocateAttraction = (attraction: Attraction) => {
@@ -141,7 +143,7 @@ export default function GroupDetailPage() {
     setAttractions(attractions);
 
     try {
-      setIsOrderChanging(true);
+      setIsUpdating(true);
       await updateOrder(
         groupId,
         attractions.map(({ id }, index) => ({ id, order: index + 1 })),
@@ -149,7 +151,7 @@ export default function GroupDetailPage() {
     } catch (e) {
       toast.error("Не получилось поменять порядок");
     } finally {
-      setIsOrderChanging(false);
+      setIsUpdating(false);
     }
   };
 
@@ -230,7 +232,7 @@ export default function GroupDetailPage() {
                 ) : (
                   <AttractionTable
                     attractions={attractions}
-                    isDisabled={isOrderChanging}
+                    isDisabled={isUpdating}
                     onOrderChanged={handleUpdateOrder}
                     onDelete={handleDeleteAttraction}
                     onUpdate={handleUpdateAttraction}
