@@ -18,6 +18,7 @@ import {
 } from "../ui/buttons";
 import { AttractionImage } from "./AttractionImage";
 import { useRouter } from "next/navigation";
+import { locateItemOnMainMap } from "@/lib/locateItemOnMainMap";
 
 // Используем тип Attraction из types/attraction.ts вместо интерфейса AttractionItem
 type AttractionItem = Attraction;
@@ -94,7 +95,7 @@ export function AttractionCard({
           <OpenInYandexMapButton attraction={attraction} />
           <ShowOnMapButton
             onClick={() => {
-              router.push(`/main?attractionId=${attraction.id}`);
+              locateItemOnMainMap({ router, item: attraction });
             }}
           />
         </div>

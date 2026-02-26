@@ -13,6 +13,7 @@ import { Tag } from "../ui/Tag";
 import { RemoveButton, ShowOnMapButton } from "../ui/buttons";
 import { NewGroupDialog } from "./NewGroupDialog";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { locateItemOnMainMap } from "@/lib/locateItemOnMainMap";
 
 interface GroupCardProps {
   group: Group;
@@ -38,7 +39,7 @@ export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
   };
 
   const handleLocate = () => {
-    router.push(`/main?groupId=${group.id}`);
+    locateItemOnMainMap({ router, item: group });
   };
 
   return (

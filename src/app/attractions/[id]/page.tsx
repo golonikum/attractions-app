@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/buttons";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { LoadingStub, NotFoundStub } from "@/components/ui/stubs";
+import { locateItemOnMainMap } from "@/lib/locateItemOnMainMap";
 
 export default function AttractionDetailPage() {
   const params = useParams();
@@ -111,7 +112,7 @@ export default function AttractionDetailPage() {
                 <ShowOnMapButton
                   view="icon"
                   onClick={() => {
-                    router.push(`/main?attractionId=${attraction.id}`);
+                    locateItemOnMainMap({ router, item: attraction });
                   }}
                 />
                 <OpenInYandexMapButton view="icon" attraction={attraction} />

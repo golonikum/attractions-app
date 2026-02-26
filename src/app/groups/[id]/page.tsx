@@ -27,15 +27,16 @@ import { DEFAULT_ATTRACTION_ZOOM } from "@/lib/constants";
 import { EmptyListState } from "@/components/group/EmptyListState";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { useLocation } from "@/hooks/useLocation";
+import { locateItemOnMainMap } from "@/lib/locateItemOnMainMap";
 
 export default function GroupDetailPage() {
   const router = useRouter();
 
   // UGLYHACK: to avoid useParams re-rendering
-  const pathNames = document.location.pathname.split("/");
-  const groupId = pathNames[pathNames.length - 1];
-
-  console.log(groupId);
+  const pathName = document.location.pathname;
+  const groupId = pathName.match(/\/groups\/.+/)
+    ? pathName.replace(/^.+groups\/(.+)$/gim, "$1")
+    : "";
 
   const {
     selectedZoom,
@@ -82,7 +83,7 @@ export default function GroupDetailPage() {
       }
     };
 
-    if (groupId !== "groups") {
+    if (groupId) {
       fetchGroupData();
     }
   }, [groupId, router]);
@@ -176,12 +177,12 @@ export default function GroupDetailPage() {
         style={isWideScreen ? { height: "calc(100vh)" } : {}}
       >
         <div className="flex items-center">
-          <BackButton />
+          <BackButton route="/groups" />
           <div className="ml-auto flex space-x-1">
             <ShowOnMapButton
               view="icon"
               onClick={() => {
-                router.push(`/main?groupId=${groupId}`);
+                locateItemOnMainMap({ router, item: group });
               }}
             />
             <NewGroupDialog

@@ -2,10 +2,7 @@
 
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Map } from "@/components/ui/Map";
-import { useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { DEFAULT_ATTRACTION_ZOOM } from "@/lib/constants";
-import { useGetAllGroups } from "@/hooks/useGetAllGroups";
+import { useRouter } from "next/navigation";
 import { useGetAllAttractions } from "@/hooks/useGetAllAttractions";
 import { LoadingStub } from "@/components/ui/stubs";
 import { useQueryParams } from "@/hooks/useQueryParams";
@@ -13,8 +10,6 @@ import { useLocation } from "@/hooks/useLocation";
 
 export default function MainPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const { groups, isLoading: isGroupsLoading } = useGetAllGroups();
   const {
     selectedZoom,
     setSelectedZoom,
@@ -29,37 +24,7 @@ export default function MainPage() {
   });
   const { attractions, isLoading: isAttractionsLoading } =
     useGetAllAttractions();
-  const isLoading = isGroupsLoading || isAttractionsLoading;
-
-  useEffect(() => {
-    if (attractions.length && groups.length) {
-      const groupId = searchParams.get("groupId");
-
-      if (groupId) {
-        const group = groups.find((item) => item.id === groupId);
-
-        if (group) {
-          setLocation({
-            zoom: group.zoom,
-            center: [group.coordinates[1], group.coordinates[0]],
-          });
-        }
-      }
-
-      const attractionId = searchParams.get("attractionId");
-
-      if (attractionId) {
-        const attraction = attractions.find((item) => item.id === attractionId);
-
-        if (attraction) {
-          setLocation({
-            zoom: DEFAULT_ATTRACTION_ZOOM,
-            center: [attraction.coordinates[1], attraction.coordinates[0]],
-          });
-        }
-      }
-    }
-  }, [groups, attractions, searchParams]);
+  const isLoading = isAttractionsLoading;
 
   if (isLoading) {
     return <LoadingStub />;

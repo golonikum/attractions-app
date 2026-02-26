@@ -8,6 +8,7 @@ import { OpenInYandexMapButton, ShowOnMapButton } from "../ui/buttons";
 import { useRouter } from "next/navigation";
 import { Group } from "@/types/group";
 import { Button } from "../ui/button";
+import { locateItemOnMainMap } from "@/lib/locateItemOnMainMap";
 
 interface AttractionInfoCardProps {
   attraction: Attraction;
@@ -82,7 +83,7 @@ export function AttractionInfoCard({
               <OpenInYandexMapButton attraction={attraction} />
               <ShowOnMapButton
                 onClick={() => {
-                  router.push(`/main?attractionId=${attraction.id}`);
+                  locateItemOnMainMap({ router, item: attraction });
                 }}
               />
             </>
