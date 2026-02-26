@@ -95,7 +95,7 @@ export function AttractionCard({
               onClick={() => setIsDescriptionHidden(false)}
             />
           ) : (
-            <CardDescription className="whitespace-pre-wrap">
+            <CardDescription className="text-gray-600 whitespace-pre-wrap">
               {attraction.description}
             </CardDescription>
           ))}

@@ -51,7 +51,7 @@ export function AttractionInfoCard({
           className={`rounded-md ${isWideScreen ? "h-full w-1/2" : "h-96 w-full"}`}
         />
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-6">
           {attraction.description && (
             <p className="text-gray-600 whitespace-pre-wrap">
               {attraction.description}
