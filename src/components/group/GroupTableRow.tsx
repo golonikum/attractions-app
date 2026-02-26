@@ -6,12 +6,14 @@ import { ConfirmDialog } from "../ui/ConfirmDialog";
 import { Tag } from "../ui/Tag";
 import { CreateGroupRequest, Group } from "@/types/group";
 import { GroupTableCellDescription } from "./GroupTableCellDescription";
+import { Attraction } from "@/types/attraction";
 
 export type GroupTableRowProps = {
   group: Group;
   onDelete: (id: string) => void;
   onUpdate: (id: string) => (updateData: CreateGroupRequest) => Promise<void>;
   onLocate: (group: Group) => void;
+  attractionsMap: Record<string, Attraction[]>;
 };
 
 export const GroupTableRow = ({
@@ -19,6 +21,7 @@ export const GroupTableRow = ({
   onDelete,
   onUpdate,
   onLocate,
+  attractionsMap,
 }: GroupTableRowProps) => {
   const router = useRouter();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -45,7 +48,9 @@ export const GroupTableRow = ({
         className="px-4 py-2  cursor-pointer"
         onClick={handleGroupClick(group)}
       >
-        <div className="text-sm font-medium text-gray-900">{group.name}</div>
+        <div className="text-sm font-medium text-gray-900">
+          {group.name} ({attractionsMap[group.id]?.length || 0})
+        </div>
       </td>
       <td
         className="px-4 py-2  cursor-pointer"

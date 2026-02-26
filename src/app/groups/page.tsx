@@ -19,6 +19,7 @@ import { useLocation } from "@/hooks/useLocation";
 import { useUpdateRequests } from "@/hooks/useUpdateRequests";
 import { useData } from "@/contexts/DataContext";
 import { toast } from "sonner";
+import { Attraction } from "@/types/attraction";
 
 export default function GroupsPage() {
   const router = useRouter();
@@ -43,6 +44,20 @@ export default function GroupsPage() {
   });
   const { groups, isGroupsLoading, attractions, isAttractionsLoading } =
     useData();
+  const attractionsMap = useMemo(() => {
+    return attractions.reduce(
+      (res, cur) => {
+        if (!res[cur.groupId]) {
+          res[cur.groupId] = [cur];
+        } else {
+          res[cur.groupId].push(cur);
+        }
+
+        return res;
+      },
+      {} as Record<string, Attraction[]>,
+    );
+  }, [attractions]);
   const isLoading = isGroupsLoading || isAttractionsLoading;
   const { createGroup, deleteGroup, updateGroup } = useUpdateRequests();
 
@@ -56,7 +71,6 @@ export default function GroupsPage() {
   // Обработчик отправки формы создания группы
   const handleSubmit = async (formData: CreateGroupRequest) => {
     await createGroup(formData);
-    // setGroups([...groups, newGroup]);
   };
 
   // Обработчик отправки формы обновления группы
@@ -199,6 +213,7 @@ export default function GroupsPage() {
                   onDelete={handleDeleteGroup}
                   onUpdate={getHandleUpdate}
                   onLocate={handleLocateGroup}
+                  attractionsMap={attractionsMap}
                 />
               )}
             </div>

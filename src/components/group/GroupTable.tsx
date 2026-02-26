@@ -10,6 +10,7 @@ export function GroupTable({
   onDelete,
   onUpdate,
   onLocate,
+  attractionsMap,
 }: GroupTableProps) {
   return (
     <div className="hidden md:block overflow-x-hidden">
@@ -53,6 +54,7 @@ export function GroupTable({
               onDelete={onDelete}
               onUpdate={onUpdate}
               onLocate={onLocate}
+              attractionsMap={attractionsMap}
             />
           ))}
         </tbody>
