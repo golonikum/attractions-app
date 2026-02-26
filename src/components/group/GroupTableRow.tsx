@@ -5,6 +5,7 @@ import { RemoveButton, ShowOnMapButton } from "../ui/buttons";
 import { ConfirmDialog } from "../ui/ConfirmDialog";
 import { Tag } from "../ui/Tag";
 import { CreateGroupRequest, Group } from "@/types/group";
+import { GroupTableCellDescription } from "./GroupTableCellDescription";
 
 export type GroupTableRowProps = {
   group: Group;
@@ -57,7 +58,7 @@ export const GroupTableRow = ({
         onClick={handleGroupClick(group)}
       >
         <div className="text-sm text-gray-900 line-clamp-4">
-          {group.description || "Нет описания"}
+          <GroupTableCellDescription description={group.description} />
         </div>
       </td>
       <td className="px-4 py-2  whitespace-nowrap text-sm font-medium">
