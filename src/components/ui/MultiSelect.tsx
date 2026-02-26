@@ -11,6 +11,7 @@ interface MultiSelectProps {
   onSelectionChange: (options: string[]) => void;
   placeholder?: string;
   className?: string;
+  isMulti?: boolean;
 }
 
 export function MultiSelect({
@@ -19,6 +20,7 @@ export function MultiSelect({
   onSelectionChange,
   placeholder = "Выберите...",
   className,
+  isMulti = true,
 }: MultiSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -30,10 +32,19 @@ export function MultiSelect({
   );
 
   const handleOptionClick = (option: string) => {
-    const newSelected = selectedOptions.includes(option)
+    let newSelected = selectedOptions.includes(option)
       ? selectedOptions.filter((item) => item !== option)
       : [...selectedOptions, option];
+
+    if (!isMulti) {
+      newSelected = [option];
+    }
+
     onSelectionChange(newSelected);
+
+    if (!isMulti) {
+      setIsOpen(false);
+    }
   };
 
   // Обработка кликов вне компонента для закрытия
@@ -51,16 +62,14 @@ export function MultiSelect({
   }, []);
 
   return (
-    <div
-      className={cn("flex-1 shrink-0", className)}
-      // style={{ minWidth: "236px" }}
-    >
+    <div className={cn("flex-1 shrink-0", className)}>
       <div className="relative multi-select">
         {/* Кнопка триггера */}
         <div className="relative w-full">
           <Button
             variant="outline"
             role="combobox"
+            type="button"
             aria-expanded={isOpen}
             className={`w-full justify-between h-10 px-3 py-2 overflow-hidden font-normal ${!isMobile ? "max-w-100 min-w-60" : ""}`}
             onClick={() => setIsOpen(!isOpen)}

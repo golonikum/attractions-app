@@ -22,6 +22,8 @@ import {
   SubmitFormButton,
 } from "../ui/buttons";
 import { DEFAULT_COORDINATES } from "@/lib/constants";
+import { useGetAllGroups } from "@/hooks/useGetAllGroups";
+import { MultiSelect } from "../ui/MultiSelect";
 
 interface NewAttractionDialogProps {
   isOpen: boolean;
@@ -64,6 +66,7 @@ export const NewAttractionDialog = ({
   const [formData, setFormData] = useState<CreateAttractionRequest>(
     getInitialAttractionFormState(groupId, attractionsCount),
   );
+  const { groups } = useGetAllGroups();
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,10 +106,11 @@ export const NewAttractionDialog = ({
   }, [attraction]);
 
   useEffect(() => {
-    if (isOpen && !attraction) {
+    if (isOpen && !attraction && groupId) {
       setFormData((data) => ({
         ...data,
         order: attractionsCount + 1,
+        groupId,
       }));
     }
   }, [isOpen, attraction, attractionsCount]);
@@ -133,6 +137,26 @@ export const NewAttractionDialog = ({
         </DialogHeader>
         <form onSubmit={handleFormSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Город</Label>
+              <MultiSelect
+                isMulti={false}
+                onSelectionChange={(value) => {
+                  const newId = groups.find(
+                    ({ name }) => name === value[0],
+                  )?.id;
+
+                  debugger;
+                  if (newId) {
+                    setFormData((val) => ({ ...val, groupId: newId }));
+                  }
+                }}
+                options={groups.map(({ name }) => name)}
+                selectedOptions={[
+                  groups.find(({ id }) => id === formData.groupId)?.name!,
+                ]}
+              />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="name">Название</Label>
               <Input
@@ -185,52 +209,59 @@ export const NewAttractionDialog = ({
               }
               required
             />
-            <div className="space-y-2">
-              <Label htmlFor="order">Порядок</Label>
-              <Input
-                id="order"
-                type="number"
-                value={formData.order || 1}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    order: parseInt(e.target.value) || 1,
-                  })
-                }
-              />
-            </div>
-            <div className="flex items-center space-x-2">
-              <button
-                type="button"
-                onClick={() =>
-                  setFormData({ ...formData, isVisited: !formData.isVisited })
-                }
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
-                  formData.isVisited ? "bg-green-500" : "bg-gray-200"
-                }`}
-              >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    formData.isVisited ? "translate-x-6" : "translate-x-1"
+            <div className="flex items-center gap-8">
+              <div className="flex items-center gap-2 w-fit">
+                <Label htmlFor="order">Порядок</Label>
+                <Input
+                  id="order"
+                  type="number"
+                  value={formData.order || 1}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      order: parseInt(e.target.value) || 1,
+                    })
+                  }
+                  className="w-20"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormData({ ...formData, isVisited: !formData.isVisited })
+                  }
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                    formData.isVisited ? "bg-green-500" : "bg-gray-200"
                   }`}
-                />
-              </button>
-              <Label>Посещено</Label>
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      formData.isVisited ? "translate-x-6" : "translate-x-1"
+                    }`}
+                  />
+                </button>
+                <Label>Посещено</Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormData({
+                      ...formData,
+                      isFavorite: !formData.isFavorite,
+                    })
+                  }
+                  className="p-1 rounded-full hover:bg-gray-100 focus:outline-none"
+                >
+                  <Star
+                    className={`h-5 w-5 ${formData.isFavorite ? "text-yellow-500 fill-current" : "text-gray-300"}`}
+                  />
+                </button>
+                <Label>Избранное</Label>
+              </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <button
-                type="button"
-                onClick={() =>
-                  setFormData({ ...formData, isFavorite: !formData.isFavorite })
-                }
-                className="p-1 rounded-full hover:bg-gray-100 focus:outline-none"
-              >
-                <Star
-                  className={`h-5 w-5 ${formData.isFavorite ? "text-yellow-500 fill-current" : "text-gray-300"}`}
-                />
-              </button>
-              <Label>Избранное</Label>
-            </div>
+            <div className="flex items-center gap-4"></div>
           </div>
           <div className="space-y-2">
             <Label htmlFor="description">Описание (необязательно)</Label>

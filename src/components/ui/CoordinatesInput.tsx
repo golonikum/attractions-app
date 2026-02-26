@@ -30,12 +30,7 @@ export const CoordinatesInput = ({
             type="number"
             step="any"
             value={value[0]}
-            onChange={(e) =>
-              onChange([
-                parseFloat(e.target.value),
-                value[1],
-              ])
-            }
+            onChange={(e) => onChange([parseFloat(e.target.value), value[1]])}
             required={required}
           />
         </div>
@@ -46,12 +41,7 @@ export const CoordinatesInput = ({
             type="number"
             step="any"
             value={value[1]}
-            onChange={(e) =>
-              onChange([
-                value[0],
-                parseFloat(e.target.value),
-              ])
-            }
+            onChange={(e) => onChange([value[0], parseFloat(e.target.value)])}
             required={required}
           />
         </div>
@@ -61,9 +51,7 @@ export const CoordinatesInput = ({
 
   return (
     <div className={`space-y-2 ${className}`}>
-      <Label htmlFor="coordinates">
-        {label} (формат: широта, долгота)
-      </Label>
+      <Label htmlFor="coordinates">{label} (формат: широта, долгота)</Label>
       <Input
         id="coordinates"
         type="text"
@@ -82,9 +70,6 @@ export const CoordinatesInput = ({
         placeholder={placeholder}
         required={required}
       />
-      <p className="text-xs text-muted-foreground">
-        Введите координаты в формате: широта, долгота (например: {placeholder})
-      </p>
     </div>
   );
 };
