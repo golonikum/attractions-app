@@ -33,7 +33,7 @@ export default function GroupDetailPage() {
   const router = useRouter();
 
   // UGLYHACK: to avoid useParams re-rendering
-  const pathName = document.location.pathname;
+  const pathName = window.document.location.pathname;
   const groupId = pathName.match(/\/groups\/.+/)
     ? pathName.replace(/^.+groups\/(.+)$/gim, "$1")
     : "";

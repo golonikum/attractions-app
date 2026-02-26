@@ -3,8 +3,6 @@
 import { useState, useMemo } from "react";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Group, CreateGroupRequest, GroupWithAttractions } from "@/types/group";
-import { createGroup, deleteGroup, updateGroup } from "@/services/groupService";
-import { toast } from "sonner";
 import { NewGroupDialog } from "@/components/group/NewGroupDialog";
 import { GroupCard } from "@/components/group/GroupCard";
 import { EmptyListState } from "@/components/group/EmptyListState";
@@ -17,9 +15,9 @@ import { Map } from "@/components/ui/Map";
 import { GroupTable } from "@/components/group/GroupTable";
 import { DEFAULT_GROUP_ZOOM } from "@/lib/constants";
 import { useRouter } from "next/navigation";
-import { useGetAllGroups } from "@/hooks/useGetAllGroups";
-import { useGetAllAttractions } from "@/hooks/useGetAllAttractions";
 import { useLocation } from "@/hooks/useLocation";
+import { useUpdateRequests } from "@/hooks/useUpdateRequests";
+import { useData } from "@/contexts/DataContext";
 
 export default function GroupsPage() {
   const router = useRouter();
@@ -36,16 +34,16 @@ export default function GroupsPage() {
     setSelectedCoordinates,
   } = useQueryParams(["tag", "zoom", "coordinates"] as const);
   const { isWideScreen } = useIsMobile();
-  const { groups, setGroups, isLoading: isGroupsLoading } = useGetAllGroups();
   const { location, setLocation } = useLocation({
     selectedZoom,
     setSelectedZoom,
     selectedCoordinates,
     setSelectedCoordinates,
   });
-  const { attractions, isLoading: isAttractionsLoading } =
-    useGetAllAttractions();
+  const { groups, isGroupsLoading, attractions, isAttractionsLoading } =
+    useData();
   const isLoading = isGroupsLoading || isAttractionsLoading;
+  const { createGroup, deleteGroup, updateGroup } = useUpdateRequests();
 
   // Получаем уникальные теги из всех групп
   const { allTags } = useFiltersInitialOptions({
@@ -56,32 +54,19 @@ export default function GroupsPage() {
 
   // Обработчик отправки формы создания группы
   const handleSubmit = async (formData: CreateGroupRequest) => {
-    const newGroup = await createGroup(formData);
-    setGroups([...groups, newGroup]);
+    await createGroup(formData);
+    // setGroups([...groups, newGroup]);
   };
 
   // Обработчик отправки формы обновления группы
   const getHandleUpdate =
     (groupId: string) => async (formData: CreateGroupRequest) => {
-      const updatedGroup = await updateGroup(groupId, formData);
-      const index = groups.findIndex((item) => item.id === groupId);
-
-      if (index !== -1) {
-        const newGroups = [...groups];
-        newGroups.splice(index, 1, updatedGroup);
-        setGroups(newGroups);
-      }
+      await updateGroup(groupId, formData);
     };
 
   // Обработчик удаления группы
   const handleDeleteGroup = async (id: string) => {
-    try {
-      await deleteGroup(id);
-      setGroups(groups.filter((group) => group.id !== id));
-      toast.success("Группа успешно удалена");
-    } catch (error) {
-      toast.error("Не удалось удалить группу");
-    }
+    await deleteGroup(id);
   };
 
   const handleLocateGroup = (group: Group) => {

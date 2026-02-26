@@ -22,8 +22,8 @@ import {
   SubmitFormButton,
 } from "../ui/buttons";
 import { DEFAULT_COORDINATES } from "@/lib/constants";
-import { useGetAllGroups } from "@/hooks/useGetAllGroups";
 import { MultiSelect } from "../ui/MultiSelect";
+import { useData } from "@/contexts/DataContext";
 
 interface NewAttractionDialogProps {
   isOpen: boolean;
@@ -66,7 +66,7 @@ export const NewAttractionDialog = ({
   const [formData, setFormData] = useState<CreateAttractionRequest>(
     getInitialAttractionFormState(groupId, attractionsCount),
   );
-  const { groups } = useGetAllGroups();
+  const { groups } = useData();
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

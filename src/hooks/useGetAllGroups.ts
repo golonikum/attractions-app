@@ -5,20 +5,21 @@ import { toast } from "sonner";
 
 export const useGetAllGroups = () => {
   const [groups, setGroups] = useState<Group[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const groupsData = await getAllGroups();
+      setGroups(groupsData);
+    } catch (error) {
+      toast.error("Не удалось загрузить данные городов");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const groupsData = await getAllGroups();
-        setGroups(groupsData);
-      } catch (error) {
-        toast.error("Не удалось загрузить данные городов");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
 
@@ -26,5 +27,6 @@ export const useGetAllGroups = () => {
     isLoading,
     setGroups,
     groups,
+    fetchData,
   };
 };

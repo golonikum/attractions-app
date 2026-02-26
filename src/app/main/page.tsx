@@ -3,10 +3,10 @@
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Map } from "@/components/ui/Map";
 import { useRouter } from "next/navigation";
-import { useGetAllAttractions } from "@/hooks/useGetAllAttractions";
 import { LoadingStub } from "@/components/ui/stubs";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { useLocation } from "@/hooks/useLocation";
+import { useData } from "@/contexts/DataContext";
 
 export default function MainPage() {
   const router = useRouter();
@@ -22,8 +22,7 @@ export default function MainPage() {
     selectedCoordinates,
     setSelectedCoordinates,
   });
-  const { attractions, isLoading: isAttractionsLoading } =
-    useGetAllAttractions();
+  const { attractions, isAttractionsLoading } = useData();
   const isLoading = isAttractionsLoading;
 
   if (isLoading) {

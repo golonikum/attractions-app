@@ -10,8 +10,7 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { EmptyListState } from "@/components/group/EmptyListState";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { useFiltersInitialOptions } from "@/hooks/useFiltersInitialOptions";
-import { useGetAllGroups } from "@/hooks/useGetAllGroups";
-import { useGetAllAttractions } from "@/hooks/useGetAllAttractions";
+import { useData } from "@/contexts/DataContext";
 
 export default function GalleryPage() {
   const { isMobile } = useIsMobile();
@@ -23,10 +22,9 @@ export default function GalleryPage() {
     selectedCategory,
     setSelectedCategory,
   } = useQueryParams(["tag", "group", "category"]);
-  const { groups, isLoading: isLoadingGroups } = useGetAllGroups();
-  const { attractions, isLoading: isLoadingAttractions } =
-    useGetAllAttractions();
-  const isLoading = isLoadingGroups || isLoadingAttractions;
+  const { groups, isGroupsLoading, attractions, isAttractionsLoading } =
+    useData();
+  const isLoading = isGroupsLoading || isAttractionsLoading;
   const { allCategories, allGroups, allTags } = useFiltersInitialOptions({
     groups,
     attractions,

@@ -1,0 +1,80 @@
+"use client";
+
+import { useGetAllAttractions } from "@/hooks/useGetAllAttractions";
+import { useGetAllGroups } from "@/hooks/useGetAllGroups";
+import { Attraction } from "@/types/attraction";
+import { Group } from "@/types/group";
+import { createContext, Dispatch, SetStateAction, useContext } from "react";
+
+type DataProviderProps = {
+  children: React.ReactNode;
+};
+
+type DataProviderState = {
+  groups: Group[];
+  isGroupsLoading: boolean;
+  setGroups: Dispatch<SetStateAction<Group[]>>;
+  attractions: Attraction[];
+  isAttractionsLoading: boolean;
+  reload: (props?: {
+    groups?: boolean;
+    attractions?: boolean;
+  }) => Promise<void>;
+};
+
+const initialState: DataProviderState = {
+  groups: [],
+  isGroupsLoading: false,
+  setGroups: () => {},
+  attractions: [],
+  isAttractionsLoading: false,
+  reload: () => Promise.resolve(),
+};
+
+export const DataProviderContext =
+  createContext<DataProviderState>(initialState);
+
+export function DataProvider({ children, ...props }: DataProviderProps) {
+  const {
+    attractions,
+    fetchData: fetchAttractions,
+    isLoading: isAttractionsLoading,
+  } = useGetAllAttractions();
+  const {
+    groups,
+    setGroups,
+    fetchData: fetchGroups,
+    isLoading: isGroupsLoading,
+  } = useGetAllGroups();
+
+  const value: DataProviderState = {
+    groups,
+    isGroupsLoading,
+    setGroups,
+    attractions,
+    isAttractionsLoading,
+    reload: async ({ groups, attractions } = {}) => {
+      if (groups) {
+        await fetchGroups();
+      }
+      if (attractions) {
+        await fetchAttractions();
+      }
+    },
+  };
+
+  return (
+    <DataProviderContext.Provider {...props} value={value}>
+      {children}
+    </DataProviderContext.Provider>
+  );
+}
+
+export const useData = () => {
+  const context = useContext(DataProviderContext);
+
+  if (context === undefined)
+    throw new Error("useData must be used within a DataProvider");
+
+  return context;
+};
