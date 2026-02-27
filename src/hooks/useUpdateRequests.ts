@@ -1,15 +1,8 @@
-import { useData } from "@/contexts/DataContext";
-import {
-  createAttraction,
-  deleteAttraction,
-  updateAttraction,
-} from "@/services/attractionService";
-import { createGroup, deleteGroup, updateGroup } from "@/services/groupService";
-import {
-  CreateAttractionRequest,
-  UpdateAttractionRequest,
-} from "@/types/attraction";
-import { CreateGroupRequest, UpdateGroupRequest } from "@/types/group";
+import { useData } from '@/contexts/DataContext';
+import { createAttraction, deleteAttraction, updateAttraction } from '@/services/attractionService';
+import { createGroup, deleteGroup, updateGroup } from '@/services/groupService';
+import { CreateAttractionRequest, UpdateAttractionRequest } from '@/types/attraction';
+import { CreateGroupRequest, UpdateGroupRequest } from '@/types/group';
 
 export const useUpdateRequests = () => {
   const { setGroups, setAttractions } = useData();
@@ -18,6 +11,7 @@ export const useUpdateRequests = () => {
     createGroup: async (groupData: CreateGroupRequest) => {
       const newGroup = await createGroup(groupData);
       setGroups((groups) => [newGroup, ...groups]);
+
       return newGroup;
     },
     updateGroup: async (id: string, formData: UpdateGroupRequest) => {
@@ -44,6 +38,7 @@ export const useUpdateRequests = () => {
     createAttraction: async (attractionData: CreateAttractionRequest) => {
       const newAttraction = await createAttraction(attractionData);
       setAttractions((attractions) => [...attractions, newAttraction]);
+
       return newAttraction;
     },
     updateAttraction: async (id: string, formData: UpdateAttractionRequest) => {
@@ -64,9 +59,7 @@ export const useUpdateRequests = () => {
     },
     deleteAttraction: async (id: string) => {
       await deleteAttraction(id);
-      setAttractions((attractions) =>
-        attractions.filter((attraction) => attraction.id !== id),
-      );
+      setAttractions((attractions) => attractions.filter((attraction) => attraction.id !== id));
     },
   };
 };

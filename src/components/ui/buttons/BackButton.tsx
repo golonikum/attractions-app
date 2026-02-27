@@ -1,8 +1,9 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { Button } from "../button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+
+import { Button } from '../button';
 
 export const BackButton = ({ route }: { route?: string }) => {
   const router = useRouter();
@@ -12,7 +13,11 @@ export const BackButton = ({ route }: { route?: string }) => {
       variant="ghost"
       size="sm"
       onClick={() => {
-        route ? router.push(route) : router.back();
+        if (route) {
+          router.push(route);
+        } else {
+          router.back();
+        }
       }}
       className="mr-4 cursor-pointer"
     >

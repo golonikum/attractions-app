@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -6,7 +6,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -16,7 +16,7 @@ interface ConfirmDialogProps {
   description: string;
   confirmText?: string;
   cancelText?: string;
-  variant?: "default" | "destructive";
+  variant?: 'default' | 'destructive';
 }
 
 export function ConfirmDialog({
@@ -25,9 +25,9 @@ export function ConfirmDialog({
   onConfirm,
   title,
   description,
-  confirmText = "Подтвердить",
-  cancelText = "Отмена",
-  variant = "default",
+  confirmText = 'Подтвердить',
+  cancelText = 'Отмена',
+  variant = 'default',
 }: ConfirmDialogProps) {
   const handleConfirm = () => {
     onConfirm();

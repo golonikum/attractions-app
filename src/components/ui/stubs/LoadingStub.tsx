@@ -1,5 +1,6 @@
-import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { Loader2 } from "lucide-react";
+import { Loader2 } from 'lucide-react';
+
+import { ProtectedRoute } from '@/components/ProtectedRoute';
 
 export const LoadingStub = () => (
   <ProtectedRoute>

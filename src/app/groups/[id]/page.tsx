@@ -1,47 +1,43 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { CreateGroupRequest, Group } from "@/types/group";
-import { getGroupById, updateGroup } from "@/services/groupService";
-import { toast } from "sonner";
-import { AttractionCard } from "@/components/attraction/AttractionCard";
-import { AttractionTable } from "@/components/attraction/AttractionTable";
-import { GroupInfoCard } from "@/components/group/GroupInfoCard";
-import { Attraction, CreateAttractionRequest } from "@/types/attraction";
-import {
-  getAttractionsByGroupId,
-  updateOrder,
-} from "@/services/attractionService";
-import { NewAttractionDialog } from "@/components/attraction/NewAttractionDialog";
-import { NewGroupDialog } from "@/components/group/NewGroupDialog";
-import { useIsMobile } from "@/hooks/useIsMobile";
-import { BackButton, ShowOnMapButton } from "@/components/ui/buttons";
-import { Map } from "@/components/ui/Map";
-import { LoadingStub, NotFoundStub } from "@/components/ui/stubs";
-import { DEFAULT_ATTRACTION_ZOOM } from "@/lib/constants";
-import { EmptyListState } from "@/components/group/EmptyListState";
-import { useQueryParams } from "@/hooks/useQueryParams";
-import { useLocation } from "@/hooks/useLocation";
-import { locateItemOnMainMap } from "@/lib/locateItemOnMainMap";
-import { useUpdateRequests } from "@/hooks/useUpdateRequests";
+import { useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { useLocation } from '@/hooks/useLocation';
+import { useQueryParams } from '@/hooks/useQueryParams';
+import { useUpdateRequests } from '@/hooks/useUpdateRequests';
+import { DEFAULT_ATTRACTION_ZOOM } from '@/lib/constants';
+import { locateItemOnMainMap } from '@/lib/locateItemOnMainMap';
+import { getAttractionsByGroupId, updateOrder } from '@/services/attractionService';
+import { getGroupById, updateGroup } from '@/services/groupService';
+import { Attraction, CreateAttractionRequest } from '@/types/attraction';
+import { CreateGroupRequest, Group } from '@/types/group';
+
+import { AttractionCard } from '@/components/attraction/AttractionCard';
+import { AttractionTable } from '@/components/attraction/AttractionTable';
+import { NewAttractionDialog } from '@/components/attraction/NewAttractionDialog';
+import { EmptyListState } from '@/components/group/EmptyListState';
+import { GroupInfoCard } from '@/components/group/GroupInfoCard';
+import { NewGroupDialog } from '@/components/group/NewGroupDialog';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { BackButton, ShowOnMapButton } from '@/components/ui/buttons';
+import { Map } from '@/components/ui/Map';
+import { LoadingStub, NotFoundStub } from '@/components/ui/stubs';
 
 export default function GroupDetailPage() {
   const router = useRouter();
 
   // UGLYHACK: to avoid useParams re-rendering
   const pathName = window.document.location.pathname;
-  const groupId = pathName.match(/\/groups\/.+/)
-    ? pathName.replace(/^.+groups\/(.+)$/gim, "$1")
-    : "";
+  const groupId = pathName.match(/\/groups\/.+/) ? pathName.replace(/^.+groups\/(.+)$/gim, '$1') : '';
 
-  const {
-    selectedZoom,
-    setSelectedZoom,
-    selectedCoordinates,
-    setSelectedCoordinates,
-  } = useQueryParams(["tag", "zoom", "coordinates"] as const);
+  const { selectedZoom, setSelectedZoom, selectedCoordinates, setSelectedCoordinates } = useQueryParams([
+    'tag',
+    'zoom',
+    'coordinates',
+  ] as const);
   const { location, setLocation } = useLocation({
     selectedZoom,
     setSelectedZoom,
@@ -54,12 +50,10 @@ export default function GroupDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isAddAttractionDialogOpen, setIsAddAttractionDialogOpen] =
-    useState(false);
+  const [isAddAttractionDialogOpen, setIsAddAttractionDialogOpen] = useState(false);
   const [isSubmittingAttraction, setIsSubmittingAttraction] = useState(false);
   const { isWideScreen } = useIsMobile();
-  const { createAttraction, deleteAttraction, updateAttraction } =
-    useUpdateRequests();
+  const { createAttraction, deleteAttraction, updateAttraction } = useUpdateRequests();
 
   const loadAttractions = useCallback(async () => {
     const attractionsData = await getAttractionsByGroupId(groupId);
@@ -80,8 +74,8 @@ export default function GroupDetailPage() {
         // Загрузка объектов для группы
         await loadAttractions();
       } catch (error) {
-        toast.error("Не удалось загрузить данные группы");
-        router.push("/groups");
+        toast.error('Не удалось загрузить данные группы');
+        router.push('/groups');
       } finally {
         setIsLoading(false);
       }
@@ -102,12 +96,10 @@ export default function GroupDetailPage() {
   const handleDeleteAttraction = async (id: string) => {
     try {
       await deleteAttraction(id);
-      setAttractions((attractions) =>
-        attractions.filter((attraction) => attraction.id !== id),
-      );
-      toast.success("Объект успешно удален");
+      setAttractions((items) => items.filter((attraction) => attraction.id !== id));
+      toast.success('Объект успешно удален');
     } catch (error) {
-      toast.error("Не удалось удалить объект");
+      toast.error('Не удалось удалить объект');
     }
   };
 
@@ -125,14 +117,13 @@ export default function GroupDetailPage() {
    * @param {string} id - The ID of the attraction to update
    * @returns {Function} An async function that takes updateData as parameter
    */
-  const handleUpdateAttraction =
-    (id: string) => async (updateData: CreateAttractionRequest) => {
-      setIsUpdating(true);
-      await updateAttraction(id, updateData);
-      // Update the attractions state with the new data
-      await loadAttractions();
-      setIsUpdating(false);
-    };
+  const handleUpdateAttraction = (id: string) => async (updateData: CreateAttractionRequest) => {
+    setIsUpdating(true);
+    await updateAttraction(id, updateData);
+    // Update the attractions state with the new data
+    await loadAttractions();
+    setIsUpdating(false);
+  };
 
   const handleLocateAttraction = (attraction: Attraction) => {
     setLocation({
@@ -141,17 +132,17 @@ export default function GroupDetailPage() {
     });
   };
 
-  const handleUpdateOrder = async (attractions: Attraction[]) => {
-    setAttractions(attractions);
+  const handleUpdateOrder = async (items: Attraction[]) => {
+    setAttractions(items);
 
     try {
       setIsUpdating(true);
       await updateOrder(
         groupId,
-        attractions.map(({ id }, index) => ({ id, order: index + 1 })),
+        items.map(({ id }, index) => ({ id, order: index + 1 })),
       );
     } catch (e) {
-      toast.error("Не получилось поменять порядок");
+      toast.error('Не получилось поменять порядок');
     } finally {
       setIsUpdating(false);
     }
@@ -177,8 +168,10 @@ export default function GroupDetailPage() {
   return (
     <ProtectedRoute>
       <div
-        className={`container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4 ${isWideScreen ? "overflow-hidden" : ""}`}
-        style={isWideScreen ? { height: "calc(100vh)" } : {}}
+        className={`container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4 ${
+          isWideScreen ? 'overflow-hidden' : ''
+        }`}
+        style={isWideScreen ? { height: 'calc(100vh)' } : {}}
       >
         <div className="flex items-center">
           <BackButton route="/groups" />
@@ -210,11 +203,8 @@ export default function GroupDetailPage() {
         </div>
 
         {isWideScreen ? (
-          <div
-            className="flex-1 flex flex-row gap-4"
-            style={{ height: "calc(100vh - 150px)" }}
-          >
-            <div style={{ height: "100%", minWidth: "600px" }}>
+          <div className="flex-1 flex flex-row gap-4" style={{ height: 'calc(100vh - 150px)' }}>
+            <div style={{ height: '100%', minWidth: '600px' }}>
               <Map
                 location={location}
                 setLocation={setLocation}

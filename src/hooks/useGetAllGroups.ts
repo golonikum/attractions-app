@@ -1,7 +1,8 @@
-import { getAllGroups } from "@/services/groupService";
-import { Group } from "@/types/group";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+
+import { getAllGroups } from '@/services/groupService';
+import { Group } from '@/types/group';
 
 export const useGetAllGroups = () => {
   const [groups, setGroups] = useState<Group[]>([]);
@@ -9,11 +10,12 @@ export const useGetAllGroups = () => {
 
   const fetchData = async () => {
     setIsLoading(true);
+
     try {
       const groupsData = await getAllGroups();
       setGroups(groupsData);
     } catch (error) {
-      toast.error("Не удалось загрузить данные городов");
+      toast.error('Не удалось загрузить данные городов');
     } finally {
       setIsLoading(false);
     }

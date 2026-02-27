@@ -1,24 +1,21 @@
-import { Attraction, CreateAttractionRequest } from "@/types/attraction";
-import { NewAttractionDialog } from "./NewAttractionDialog";
-import { AttractionImage } from "./AttractionImage";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import {
-  OpenInYandexMapButton,
-  RemoveButton,
-  ShowOnMapButton,
-} from "../ui/buttons";
-import { ConfirmDialog } from "../ui/ConfirmDialog";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { Tag } from "../ui/Tag";
+import { useState } from 'react';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { useRouter } from 'next/navigation';
+
+import { Attraction, CreateAttractionRequest } from '@/types/attraction';
+
+import { OpenInYandexMapButton, RemoveButton, ShowOnMapButton } from '../ui/buttons';
+import { ConfirmDialog } from '../ui/ConfirmDialog';
+import { Tag } from '../ui/Tag';
+
+import { AttractionImage } from './AttractionImage';
+import { NewAttractionDialog } from './NewAttractionDialog';
 
 export type AttractionTableRowProps = {
   attraction: Attraction;
   onDelete?: (id: string) => void;
-  onUpdate?: (
-    id: string,
-  ) => (updateData: CreateAttractionRequest) => Promise<void>;
+  onUpdate?: (id: string) => (updateData: CreateAttractionRequest) => Promise<void>;
   onLocate: (attraction: Attraction) => void;
   hasDnd?: boolean;
 };
@@ -34,14 +31,7 @@ export const AttractionTableRow = ({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: attraction.id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: attraction.id });
 
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
@@ -56,8 +46,8 @@ export const AttractionTableRow = ({
     setIsDeleteDialogOpen(true);
   };
 
-  const handleAttractionClick = (attraction: Attraction) => () => {
-    router.push(`/attractions/${attraction.id}`);
+  const handleAttractionClick = (item: Attraction) => () => {
+    router.push(`/attractions/${item.id}`);
   };
 
   const onLocateAttractionClick = () => {
@@ -66,38 +56,22 @@ export const AttractionTableRow = ({
 
   return (
     <tr
-      className={attraction.isVisited ? "bg-green-50" : ""}
+      className={attraction.isVisited ? 'bg-green-50' : ''}
       ref={setNodeRef}
       style={style}
       {...attributes}
       {...listeners}
     >
       {hasDnd && <td className="px-4 py-2  cursor-move">☰</td>}
-      <td
-        className="px-4 py-2  whitespace-nowrap cursor-pointer"
-        onClick={handleAttractionClick(attraction)}
-      >
-        <AttractionImage
-          attraction={attraction}
-          className="h-24 w-24 rounded-md"
-        />
+      <td className="px-4 py-2  whitespace-nowrap cursor-pointer" onClick={handleAttractionClick(attraction)}>
+        <AttractionImage attraction={attraction} className="h-24 w-24 rounded-md" />
       </td>
-      <td
-        className="px-4 py-2  cursor-pointer"
-        onClick={handleAttractionClick(attraction)}
-      >
-        <div className="text-sm font-medium text-gray-900">
-          {attraction.name}
-        </div>
+      <td className="px-4 py-2  cursor-pointer" onClick={handleAttractionClick(attraction)}>
+        <div className="text-sm font-medium text-gray-900">{attraction.name}</div>
         {attraction.category && <Tag text={attraction.category} />}
       </td>
-      <td
-        className="px-4 py-2  cursor-pointer"
-        onClick={handleAttractionClick(attraction)}
-      >
-        <div className="text-sm text-gray-900 line-clamp-4">
-          {attraction.description || "Нет описания"}
-        </div>
+      <td className="px-4 py-2  cursor-pointer" onClick={handleAttractionClick(attraction)}>
+        <div className="text-sm text-gray-900 line-clamp-4">{attraction.description || 'Нет описания'}</div>
       </td>
       <td className="px-4 py-2  whitespace-nowrap text-sm font-medium">
         <div className="flex justify-end space-x-1">

@@ -1,4 +1,4 @@
-import { Attraction } from "./attraction";
+import { Attraction } from './attraction';
 
 export interface Group {
   id: string;

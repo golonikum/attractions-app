@@ -1,20 +1,18 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { useRouter } from "next/navigation";
-import { CreateGroupRequest, Group } from "@/types/group";
-import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
-import { useState } from "react";
-import { Tag } from "../ui/Tag";
-import { RemoveButton, ShowOnMapButton } from "../ui/buttons";
-import { NewGroupDialog } from "./NewGroupDialog";
-import { useIsMobile } from "@/hooks/useIsMobile";
-import { locateItemOnMainMap } from "@/lib/locateItemOnMainMap";
-import { Attraction } from "@/types/attraction";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { locateItemOnMainMap } from '@/lib/locateItemOnMainMap';
+import { Attraction } from '@/types/attraction';
+import { CreateGroupRequest, Group } from '@/types/group';
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+
+import { RemoveButton, ShowOnMapButton } from '../ui/buttons';
+import { Tag } from '../ui/Tag';
+
+import { NewGroupDialog } from './NewGroupDialog';
 
 interface GroupCardProps {
   group: Group;
@@ -23,12 +21,7 @@ interface GroupCardProps {
   attractionsMap: Record<string, Attraction[]>;
 }
 
-export function GroupCard({
-  group,
-  onDelete,
-  onUpdate,
-  attractionsMap,
-}: GroupCardProps) {
+export function GroupCard({ group, onDelete, onUpdate, attractionsMap }: GroupCardProps) {
   const router = useRouter();
   const { isWideScreen } = useIsMobile();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -53,23 +46,16 @@ export function GroupCard({
     <Card className="overflow-hidden flex flex-col">
       <CardHeader>
         <div className="flex justify-between items-start space-x-1">
-          <div
-            className="flex-1 flex flex-col gap-2 cursor-pointer"
-            onClick={handleCardClick}
-          >
+          <div className="flex-1 flex flex-col gap-2 cursor-pointer" onClick={handleCardClick}>
             <CardTitle className="text-lg/5">
-              {group.name}{" "}
+              {group.name}{' '}
               {!!attractionsMap[group.id]?.length && (
-                <span className="font-normal text-gray-400">
-                  ({attractionsMap[group.id].length})
-                </span>
+                <span className="font-normal text-gray-400">({attractionsMap[group.id].length})</span>
               )}
             </CardTitle>
             {group.tag && <Tag text={group.tag} />}
           </div>
-          {isWideScreen && (
-            <ShowOnMapButton onClick={handleLocate} view="icon" />
-          )}
+          {isWideScreen && <ShowOnMapButton onClick={handleLocate} view="icon" />}
           <NewGroupDialog
             groupData={group}
             handleSubmit={onUpdate}
@@ -92,10 +78,7 @@ export function GroupCard({
           />
         </div>
       </CardHeader>
-      <CardContent
-        className="cursor-pointer flex flex-col gap-4 justify-between flex-1"
-        onClick={handleCardClick}
-      >
+      <CardContent className="cursor-pointer flex flex-col gap-4 justify-between flex-1" onClick={handleCardClick}>
         <CardDescription>{group.description}</CardDescription>
         {!isWideScreen && <ShowOnMapButton onClick={handleLocate} />}
       </CardContent>

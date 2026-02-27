@@ -1,16 +1,14 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
-import { hashPassword } from "@/lib/serverAuth";
+import { NextRequest, NextResponse } from 'next/server';
+
+import { prisma } from '@/lib/db';
+import { hashPassword } from '@/lib/serverAuth';
 
 export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json();
 
     if (!email || !password) {
-      return NextResponse.json(
-        { error: "Электронная почта и пароль обязательны" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Электронная почта и пароль обязательны' }, { status: 400 });
     }
 
     // Check if user already exists
@@ -19,10 +17,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (existingUser) {
-      return NextResponse.json(
-        { error: "Пользователь уже существует" },
-        { status: 409 }
-      );
+      return NextResponse.json({ error: 'Пользователь уже существует' }, { status: 409 });
     }
 
     // Hash the password
@@ -36,15 +31,10 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json(
-      { message: "Пользователь успешно создан", userId: user.id },
-      { status: 201 }
-    );
+    return NextResponse.json({ message: 'Пользователь успешно создан', userId: user.id }, { status: 201 });
   } catch (error) {
-    console.error("Registration error:", error);
-    return NextResponse.json(
-      { error: "Внутренняя ошибка сервера" },
-      { status: 500 }
-    );
+    console.error('Registration error:', error);
+
+    return NextResponse.json({ error: 'Внутренняя ошибка сервера' }, { status: 500 });
   }
 }

@@ -1,23 +1,12 @@
-"use client";
+'use client';
 
-import { MouseEventHandler } from "react";
-import { Button } from "../button";
-import { Edit } from "lucide-react";
+import { MouseEventHandler } from 'react';
+import { Edit } from 'lucide-react';
 
-export const EditButton = ({
-  onClick,
-}: {
-  onClick?: MouseEventHandler<HTMLButtonElement>;
-}) => {
-  return (
-    <Button
-      variant="ghost"
-      size="sm"
-      onClick={onClick}
-      title="Изменить"
-      className="cursor-pointer"
-    >
-      <Edit className="h-4 w-4" />
-    </Button>
-  );
-};
+import { Button } from '../button';
+
+export const EditButton = ({ onClick }: { onClick?: MouseEventHandler<HTMLButtonElement> }) => (
+  <Button variant="ghost" size="sm" onClick={onClick} title="Изменить" className="cursor-pointer">
+    <Edit className="h-4 w-4" />
+  </Button>
+);

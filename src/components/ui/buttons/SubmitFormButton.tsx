@@ -1,6 +1,7 @@
-import { FC } from "react";
-import { Button } from "../button";
-import { Loader2 } from "lucide-react";
+import { FC } from 'react';
+import { Loader2 } from 'lucide-react';
+
+import { Button } from '../button';
 
 export const SubmitFormButton: FC<{
   id?: string;
@@ -10,12 +11,10 @@ export const SubmitFormButton: FC<{
     {isSubmitting ? (
       <>
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        {id ? "Сохранение..." : "Создание..."}
+        {id ? 'Сохранение...' : 'Создание...'}
       </>
-    ) : id ? (
-      "Сохранить"
     ) : (
-      "Создать"
+      <>{id ? 'Сохранить' : 'Создать'}</>
     )}
   </Button>
 );

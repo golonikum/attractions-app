@@ -1,19 +1,21 @@
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { useAuth } from "@/contexts/AuthContext";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import PWAInstallPrompt from "@/components/pwa/PWAInstallPrompt";
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
-import { useIsMobile } from "@/hooks/useIsMobile";
+import { useState } from 'react';
+import { Menu, X } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+import { useAuth } from '@/contexts/AuthContext';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { cn } from '@/lib/utils';
+
+import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
+import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 const navItems = [
-  { href: "/main", label: "Карта" },
-  { href: "/groups", label: "Города" },
-  { href: "/gallery", label: "Галерея" },
-  { href: "/search", label: "Поиск" },
+  { href: '/main', label: 'Карта' },
+  { href: '/groups', label: 'Города' },
+  { href: '/gallery', label: 'Галерея' },
+  { href: '/search', label: 'Поиск' },
 ];
 
 export function Navigation() {
@@ -35,12 +37,7 @@ export function Navigation() {
       <div className="container lg:max-w-full mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {isMobile ? (
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleMenu}
-              className="text-foreground"
-            >
+            <Button variant="ghost" size="icon" onClick={toggleMenu} className="text-foreground">
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </Button>
           ) : (
@@ -50,10 +47,8 @@ export function Navigation() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "text-sm font-medium transition-colors hover:text-primary",
-                    pathname === item.href
-                      ? "text-foreground"
-                      : "text-muted-foreground",
+                    'text-sm font-medium transition-colors hover:text-primary',
+                    pathname === item.href ? 'text-foreground' : 'text-muted-foreground',
                   )}
                 >
                   {item.label}
@@ -77,10 +72,8 @@ export function Navigation() {
                   href={item.href}
                   onClick={closeMenu}
                   className={cn(
-                    "text-sm font-medium transition-colors hover:text-primary px-4 py-2",
-                    pathname === item.href
-                      ? "text-foreground bg-muted"
-                      : "text-muted-foreground",
+                    'text-sm font-medium transition-colors hover:text-primary px-4 py-2',
+                    pathname === item.href ? 'text-foreground bg-muted' : 'text-muted-foreground',
                   )}
                 >
                   {item.label}

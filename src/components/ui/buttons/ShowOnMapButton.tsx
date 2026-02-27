@@ -1,25 +1,14 @@
-"use client";
+'use client';
 
-import { Button } from "../button";
-import { LocateFixed, MapPin } from "lucide-react";
+import { LocateFixed, MapPin } from 'lucide-react';
 
-export const ShowOnMapButton = ({
-  onClick,
-  view = "full",
-}: {
-  onClick: () => void;
-  view?: "icon" | "full";
-}) => {
-  const label = "Показать на карте";
+import { Button } from '../button';
 
-  return view === "icon" ? (
-    <Button
-      variant="ghost"
-      size="sm"
-      onClick={onClick}
-      title={label}
-      className="cursor-pointer"
-    >
+export const ShowOnMapButton = ({ onClick, view = 'full' }: { onClick: () => void; view?: 'icon' | 'full' }) => {
+  const label = 'Показать на карте';
+
+  return view === 'icon' ? (
+    <Button variant="ghost" size="sm" onClick={onClick} title={label} className="cursor-pointer">
       <LocateFixed className="h-4 w-4" />
     </Button>
   ) : (

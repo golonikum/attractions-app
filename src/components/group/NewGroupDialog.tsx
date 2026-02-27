@@ -1,30 +1,20 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
-import { CoordinatesInput } from "../ui/CoordinatesInput";
-import { useEffect, useState } from "react";
-import { CreateGroupRequest, Group } from "@/types/group";
-import { toast } from "sonner";
-import {
-  AddButton,
-  CancelFormButton,
-  EditButton,
-  SubmitFormButton,
-} from "../ui/buttons";
-import { DEFAULT_COORDINATES } from "@/lib/constants";
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+
+import { DEFAULT_COORDINATES } from '@/lib/constants';
+import { CreateGroupRequest, Group } from '@/types/group';
+
+import { AddButton, CancelFormButton, EditButton, SubmitFormButton } from '../ui/buttons';
+import { CoordinatesInput } from '../ui/CoordinatesInput';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Textarea } from '../ui/textarea';
 
 const initialGroupFormState = {
-  name: "",
-  description: "",
-  tag: "",
+  name: '',
+  description: '',
+  tag: '',
   coordinates: DEFAULT_COORDINATES,
   zoom: 10,
 };
@@ -36,7 +26,7 @@ export const NewGroupDialog = ({
   isSubmitting,
   setIsSubmitting,
   groupData,
-  selectedTag = "",
+  selectedTag = '',
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
@@ -46,9 +36,7 @@ export const NewGroupDialog = ({
   groupData?: Group;
   selectedTag?: string;
 }) => {
-  const [formData, setFormData] = useState<CreateGroupRequest>(
-    initialGroupFormState,
-  );
+  const [formData, setFormData] = useState<CreateGroupRequest>(initialGroupFormState);
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,7 +44,7 @@ export const NewGroupDialog = ({
 
     try {
       await handleSubmit(formData);
-      toast.success(`Группа успешно ${groupData ? "обновлена" : "создана"}`);
+      toast.success(`Группа успешно ${groupData ? 'обновлена' : 'создана'}`);
       setIsOpen(false);
 
       // Сброс формы
@@ -64,7 +52,7 @@ export const NewGroupDialog = ({
         setFormData(initialGroupFormState);
       }
     } catch (error) {
-      toast.error(`Не удалось ${groupData ? "обновить" : "создать"} группу`);
+      toast.error(`Не удалось ${groupData ? 'обновить' : 'создать'} группу`);
     } finally {
       setIsSubmitting(false);
     }
@@ -75,7 +63,7 @@ export const NewGroupDialog = ({
       setFormData({
         name: groupData.name,
         description: groupData.description,
-        tag: groupData.tag || "",
+        tag: groupData.tag || '',
         coordinates: groupData.coordinates,
         zoom: groupData.zoom,
       });
@@ -93,22 +81,12 @@ export const NewGroupDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        {groupData ? (
-          <EditButton />
-        ) : (
-          <AddButton title="Добавить новую группу" />
-        )}
-      </DialogTrigger>
+      <DialogTrigger asChild>{groupData ? <EditButton /> : <AddButton title="Добавить новую группу" />}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>
-            {groupData ? "Изменить группу" : "Создать новую группу"}
-          </DialogTitle>
+          <DialogTitle>{groupData ? 'Изменить группу' : 'Создать новую группу'}</DialogTitle>
           <DialogDescription>
-            {groupData
-              ? "Измените информацию о группе"
-              : "Создайте новую группу для организации ваших объектов"}
+            {groupData ? 'Измените информацию о группе' : 'Создайте новую группу для организации ваших объектов'}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleFormSubmit} className="space-y-4">
@@ -117,9 +95,7 @@ export const NewGroupDialog = ({
             <Input
               id="name"
               value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
             />
           </div>
@@ -128,9 +104,7 @@ export const NewGroupDialog = ({
             <Textarea
               id="description"
               value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               required
             />
           </div>
@@ -139,16 +113,12 @@ export const NewGroupDialog = ({
             <Input
               id="tag"
               value={formData.tag || selectedTag}
-              onChange={(e) =>
-                setFormData({ ...formData, tag: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, tag: e.target.value })}
             />
           </div>
           <CoordinatesInput
             value={formData.coordinates}
-            onChange={(coordinates) =>
-              setFormData({ ...formData, coordinates })
-            }
+            onChange={(coordinates) => setFormData({ ...formData, coordinates })}
             required
           />
           <div className="space-y-2">

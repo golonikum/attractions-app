@@ -1,24 +1,25 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar } from "lucide-react";
-import { Attraction } from "@/types/attraction";
-import { Tag } from "@/components/ui/Tag";
-import { AttractionImage } from "./AttractionImage";
-import { useIsMobile } from "@/hooks/useIsMobile";
-import { OpenInYandexMapButton, ShowOnMapButton } from "../ui/buttons";
-import { useRouter } from "next/navigation";
-import { Group } from "@/types/group";
-import { Button } from "../ui/button";
-import { locateItemOnMainMap } from "@/lib/locateItemOnMainMap";
+import { Calendar } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { locateItemOnMainMap } from '@/lib/locateItemOnMainMap';
+import { Attraction } from '@/types/attraction';
+import { Group } from '@/types/group';
+
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tag } from '@/components/ui/Tag';
+
+import { Button } from '../ui/button';
+import { OpenInYandexMapButton, ShowOnMapButton } from '../ui/buttons';
+
+import { AttractionImage } from './AttractionImage';
 
 interface AttractionInfoCardProps {
   attraction: Attraction;
   group: Group | null;
 }
 
-export function AttractionInfoCard({
-  attraction,
-  group,
-}: AttractionInfoCardProps) {
+export function AttractionInfoCard({ attraction, group }: AttractionInfoCardProps) {
   const { isWideScreen } = useIsMobile();
   const router = useRouter();
 
@@ -27,7 +28,7 @@ export function AttractionInfoCard({
       <CardHeader>
         <div className="flex gap-4 justify-between items-start">
           <CardTitle className="flex flex-col gap-2 flex-start">
-            {attraction.name}{" "}
+            {attraction.name}{' '}
             <Button
               variant="ghost"
               size="sm"
@@ -37,26 +38,18 @@ export function AttractionInfoCard({
               {group?.name}
             </Button>
           </CardTitle>
-          {attraction.category && (
-            <Tag text={attraction.category} variant="default" />
-          )}
+          {attraction.category && <Tag text={attraction.category} variant="default" />}
         </div>
       </CardHeader>
 
-      <CardContent
-        className={`flex gap-4 ${isWideScreen ? "flex-row" : "flex-col"}`}
-      >
+      <CardContent className={`flex gap-4 ${isWideScreen ? 'flex-row' : 'flex-col'}`}>
         <AttractionImage
           attraction={attraction}
-          className={`rounded-md ${isWideScreen ? "h-full w-1/2" : "h-96 w-full"}`}
+          className={`rounded-md ${isWideScreen ? 'h-full w-1/2' : 'h-96 w-full'}`}
         />
 
         <div className="flex flex-col gap-6">
-          {attraction.description && (
-            <p className="text-gray-600 whitespace-pre-wrap">
-              {attraction.description}
-            </p>
-          )}
+          {attraction.description && <p className="text-gray-600 whitespace-pre-wrap">{attraction.description}</p>}
 
           {attraction.notes && attraction.notes.length > 0 && (
             <div>
@@ -66,10 +59,7 @@ export function AttractionInfoCard({
               </h4>
               <div className="space-y-2">
                 {attraction.notes.map((note, index) => (
-                  <div
-                    key={index}
-                    className="border-l-4 border-blue-500 pl-3 py-1"
-                  >
+                  <div key={index} className="border-l-4 border-blue-500 pl-3 py-1">
                     <div className="text-sm text-gray-500">{note.date}</div>
                     <p className="text-sm">{note.note}</p>
                   </div>

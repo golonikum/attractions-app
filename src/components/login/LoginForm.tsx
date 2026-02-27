@@ -1,17 +1,19 @@
-"use client";
+'use client';
 
-import { useState, FormEvent, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAuth } from "@/contexts/AuthContext";
+import { FormEvent, useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+
+import { useAuth } from '@/contexts/AuthContext';
+
+import { Button } from '@/components/ui/button';
+import { Card, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 export default function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -20,14 +22,15 @@ export default function LoginForm() {
   // Check if user is already logged in
   useEffect(() => {
     if (user) {
-      router.push("/");
+      router.push('/');
     }
   }, [router, user]);
 
   // Check if user is already logged in
   useEffect(() => {
     // Check for success message from registration
-    const message = searchParams.get("message");
+    const message = searchParams.get('message');
+
     if (message) {
       setError(message);
     }
@@ -35,14 +38,14 @@ export default function LoginForm() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/login", {
-        method: "POST",
+      const response = await fetch('/api/login', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
       });
@@ -52,12 +55,12 @@ export default function LoginForm() {
       if (response.ok) {
         login(data.user);
         // Redirect to main page
-        router.push("/");
+        router.push('/');
       } else {
-        setError(data.error || "Login failed");
+        setError(data.error || 'Login failed');
       }
-    } catch (error) {
-      setError("An unexpected error occurred");
+    } catch (err) {
+      setError('An unexpected error occurred');
     } finally {
       setIsLoading(false);
     }
@@ -70,22 +73,12 @@ export default function LoginForm() {
           <CardTitle className="text-center">Вход</CardTitle>
         </CardHeader>
 
-        {error && (
-          <div className="mb-4 p-3 text-red-500 bg-red-50 dark:bg-red-900/20 rounded-md">
-            {error}
-          </div>
-        )}
+        {error && <div className="mb-4 p-3 text-red-500 bg-red-50 dark:bg-red-900/20 rounded-md">{error}</div>}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="email">Электронная почта</Label>
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+            <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
 
           <div className="space-y-2">
@@ -100,12 +93,12 @@ export default function LoginForm() {
           </div>
 
           <Button type="submit" disabled={isLoading} className="w-full">
-            {isLoading ? "Вход..." : "Войти"}
+            {isLoading ? 'Вход...' : 'Войти'}
           </Button>
 
           <CardFooter className="flex justify-center">
             <p className="text-sm text-zinc-600 dark:text-zinc-400">
-              Нет аккаунта?{" "}
+              Нет аккаунта?{' '}
               <a
                 href="/register"
                 className="font-medium text-zinc-900 hover:text-zinc-700 dark:text-zinc-50 dark:hover:text-zinc-300"

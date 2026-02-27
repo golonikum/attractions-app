@@ -1,3 +1,11 @@
+import { FC, useContext } from 'react';
+import { Minus, Plus } from 'lucide-react';
+import { YMapCenterLocation, YMapZoomLocation } from 'ymaps3';
+
+import { ThemeProviderContext } from '@/contexts/ThemeContext';
+import { useMapReady } from '@/hooks/useMapReady';
+import { DEFAULT_LOCATION } from '@/lib/constants';
+import { isAttraction } from '@/lib/utils';
 import {
   YMap,
   YMapControlButton,
@@ -7,33 +15,20 @@ import {
   YMapGeolocationControl,
   YMapListener,
   YMapScaleControl,
-} from "@/lib/ymaps";
-import { Attraction } from "@/types/attraction";
-import { FC, useContext } from "react";
-import { MarkerPin } from "./MarkerPin";
-import { YMapCenterLocation, YMapZoomLocation } from "ymaps3";
-import { useMapReady } from "@/hooks/useMapReady";
-import { ThemeProviderContext } from "@/contexts/ThemeContext";
-import { Minus, Plus } from "lucide-react";
-import { DEFAULT_LOCATION } from "@/lib/constants";
-import { GroupWithAttractions } from "@/types/group";
-import { isAttraction } from "@/lib/utils";
+} from '@/lib/ymaps';
+import { Attraction } from '@/types/attraction';
+import { GroupWithAttractions } from '@/types/group';
+
+import { MarkerPin } from './MarkerPin';
 
 type MapPropsType = {
   items?: Attraction[] | GroupWithAttractions[];
   location?: YMapCenterLocation & YMapZoomLocation;
-  setLocation: React.Dispatch<
-    React.SetStateAction<YMapCenterLocation & YMapZoomLocation>
-  >;
+  setLocation: React.Dispatch<React.SetStateAction<YMapCenterLocation & YMapZoomLocation>>;
   onItemClick?: (id: string) => void;
 };
 
-export const Map: FC<MapPropsType> = ({
-  items,
-  location = DEFAULT_LOCATION,
-  setLocation,
-  onItemClick,
-}) => {
+export const Map: FC<MapPropsType> = ({ items, location = DEFAULT_LOCATION, setLocation, onItemClick }) => {
   const { isMapReady } = useMapReady();
   const { theme } = useContext(ThemeProviderContext);
   // const [location, setLocation] = useState(defaultLocation);
@@ -42,25 +37,20 @@ export const Map: FC<MapPropsType> = ({
   //   setLocation(defaultLocation);
   // }, [defaultLocation]);
 
-  const onClickZoom = (operation: "plus" | "minus") => () => {
+  const onClickZoom = (operation: 'plus' | 'minus') => () => {
     setLocation((val) => ({
       center: val.center,
-      zoom: val.zoom + (operation === "plus" ? 1 : -1),
+      zoom: val.zoom + (operation === 'plus' ? 1 : -1),
     }));
   };
 
   return isMapReady ? (
-    <YMap
-      location={{ ...location }}
-      mode="raster"
-      zoomStrategy="zoomToCenter"
-      theme={theme}
-    >
+    <YMap location={{ ...location }} mode="raster" zoomStrategy="zoomToCenter" theme={theme}>
       <YMapDefaultSchemeLayer />
       <YMapDefaultFeaturesLayer />
       <YMapListener
-        onUpdate={({ location }) => {
-          setLocation(location);
+        onUpdate={(args) => {
+          setLocation(args.location);
         }}
       />
       <YMapControls position="left top">
@@ -70,16 +60,10 @@ export const Map: FC<MapPropsType> = ({
         <YMapGeolocationControl />
       </YMapControls>
       <YMapControls position="right" orientation="vertical">
-        <YMapControlButton
-          onClick={onClickZoom("plus")}
-          disabled={location.zoom === 20}
-        >
+        <YMapControlButton onClick={onClickZoom('plus')} disabled={location.zoom === 20}>
           <Plus />
         </YMapControlButton>
-        <YMapControlButton
-          onClick={onClickZoom("minus")}
-          disabled={location.zoom === 1}
-        >
+        <YMapControlButton onClick={onClickZoom('minus')} disabled={location.zoom === 1}>
           <Minus />
         </YMapControlButton>
       </YMapControls>

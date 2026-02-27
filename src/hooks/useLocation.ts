@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import { getInitialLocation } from "@/lib/getInitialLocation";
+import { useEffect, useState } from 'react';
+
+import { getInitialLocation } from '@/lib/getInitialLocation';
 
 export const useLocation = ({
   selectedCoordinates,
@@ -12,9 +13,7 @@ export const useLocation = ({
   selectedCoordinates: string[];
   setSelectedCoordinates: (value: string[]) => void;
 }) => {
-  const [location, setLocation] = useState(
-    getInitialLocation({ selectedCoordinates, selectedZoom }),
-  );
+  const [location, setLocation] = useState(getInitialLocation({ selectedCoordinates, selectedZoom }));
 
   useEffect(() => {
     setSelectedZoom([`${location.zoom}`]);

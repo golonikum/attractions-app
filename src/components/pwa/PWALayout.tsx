@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
-import { useAuth } from "@/contexts/AuthContext";
-import { useEffect } from "react";
+import { useEffect } from 'react';
+
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function PWALayout({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
@@ -9,23 +10,21 @@ export default function PWALayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (user) {
       // Register service worker
-      if ("serviceWorker" in navigator) {
+      if ('serviceWorker' in navigator) {
         navigator.serviceWorker
-          .register("/sw.js")
+          .register('/sw.js')
           .then((registration) => {
-            console.log("Service Worker registered: ", registration);
+            console.log('Service Worker registered: ', registration);
 
             // Check for service worker updates
-            registration.addEventListener("updatefound", () => {
+            registration.addEventListener('updatefound', () => {
               const installingWorker = registration.installing;
+
               if (installingWorker) {
-                installingWorker.addEventListener("statechange", () => {
-                  if (
-                    installingWorker.state === "installed" &&
-                    navigator.serviceWorker.controller
-                  ) {
+                installingWorker.addEventListener('statechange', () => {
+                  if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
                     // New content is available; refresh to get it
-                    console.log("New content available, refreshing");
+                    console.log('New content available, refreshing');
                     window.location.reload();
                   }
                 });
@@ -33,41 +32,40 @@ export default function PWALayout({ children }: { children: React.ReactNode }) {
             });
           })
           .catch((registrationError) => {
-            console.error(
-              "Service Worker registration failed: ",
-              registrationError
-            );
+            console.error('Service Worker registration failed: ', registrationError);
           });
       } else {
-        console.error("Service workers are not supported in this browser");
+        console.error('Service workers are not supported in this browser');
       }
 
       // Add to home screen prompt
       let deferredPrompt: any = null;
-      window.addEventListener("beforeinstallprompt", (e) => {
+      window.addEventListener('beforeinstallprompt', (e) => {
         // Prevent the mini-infobar from appearing on mobile
         e.preventDefault();
         // Stash the event so it can be triggered later
         deferredPrompt = e;
         // Update UI notify the user they can install the PWA
         // Optionally, show an install button or banner
-        console.log("beforeinstallprompt fired");
+        console.log('beforeinstallprompt fired');
       });
 
       // Optional: Show install button/banner
-      const installButton = document.getElementById("pwa-install-button");
+      const installButton = document.getElementById('pwa-install-button');
+
       if (installButton) {
-        installButton.addEventListener("click", () => {
+        installButton.addEventListener('click', () => {
           if (deferredPrompt) {
             // Show the install prompt
             deferredPrompt.prompt();
             // Wait for the user to respond to the prompt
             deferredPrompt.userChoice.then((choiceResult: any) => {
-              if (choiceResult.outcome === "accepted") {
-                console.log("User accepted the A2HS prompt");
+              if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the A2HS prompt');
               } else {
-                console.log("User dismissed the A2HS prompt");
+                console.log('User dismissed the A2HS prompt');
               }
+
               // We don't need the prompt anymore
               deferredPrompt = null;
             });

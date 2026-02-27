@@ -1,5 +1,6 @@
-import { FC } from "react";
-import { Button } from "../button";
+import { FC } from 'react';
+
+import { Button } from '../button';
 
 export const CancelFormButton: FC<{
   onClick: () => void;

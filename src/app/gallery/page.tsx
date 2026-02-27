@@ -1,29 +1,25 @@
-"use client";
+'use client';
 
-import { useMemo } from "react";
-import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { MultiSelect } from "@/components/ui/MultiSelect";
-import { FoundCountStub, LoadingStub } from "@/components/ui/stubs";
-import ImageGallery from "react-image-gallery";
-import "../gallery.css";
-import { useIsMobile } from "@/hooks/useIsMobile";
-import { EmptyListState } from "@/components/group/EmptyListState";
-import { useQueryParams } from "@/hooks/useQueryParams";
-import { useFiltersInitialOptions } from "@/hooks/useFiltersInitialOptions";
-import { useData } from "@/contexts/DataContext";
+import { useMemo } from 'react';
+import ImageGallery from 'react-image-gallery';
+
+import { useData } from '@/contexts/DataContext';
+import { useFiltersInitialOptions } from '@/hooks/useFiltersInitialOptions';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { useQueryParams } from '@/hooks/useQueryParams';
+
+import { EmptyListState } from '@/components/group/EmptyListState';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { MultiSelect } from '@/components/ui/MultiSelect';
+import { FoundCountStub, LoadingStub } from '@/components/ui/stubs';
+
+import '../gallery.css';
 
 export default function GalleryPage() {
   const { isMobile } = useIsMobile();
-  const {
-    selectedTag,
-    setSelectedTag,
-    selectedGroup,
-    setSelectedGroup,
-    selectedCategory,
-    setSelectedCategory,
-  } = useQueryParams(["tag", "group", "category"]);
-  const { groups, isGroupsLoading, attractions, isAttractionsLoading } =
-    useData();
+  const { selectedTag, setSelectedTag, selectedGroup, setSelectedGroup, selectedCategory, setSelectedCategory } =
+    useQueryParams(['tag', 'group', 'category']);
+  const { groups, isGroupsLoading, attractions, isAttractionsLoading } = useData();
   const isLoading = isGroupsLoading || isAttractionsLoading;
   const { allCategories, allGroups, allTags } = useFiltersInitialOptions({
     groups,
@@ -38,26 +34,23 @@ export default function GalleryPage() {
     // Фильтрация по тегам
     if (selectedTag.length > 0) {
       filteredGroups = filteredGroups.filter((group) => {
-        if (!group.tag) return false;
+        if (!group.tag) {
+          return false;
+        }
+
         return selectedTag.includes(group.tag);
       });
     }
 
     // Фильтрация по группам
     if (selectedGroup.length > 0) {
-      filteredGroups = filteredGroups.filter((group) => {
-        return selectedGroup.includes(group.name);
-      });
+      filteredGroups = filteredGroups.filter((group) => selectedGroup.includes(group.name));
     }
 
     const groupsIds = filteredGroups.map((group) => group.id);
     const result = attractions
       .filter((item) => groupsIds.includes(item.groupId))
-      .filter(
-        (item) =>
-          !selectedCategory.length ||
-          (item.category && selectedCategory.includes(item.category)),
-      )
+      .filter((item) => !selectedCategory.length || (item.category && selectedCategory.includes(item.category)))
       .filter((item) => !!item.imageUrl)
       .map((item) => ({
         original: item.imageUrl!,
@@ -98,30 +91,22 @@ export default function GalleryPage() {
             />
             <FoundCountStub
               count={photos.length}
-              hasFilters={
-                selectedCategory.length > 0 ||
-                selectedGroup.length > 0 ||
-                selectedTag.length > 0
-              }
+              hasFilters={selectedCategory.length > 0 || selectedGroup.length > 0 || selectedTag.length > 0}
             />
           </div>
         </div>
 
         {photos.length === 0 ? (
           <EmptyListState
-            message={
-              selectedTag.length > 0
-                ? "Нет фотографий, соответствующих фильтрам"
-                : "Нет доступных фотографий"
-            }
+            message={selectedTag.length > 0 ? 'Нет фотографий, соответствующих фильтрам' : 'Нет доступных фотографий'}
           />
         ) : (
-          <div className={isMobile ? "mobile" : ""}>
+          <div className={isMobile ? 'mobile' : ''}>
             <ImageGallery
               items={photos}
               lazyLoad={true}
               showThumbnails={!isMobile}
-              thumbnailPosition={isMobile ? "bottom" : "left"}
+              thumbnailPosition={isMobile ? 'bottom' : 'left'}
               showBullets={!isMobile && photos.length < 30}
               slideInterval={5000}
             />

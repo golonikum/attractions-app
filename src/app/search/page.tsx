@@ -1,18 +1,20 @@
 'use client';
 
-import { ProtectedRoute } from '@/components/ProtectedRoute';
-import { useRouter } from 'next/navigation';
-import { FoundCountStub, LoadingStub } from '@/components/ui/stubs';
-import { useQueryParams } from '@/hooks/useQueryParams';
-import { useData } from '@/contexts/DataContext';
-import { useIsMobile } from '@/hooks/useIsMobile';
-import { AttractionTable } from '@/components/attraction/AttractionTable';
-import { AttractionCard } from '@/components/attraction/AttractionCard';
 import { useCallback, useEffect, useState } from 'react';
-import { locateItemOnMainMap } from '@/lib/locateItemOnMainMap';
-import { EmptyListState } from '@/components/group/EmptyListState';
+import { useRouter } from 'next/navigation';
+
+import { useData } from '@/contexts/DataContext';
 import { useDebounceCallback } from '@/hooks/useDebounceCallback';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { useQueryParams } from '@/hooks/useQueryParams';
+import { locateItemOnMainMap } from '@/lib/locateItemOnMainMap';
 import { Attraction } from '@/types/attraction';
+
+import { AttractionCard } from '@/components/attraction/AttractionCard';
+import { AttractionTable } from '@/components/attraction/AttractionTable';
+import { EmptyListState } from '@/components/group/EmptyListState';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { FoundCountStub, LoadingStub } from '@/components/ui/stubs';
 
 export default function SearchPage() {
   const router = useRouter();
@@ -88,14 +90,18 @@ export default function SearchPage() {
               )}
             </div>
           </div>
-        ) : foundAttractions.length === 0 ? (
-          emptyState
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {foundAttractions.map((attraction) => (
-              <AttractionCard key={attraction.id} attraction={attraction} />
-            ))}
-          </div>
+          <>
+            {foundAttractions.length === 0 ? (
+              emptyState
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {foundAttractions.map((attraction) => (
+                  <AttractionCard key={attraction.id} attraction={attraction} />
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
     </ProtectedRoute>

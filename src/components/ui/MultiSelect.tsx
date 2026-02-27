@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
-import { Button } from "./button";
-import { Tag } from "./Tag";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useIsMobile } from "@/hooks/useIsMobile";
+import { useEffect, useState } from 'react';
+import { Check, ChevronsUpDown } from 'lucide-react';
+
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { cn } from '@/lib/utils';
+
+import { Button } from './button';
+import { Tag } from './Tag';
 
 interface MultiSelectProps {
   options: string[];
@@ -18,18 +20,16 @@ export function MultiSelect({
   options,
   selectedOptions,
   onSelectionChange,
-  placeholder = "Выберите...",
+  placeholder = 'Выберите...',
   className,
   isMulti = true,
 }: MultiSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState('');
   const { isMobile } = useIsMobile();
 
   // Фильтрация опций на основе поискового запроса
-  const filteredOptions = options.filter((option) =>
-    option.toLowerCase().includes(searchValue.toLowerCase()),
-  );
+  const filteredOptions = options.filter((option) => option.toLowerCase().includes(searchValue.toLowerCase()));
 
   const handleOptionClick = (option: string) => {
     let newSelected = selectedOptions.includes(option)
@@ -51,18 +51,20 @@ export function MultiSelect({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
+
       // Проверяем, что клик был именно за пределами мультиселекта
-      if (!target.closest(".multi-select")) {
+      if (!target.closest('.multi-select')) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   return (
-    <div className={cn("flex-1 shrink-0", className)}>
+    <div className={cn('flex-1 shrink-0', className)}>
       <div className="relative multi-select">
         {/* Кнопка триггера */}
         <div className="relative w-full">
@@ -71,7 +73,9 @@ export function MultiSelect({
             role="combobox"
             type="button"
             aria-expanded={isOpen}
-            className={`w-full justify-between h-10 px-3 py-2 overflow-hidden font-normal ${!isMobile ? "max-w-100 min-w-60" : ""}`}
+            className={`w-full justify-between h-10 px-3 py-2 overflow-hidden font-normal ${
+              !isMobile ? 'max-w-100 min-w-60' : ''
+            }`}
             onClick={() => setIsOpen(!isOpen)}
           >
             {selectedOptions.length === 0 ? (
@@ -123,17 +127,13 @@ export function MultiSelect({
                       }}
                     >
                       <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-                        {selectedOptions.includes(option) && (
-                          <Check className="h-4 w-4" />
-                        )}
+                        {selectedOptions.includes(option) && <Check className="h-4 w-4" />}
                       </span>
                       {option}
                     </div>
                   ))
                 ) : (
-                  <div className="py-1.5 text-center text-sm">
-                    Нет вариантов
-                  </div>
+                  <div className="py-1.5 text-center text-sm">Нет вариантов</div>
                 )}
               </div>
             </div>

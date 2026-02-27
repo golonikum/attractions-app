@@ -1,5 +1,5 @@
-import { Label } from "./label";
-import { Input } from "./input";
+import { Input } from './input';
+import { Label } from './label';
 
 interface CoordinatesInputProps {
   value: [number, number];
@@ -8,19 +8,19 @@ interface CoordinatesInputProps {
   required?: boolean;
   placeholder?: string;
   className?: string;
-  format?: "single" | "separate"; // single - одна строка, separate - два поля
+  format?: 'single' | 'separate'; // single - одна строка, separate - два поля
 }
 
 export const CoordinatesInput = ({
   value,
   onChange,
-  label = "Координаты",
+  label = 'Координаты',
   required = false,
-  placeholder = "55.755819, 37.617644",
-  className = "",
-  format = "single",
+  placeholder = '55.755819, 37.617644',
+  className = '',
+  format = 'single',
 }: CoordinatesInputProps) => {
-  if (format === "separate") {
+  if (format === 'separate') {
     return (
       <div className={`grid grid-cols-2 gap-4 ${className}`}>
         <div className="space-y-2">
@@ -57,7 +57,8 @@ export const CoordinatesInput = ({
         type="text"
         value={`${value[0]}, ${value[1]}`}
         onChange={(e) => {
-          const parts = e.target.value.split(",");
+          const parts = e.target.value.split(',');
+
           if (parts.length === 2) {
             const latitude = parseFloat(parts[0].trim());
             const longitude = parseFloat(parts[1].trim());

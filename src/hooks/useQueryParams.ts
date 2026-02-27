@@ -1,5 +1,6 @@
-import { capitalizeFirstLetter } from '@/lib/utils';
 import { useEffect, useState } from 'react';
+
+import { capitalizeFirstLetter } from '@/lib/utils';
 
 type FieldsAndSetters<T extends readonly string[]> = T extends readonly (infer Name extends string)[]
   ? {

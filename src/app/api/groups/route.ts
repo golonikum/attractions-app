@@ -1,14 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
-import { withAuth } from "@/lib/serverAuth";
+import { NextRequest, NextResponse } from 'next/server';
+
+import { prisma } from '@/lib/db';
+import { withAuth } from '@/lib/serverAuth';
 
 // Get all groups for the authenticated user
 export async function GET(request: NextRequest) {
-  return await withAuth(request, async (userId) => {
+  return withAuth(request, async (userId) => {
     // Fetch all groups for the user
     const groups = await prisma.group.findMany({
       where: { userId },
-      orderBy: [{ tag: "asc" }, { name: "asc" }],
+      orderBy: [{ tag: 'asc' }, { name: 'asc' }],
     });
 
     return NextResponse.json({ groups });
@@ -17,7 +18,7 @@ export async function GET(request: NextRequest) {
 
 // Create a new group
 export async function POST(request: NextRequest) {
-  return await withAuth(request, async (userId) => {
+  return withAuth(request, async (userId) => {
     // Parse request body
     const { name, description, tag, coordinates, zoom } = await request.json();
 
@@ -28,12 +29,11 @@ export async function POST(request: NextRequest) {
       !coordinates ||
       !Array.isArray(coordinates) ||
       coordinates.length !== 2 ||
-      typeof zoom !== "number"
+      typeof zoom !== 'number'
     ) {
       return NextResponse.json(
         {
-          error:
-            "Неверные данные. Убедитесь, что name, description, coordinates [long, lat] и zoom указаны правильно",
+          error: 'Неверные данные. Убедитесь, что name, description, coordinates [long, lat] и zoom указаны правильно',
         },
         { status: 400 },
       );

@@ -1,0 +1,13 @@
+.next
+.git
+public
+build
+scripts
+node_modules
+webpack.config.js
+next-env.d.ts
+next.config.ts
+prettier.config.js
+tailwind.config.ts
+!src/**/*.ts
+!src/**/*.tsx

@@ -1,7 +1,8 @@
-import { getAllAttractions } from "@/services/attractionService";
-import { Attraction } from "@/types/attraction";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+
+import { getAllAttractions } from '@/services/attractionService';
+import { Attraction } from '@/types/attraction';
 
 export const useGetAllAttractions = () => {
   const [attractions, setAttractions] = useState<Attraction[]>([]);
@@ -9,11 +10,12 @@ export const useGetAllAttractions = () => {
 
   const fetchData = async () => {
     setIsLoading(true);
+
     try {
       const data = await getAllAttractions();
       setAttractions(data);
     } catch (error) {
-      toast.error("Не удалось загрузить данные объектов");
+      toast.error('Не удалось загрузить данные объектов');
     } finally {
       setIsLoading(false);
     }

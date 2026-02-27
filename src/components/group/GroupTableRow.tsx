@@ -1,12 +1,15 @@
-import { NewGroupDialog } from "./NewGroupDialog";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { RemoveButton, ShowOnMapButton } from "../ui/buttons";
-import { ConfirmDialog } from "../ui/ConfirmDialog";
-import { Tag } from "../ui/Tag";
-import { CreateGroupRequest, Group } from "@/types/group";
-import { GroupTableCellDescription } from "./GroupTableCellDescription";
-import { Attraction } from "@/types/attraction";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+import { Attraction } from '@/types/attraction';
+import { CreateGroupRequest, Group } from '@/types/group';
+
+import { RemoveButton, ShowOnMapButton } from '../ui/buttons';
+import { ConfirmDialog } from '../ui/ConfirmDialog';
+import { Tag } from '../ui/Tag';
+
+import { GroupTableCellDescription } from './GroupTableCellDescription';
+import { NewGroupDialog } from './NewGroupDialog';
 
 export type GroupTableRowProps = {
   group: Group;
@@ -16,13 +19,7 @@ export type GroupTableRowProps = {
   attractionsMap: Record<string, Attraction[]>;
 };
 
-export const GroupTableRow = ({
-  group,
-  onDelete,
-  onUpdate,
-  onLocate,
-  attractionsMap,
-}: GroupTableRowProps) => {
+export const GroupTableRow = ({ group, onDelete, onUpdate, onLocate, attractionsMap }: GroupTableRowProps) => {
   const router = useRouter();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -34,8 +31,8 @@ export const GroupTableRow = ({
     setIsDeleteDialogOpen(true);
   };
 
-  const handleGroupClick = (group: Group) => () => {
-    router.push(`/groups/${group.id}`);
+  const handleGroupClick = (item: Group) => () => {
+    router.push(`/groups/${item.id}`);
   };
 
   const onLocateClick = () => {
@@ -44,27 +41,15 @@ export const GroupTableRow = ({
 
   return (
     <tr>
-      <td
-        className="px-4 py-2  cursor-pointer"
-        onClick={handleGroupClick(group)}
-      >
+      <td className="px-4 py-2  cursor-pointer" onClick={handleGroupClick(group)}>
         <div className="text-sm font-medium text-gray-900">
-          {group.name}{" "}
-          <span className="font-normal text-gray-400">
-            ({attractionsMap[group.id]?.length || 0})
-          </span>
+          {group.name} <span className="font-normal text-gray-400">({attractionsMap[group.id]?.length || 0})</span>
         </div>
       </td>
-      <td
-        className="px-4 py-2  cursor-pointer"
-        onClick={handleGroupClick(group)}
-      >
+      <td className="px-4 py-2  cursor-pointer" onClick={handleGroupClick(group)}>
         {group.tag && <Tag text={group.tag} />}
       </td>
-      <td
-        className="px-4 py-2  cursor-pointer"
-        onClick={handleGroupClick(group)}
-      >
+      <td className="px-4 py-2  cursor-pointer" onClick={handleGroupClick(group)}>
         <div className="text-sm text-gray-900 line-clamp-4">
           <GroupTableCellDescription description={group.description} />
         </div>

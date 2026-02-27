@@ -1,5 +1,6 @@
-import { LngLat, YMapCenterLocation, YMapZoomLocation } from "ymaps3";
-import { DEFAULT_LOCATION } from "./constants";
+import { LngLat, YMapCenterLocation, YMapZoomLocation } from 'ymaps3';
+
+import { DEFAULT_LOCATION } from './constants';
 
 export const getInitialLocation = ({
   selectedCoordinates,
@@ -10,9 +11,7 @@ export const getInitialLocation = ({
 }): YMapCenterLocation & YMapZoomLocation =>
   selectedZoom?.length && selectedCoordinates?.length
     ? {
-        center: selectedCoordinates.map((coordinate) =>
-          Number(coordinate),
-        ) as LngLat,
+        center: selectedCoordinates.map((coordinate) => Number(coordinate)) as LngLat,
         zoom: Number(selectedZoom[0]),
       }
     : DEFAULT_LOCATION;

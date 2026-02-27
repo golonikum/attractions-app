@@ -1,28 +1,13 @@
-import { Attraction } from "@/types/attraction";
-import {
-  AttractionTableRow,
-  AttractionTableRowProps,
-} from "./AttractionTableRow";
-import {
-  closestCenter,
-  DndContext,
-  DragEndEvent,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import { CSSProperties, useCallback } from "react";
+import { CSSProperties, useCallback } from 'react';
+import { closestCenter, DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
-type AttractionTableProps = Omit<
-  AttractionTableRowProps,
-  "attraction" | "hasDnd"
-> & {
+import { Attraction } from '@/types/attraction';
+
+import { AttractionTableRow, AttractionTableRowProps } from './AttractionTableRow';
+
+type AttractionTableProps = Omit<AttractionTableRowProps, 'attraction' | 'hasDnd'> & {
   attractions: Attraction[];
   onOrderChanged?: (attractions: Attraction[]) => void;
   isDisabled?: boolean;
@@ -59,10 +44,10 @@ export function AttractionTable({
 
   const style: CSSProperties = isDisabled
     ? {
-        pointerEvents: "none",
+        pointerEvents: 'none',
         opacity: 0.6,
-        cursor: "not-allowed",
-        userSelect: "none",
+        cursor: 'not-allowed',
+        userSelect: 'none',
       }
     : {};
 
@@ -73,15 +58,12 @@ export function AttractionTable({
       modifiers={[restrictToVerticalAxis]}
       onDragEnd={handleDragEnd}
     >
-      <SortableContext
-        items={attractions.map((d) => d.id)}
-        strategy={verticalListSortingStrategy}
-      >
+      <SortableContext items={attractions.map((d) => d.id)} strategy={verticalListSortingStrategy}>
         <div className="hidden md:block overflow-x-hidden">
           <table className="min-w-full divide-y divide-gray-200" style={style}>
             <thead className="bg-gray-50">
               <tr>
-                {onOrderChanged ? <th style={{ width: "50px" }}></th> : <></>}
+                {onOrderChanged ? <th style={{ width: '50px' }}></th> : <></>}
                 <th
                   scope="col"
                   className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -91,7 +73,7 @@ export function AttractionTable({
                 <th
                   scope="col"
                   className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  style={{ minWidth: "200px" }}
+                  style={{ minWidth: '200px' }}
                 >
                   Название
                 </th>

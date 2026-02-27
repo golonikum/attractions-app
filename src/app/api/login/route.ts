@@ -1,16 +1,14 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
-import { verifyPassword, generateToken } from "@/lib/serverAuth";
+import { NextRequest, NextResponse } from 'next/server';
+
+import { prisma } from '@/lib/db';
+import { generateToken, verifyPassword } from '@/lib/serverAuth';
 
 export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json();
 
     if (!email || !password) {
-      return NextResponse.json(
-        { error: "Электронная почта и пароль обязательны" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'Электронная почта и пароль обязательны' }, { status: 400 });
     }
 
     // Find the user
@@ -19,20 +17,14 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { error: "Неверные учетные данные" },
-        { status: 401 },
-      );
+      return NextResponse.json({ error: 'Неверные учетные данные' }, { status: 401 });
     }
 
     // Verify the password
     const isValid = await verifyPassword(password, user.password);
 
     if (!isValid) {
-      return NextResponse.json(
-        { error: "Неверные учетные данные" },
-        { status: 401 },
-      );
+      return NextResponse.json({ error: 'Неверные учетные данные' }, { status: 401 });
     }
 
     // Generate a JWT token
@@ -40,30 +32,28 @@ export async function POST(request: NextRequest) {
 
     // Create response with user info (but not the token)
     const response = NextResponse.json({
-      message: "Вход выполнен успешно",
+      message: 'Вход выполнен успешно',
       user: {
-        id: "ADMIN",
+        id: 'ADMIN',
         email,
       },
     });
 
     // Set token in HTTP-only cookie
     response.cookies.set({
-      name: "token",
+      name: 'token',
       value: token,
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 7, // 7 days
-      path: "/",
+      path: '/',
     });
 
     return response;
   } catch (error) {
-    console.error("Login error:", error);
-    return NextResponse.json(
-      { error: "Внутренняя ошибка сервера" },
-      { status: 500 },
-    );
+    console.error('Login error:', error);
+
+    return NextResponse.json({ error: 'Внутренняя ошибка сервера' }, { status: 500 });
   }
 }

@@ -1,7 +1,8 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tag } from "@/components/ui/Tag";
-import { Attraction } from "@/types/attraction";
-import { Group } from "@/types/group";
+import { Attraction } from '@/types/attraction';
+import { Group } from '@/types/group';
+
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tag } from '@/components/ui/Tag';
 
 interface GroupInfoCardProps {
   group: Group;
@@ -14,12 +15,8 @@ export function GroupInfoCard({ group, attractions }: GroupInfoCardProps) {
       <CardHeader>
         <div className="flex gap-4 justify-between items-start">
           <CardTitle>
-            {group.name}{" "}
-            {!!attractions.length && (
-              <span className="font-normal text-gray-400">
-                ({attractions.length})
-              </span>
-            )}
+            {group.name}{' '}
+            {!!attractions.length && <span className="font-normal text-gray-400">({attractions.length})</span>}
           </CardTitle>
           {group.tag && <Tag text={group.tag} variant="default" />}
         </div>

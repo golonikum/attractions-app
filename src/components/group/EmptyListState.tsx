@@ -1,5 +1,6 @@
-import { MapPin } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { MapPin } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 
 interface EmptyGroupsStateProps {
   onButtonClick?: () => void;
@@ -11,7 +12,7 @@ interface EmptyGroupsStateProps {
 export function EmptyListState({
   onButtonClick,
   buttonLabel,
-  message = "Ничего нет",
+  message = 'Ничего нет',
   description,
 }: EmptyGroupsStateProps) {
   return (

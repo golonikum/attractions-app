@@ -1,10 +1,11 @@
-"use client";
+'use client';
 
-import { useGetAllAttractions } from "@/hooks/useGetAllAttractions";
-import { useGetAllGroups } from "@/hooks/useGetAllGroups";
-import { Attraction } from "@/types/attraction";
-import { Group } from "@/types/group";
-import { createContext, Dispatch, SetStateAction, useContext } from "react";
+import { createContext, Dispatch, SetStateAction, useContext } from 'react';
+
+import { useGetAllAttractions } from '@/hooks/useGetAllAttractions';
+import { useGetAllGroups } from '@/hooks/useGetAllGroups';
+import { Attraction } from '@/types/attraction';
+import { Group } from '@/types/group';
 
 type DataProviderProps = {
   children: React.ReactNode;
@@ -17,10 +18,7 @@ type DataProviderState = {
   attractions: Attraction[];
   isAttractionsLoading: boolean;
   setAttractions: Dispatch<SetStateAction<Attraction[]>>;
-  reload: (props?: {
-    groups?: boolean;
-    attractions?: boolean;
-  }) => Promise<void>;
+  reload: (props?: { groups?: boolean; attractions?: boolean }) => Promise<void>;
 };
 
 const initialState: DataProviderState = {
@@ -33,8 +31,7 @@ const initialState: DataProviderState = {
   reload: () => Promise.resolve(),
 };
 
-export const DataProviderContext =
-  createContext<DataProviderState>(initialState);
+export const DataProviderContext = createContext<DataProviderState>(initialState);
 
 export function DataProvider({ children, ...props }: DataProviderProps) {
   const {
@@ -43,12 +40,7 @@ export function DataProvider({ children, ...props }: DataProviderProps) {
     fetchData: fetchAttractions,
     isLoading: isAttractionsLoading,
   } = useGetAllAttractions();
-  const {
-    groups,
-    setGroups,
-    fetchData: fetchGroups,
-    isLoading: isGroupsLoading,
-  } = useGetAllGroups();
+  const { groups, setGroups, fetchData: fetchGroups, isLoading: isGroupsLoading } = useGetAllGroups();
 
   const value: DataProviderState = {
     groups,
@@ -57,11 +49,12 @@ export function DataProvider({ children, ...props }: DataProviderProps) {
     attractions,
     isAttractionsLoading,
     setAttractions,
-    reload: async ({ groups, attractions } = {}) => {
-      if (groups) {
+    reload: async ({ groups: g, attractions: a } = {}) => {
+      if (g) {
         await fetchGroups();
       }
-      if (attractions) {
+
+      if (a) {
         await fetchAttractions();
       }
     },
@@ -77,8 +70,9 @@ export function DataProvider({ children, ...props }: DataProviderProps) {
 export const useData = () => {
   const context = useContext(DataProviderContext);
 
-  if (context === undefined)
-    throw new Error("useData must be used within a DataProvider");
+  if (context === undefined) {
+    throw new Error('useData must be used within a DataProvider');
+  }
 
   return context;
 };

@@ -1,5 +1,6 @@
-import { initYMaps } from "@/lib/ymaps";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
+
+import { initYMaps } from '@/lib/ymaps';
 
 export const useMapReady = () => {
   const [isMapReady, setIsMapReady] = useState(false);

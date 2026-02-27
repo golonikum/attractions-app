@@ -1,26 +1,23 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useCallback } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { Attraction, CreateAttractionRequest } from "@/types/attraction";
-import { getAttractionById } from "@/services/attractionService";
-import { toast } from "sonner";
-import { NewAttractionDialog } from "@/components/attraction/NewAttractionDialog";
-import { AttractionInfoCard } from "@/components/attraction/AttractionInfoCard";
-import { Group } from "@/types/group";
-import { getGroupById } from "@/services/groupService";
-import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
-import {
-  BackButton,
-  OpenInYandexMapButton,
-  RemoveButton,
-  ShowOnMapButton,
-} from "@/components/ui/buttons";
-import { useIsMobile } from "@/hooks/useIsMobile";
-import { LoadingStub, NotFoundStub } from "@/components/ui/stubs";
-import { locateItemOnMainMap } from "@/lib/locateItemOnMainMap";
-import { useUpdateRequests } from "@/hooks/useUpdateRequests";
+import { useCallback, useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { useUpdateRequests } from '@/hooks/useUpdateRequests';
+import { locateItemOnMainMap } from '@/lib/locateItemOnMainMap';
+import { getAttractionById } from '@/services/attractionService';
+import { getGroupById } from '@/services/groupService';
+import { Attraction, CreateAttractionRequest } from '@/types/attraction';
+import { Group } from '@/types/group';
+
+import { AttractionInfoCard } from '@/components/attraction/AttractionInfoCard';
+import { NewAttractionDialog } from '@/components/attraction/NewAttractionDialog';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { BackButton, OpenInYandexMapButton, RemoveButton, ShowOnMapButton } from '@/components/ui/buttons';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { LoadingStub, NotFoundStub } from '@/components/ui/stubs';
 
 export default function AttractionDetailPage() {
   const params = useParams();
@@ -46,8 +43,8 @@ export default function AttractionDetailPage() {
         const groupData = await getGroupById(attractionData!.groupId);
         setGroup(groupData);
       } catch (error) {
-        toast.error("Не удалось загрузить данные достопримечательности");
-        router.push("/groups");
+        toast.error('Не удалось загрузить данные достопримечательности');
+        router.push('/groups');
       } finally {
         setIsLoading(false);
       }
@@ -66,15 +63,15 @@ export default function AttractionDetailPage() {
   const handleDeleteAttraction = useCallback(async () => {
     try {
       await deleteAttraction(attractionId);
-      toast.success("Объект успешно удален");
+      toast.success('Объект успешно удален');
 
       if (group) {
         router.push(`/groups/${group?.id}`);
       } else {
-        router.push("/groups");
+        router.push('/groups');
       }
     } catch (error) {
-      toast.error("Не удалось удалить объект");
+      toast.error('Не удалось удалить объект');
     }
   }, [group, attractionId, router]);
 

@@ -1,21 +1,22 @@
-"use client";
+'use client';
 
-import { MouseEventHandler } from "react";
-import { Button } from "../button";
-import { MessageSquarePlus, SquarePlus } from "lucide-react";
+import { MouseEventHandler } from 'react';
+import { MessageSquarePlus, SquarePlus } from 'lucide-react';
 
-type AddButtonType = "default" | "note";
+import { Button } from '../button';
+
+type AddButtonType = 'default' | 'note';
 
 export const AddButton = ({
   onClick,
-  title = "Добавить",
-  view = "default",
+  title = 'Добавить',
+  view = 'default',
 }: {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   title?: string;
   view?: AddButtonType;
 }) => {
-  const Icon = view === "note" ? MessageSquarePlus : SquarePlus;
+  const Icon = view === 'note' ? MessageSquarePlus : SquarePlus;
 
   return (
     <Button

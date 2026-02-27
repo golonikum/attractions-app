@@ -1,6 +1,7 @@
-import { Attraction } from "@/types/attraction";
-import { Group } from "@/types/group";
-import { useMemo } from "react";
+import { useMemo } from 'react';
+
+import { Attraction } from '@/types/attraction';
+import { Group } from '@/types/group';
 
 export const useFiltersInitialOptions = ({
   attractions,
@@ -18,18 +19,18 @@ export const useFiltersInitialOptions = ({
         tags.add(group.tag);
       }
     });
+
     return Array.from(tags).sort();
   }, [groups]);
 
-  const allGroups = useMemo(() => {
-    return groups
-      .filter(
-        (item) =>
-          !selectedTag.length || (item.tag && selectedTag.includes(item.tag)),
-      )
-      .map((item) => item.name)
-      .sort();
-  }, [groups, selectedTag]);
+  const allGroups = useMemo(
+    () =>
+      groups
+        .filter((item) => !selectedTag.length || (item.tag && selectedTag.includes(item.tag)))
+        .map((item) => item.name)
+        .sort(),
+    [groups, selectedTag],
+  );
 
   const allCategories = useMemo(() => {
     const categories = new Set<string>();
@@ -38,6 +39,7 @@ export const useFiltersInitialOptions = ({
         categories.add(item.category);
       }
     });
+
     return Array.from(categories).sort();
   }, [attractions]);
 

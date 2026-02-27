@@ -1,17 +1,12 @@
-import { GroupTableRow, GroupTableRowProps } from "./GroupTableRow";
-import { Group } from "@/types/group";
+import { Group } from '@/types/group';
 
-type GroupTableProps = Omit<GroupTableRowProps, "group"> & {
+import { GroupTableRow, GroupTableRowProps } from './GroupTableRow';
+
+type GroupTableProps = Omit<GroupTableRowProps, 'group'> & {
   groups: Group[];
 };
 
-export function GroupTable({
-  groups,
-  onDelete,
-  onUpdate,
-  onLocate,
-  attractionsMap,
-}: GroupTableProps) {
+export function GroupTable({ groups, onDelete, onUpdate, onLocate, attractionsMap }: GroupTableProps) {
   return (
     <div className="hidden md:block overflow-x-hidden">
       <table className="min-w-full divide-y divide-gray-200">
@@ -20,27 +15,24 @@ export function GroupTable({
             <th
               scope="col"
               className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              style={{ width: "150px" }}
+              style={{ width: '150px' }}
             >
               Название
             </th>
             <th
               scope="col"
               className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              style={{ width: "220px" }}
+              style={{ width: '220px' }}
             >
               Регион
             </th>
-            <th
-              scope="col"
-              className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
+            <th scope="col" className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Описание
             </th>
             <th
               scope="col"
               className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              style={{ width: "180px" }}
+              style={{ width: '180px' }}
             >
               Действия
             </th>

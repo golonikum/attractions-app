@@ -1,25 +1,27 @@
-"use client";
+'use client';
 
-import { useState, useMemo } from "react";
-import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { Group, CreateGroupRequest, GroupWithAttractions } from "@/types/group";
-import { NewGroupDialog } from "@/components/group/NewGroupDialog";
-import { GroupCard } from "@/components/group/GroupCard";
-import { EmptyListState } from "@/components/group/EmptyListState";
-import { MultiSelect } from "@/components/ui/MultiSelect";
-import { FoundCountStub, LoadingStub } from "@/components/ui/stubs";
-import { useQueryParams } from "@/hooks/useQueryParams";
-import { useFiltersInitialOptions } from "@/hooks/useFiltersInitialOptions";
-import { useIsMobile } from "@/hooks/useIsMobile";
-import { Map } from "@/components/ui/Map";
-import { GroupTable } from "@/components/group/GroupTable";
-import { DEFAULT_GROUP_ZOOM } from "@/lib/constants";
-import { useRouter } from "next/navigation";
-import { useLocation } from "@/hooks/useLocation";
-import { useUpdateRequests } from "@/hooks/useUpdateRequests";
-import { useData } from "@/contexts/DataContext";
-import { toast } from "sonner";
-import { Attraction } from "@/types/attraction";
+import { useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+
+import { useData } from '@/contexts/DataContext';
+import { useFiltersInitialOptions } from '@/hooks/useFiltersInitialOptions';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { useLocation } from '@/hooks/useLocation';
+import { useQueryParams } from '@/hooks/useQueryParams';
+import { useUpdateRequests } from '@/hooks/useUpdateRequests';
+import { DEFAULT_GROUP_ZOOM } from '@/lib/constants';
+import { Attraction } from '@/types/attraction';
+import { CreateGroupRequest, Group, GroupWithAttractions } from '@/types/group';
+
+import { EmptyListState } from '@/components/group/EmptyListState';
+import { GroupCard } from '@/components/group/GroupCard';
+import { GroupTable } from '@/components/group/GroupTable';
+import { NewGroupDialog } from '@/components/group/NewGroupDialog';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { Map } from '@/components/ui/Map';
+import { MultiSelect } from '@/components/ui/MultiSelect';
+import { FoundCountStub, LoadingStub } from '@/components/ui/stubs';
 
 export default function GroupsPage() {
   const router = useRouter();
@@ -34,7 +36,7 @@ export default function GroupsPage() {
     setSelectedZoom,
     selectedCoordinates,
     setSelectedCoordinates,
-  } = useQueryParams(["tag", "zoom", "coordinates"] as const);
+  } = useQueryParams(['tag', 'zoom', 'coordinates'] as const);
   const { isWideScreen } = useIsMobile();
   const { location, setLocation } = useLocation({
     selectedZoom,
@@ -42,22 +44,23 @@ export default function GroupsPage() {
     selectedCoordinates,
     setSelectedCoordinates,
   });
-  const { groups, isGroupsLoading, attractions, isAttractionsLoading } =
-    useData();
-  const attractionsMap = useMemo(() => {
-    return attractions.reduce(
-      (res, cur) => {
-        if (!res[cur.groupId]) {
-          res[cur.groupId] = [cur];
-        } else {
-          res[cur.groupId].push(cur);
-        }
+  const { groups, isGroupsLoading, attractions, isAttractionsLoading } = useData();
+  const attractionsMap = useMemo(
+    () =>
+      attractions.reduce(
+        (res, cur) => {
+          if (!res[cur.groupId]) {
+            res[cur.groupId] = [cur];
+          } else {
+            res[cur.groupId].push(cur);
+          }
 
-        return res;
-      },
-      {} as Record<string, Attraction[]>,
-    );
-  }, [attractions]);
+          return res;
+        },
+        {} as Record<string, Attraction[]>,
+      ),
+    [attractions],
+  );
   const isLoading = isGroupsLoading || isAttractionsLoading;
   const { createGroup, deleteGroup, updateGroup } = useUpdateRequests();
 
@@ -74,18 +77,17 @@ export default function GroupsPage() {
   };
 
   // Обработчик отправки формы обновления группы
-  const getHandleUpdate =
-    (groupId: string) => async (formData: CreateGroupRequest) => {
-      await updateGroup(groupId, formData);
-    };
+  const getHandleUpdate = (groupId: string) => async (formData: CreateGroupRequest) => {
+    await updateGroup(groupId, formData);
+  };
 
   // Обработчик удаления группы
   const handleDeleteGroup = async (id: string) => {
     try {
       await deleteGroup(id);
-      toast.success("Группа успешно удалена");
+      toast.success('Группа успешно удалена');
     } catch (error) {
-      toast.error("Не удалось удалить группу");
+      toast.error('Не удалось удалить группу');
     }
   };
 
@@ -103,7 +105,10 @@ export default function GroupsPage() {
     // Фильтрация по тегам
     if (selectedTag.length > 0) {
       result = result.filter((group) => {
-        if (!group.tag) return false;
+        if (!group.tag) {
+          return false;
+        }
+
         return selectedTag.includes(group.tag);
       });
     }
@@ -112,17 +117,13 @@ export default function GroupsPage() {
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
       result = result.filter(
-        (group) =>
-          group.name.toLowerCase().includes(query) ||
-          group.description.toLowerCase().includes(query),
+        (group) => group.name.toLowerCase().includes(query) || group.description.toLowerCase().includes(query),
       );
     }
 
     return result.map((item) => ({
       ...item,
-      attractions: attractions.filter(
-        (attraction) => attraction.groupId === item.id,
-      ),
+      attractions: attractions.filter((attraction) => attraction.groupId === item.id),
     }));
   }, [groups, selectedTag, searchQuery, attractions]);
 
@@ -135,15 +136,11 @@ export default function GroupsPage() {
   const emptyState = (
     <EmptyListState
       onButtonClick={() => setIsCreateDialogOpen(true)}
-      message={
-        hasFilters
-          ? "Нет групп, соответствующих фильтрам"
-          : "Нет доступных групп"
-      }
+      message={hasFilters ? 'Нет групп, соответствующих фильтрам' : 'Нет доступных групп'}
       description={
         hasFilters
-          ? "Попробуйте изменить фильтры или создайте новую группу."
-          : "У вас пока нет созданных групп. Создайте свою первую группу, чтобы начать добавлять объекта."
+          ? 'Попробуйте изменить фильтры или создайте новую группу.'
+          : 'У вас пока нет созданных групп. Создайте свою первую группу, чтобы начать добавлять объекта.'
       }
       buttonLabel="Создать группу"
     />
@@ -152,8 +149,10 @@ export default function GroupsPage() {
   return (
     <ProtectedRoute>
       <div
-        className={`container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4 ${isWideScreen ? "overflow-hidden" : ""}`}
-        style={isWideScreen ? { height: "calc(100vh)" } : {}}
+        className={`container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4 ${
+          isWideScreen ? 'overflow-hidden' : ''
+        }`}
+        style={isWideScreen ? { height: 'calc(100vh)' } : {}}
       >
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           {/* Фильтры по тегам и поиск */}
@@ -173,10 +172,7 @@ export default function GroupsPage() {
               onSelectionChange={setSelectedTag}
               placeholder="Фильтровать по регионам"
             />
-            <FoundCountStub
-              count={filteredGroups.length}
-              hasFilters={selectedTag.length > 0 || !!searchQuery.trim()}
-            />
+            <FoundCountStub count={filteredGroups.length} hasFilters={selectedTag.length > 0 || !!searchQuery.trim()} />
           </div>
           <NewGroupDialog
             handleSubmit={handleSubmit}
@@ -189,11 +185,8 @@ export default function GroupsPage() {
         </div>
 
         {isWideScreen ? (
-          <div
-            className="flex-1 flex flex-row gap-4"
-            style={{ height: "calc(100vh - 150px)" }}
-          >
-            <div style={{ height: "100%", minWidth: "800px" }}>
+          <div className="flex-1 flex flex-row gap-4" style={{ height: 'calc(100vh - 150px)' }}>
+            <div style={{ height: '100%', minWidth: '800px' }}>
               <Map
                 location={location}
                 setLocation={setLocation}
@@ -218,20 +211,24 @@ export default function GroupsPage() {
               )}
             </div>
           </div>
-        ) : filteredGroups.length === 0 ? (
-          emptyState
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredGroups.map((group) => (
-              <GroupCard
-                key={group.id}
-                group={group}
-                onDelete={handleDeleteGroup}
-                onUpdate={getHandleUpdate(group.id)}
-                attractionsMap={attractionsMap}
-              />
-            ))}
-          </div>
+          <>
+            {filteredGroups.length === 0 ? (
+              emptyState
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {filteredGroups.map((group) => (
+                  <GroupCard
+                    key={group.id}
+                    group={group}
+                    onDelete={handleDeleteGroup}
+                    onUpdate={getHandleUpdate(group.id)}
+                    attractionsMap={attractionsMap}
+                  />
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
     </ProtectedRoute>

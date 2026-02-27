@@ -1,19 +1,16 @@
-import {
-  YMapGeolocationControlProps,
-  YMapZoomControlProps,
-} from "@yandex/ymaps3-types/packages/controls";
-import React, { FC, PropsWithChildren } from "react";
-import ReactDom from "react-dom";
+import React, { FC, PropsWithChildren } from 'react';
+import ReactDom from 'react-dom';
+import { YMapGeolocationControlProps, YMapZoomControlProps } from '@yandex/ymaps3-types/packages/controls';
 import type {
   YMapControlButtonProps,
   YMapControlsProps,
-  YMapScaleControlProps,
-  YMapMarkerProps,
-  YMapDefaultSchemeLayerProps,
   YMapDefaultFeaturesLayerProps,
-  YMapProps,
+  YMapDefaultSchemeLayerProps,
   YMapListenerProps,
-} from "ymaps3";
+  YMapMarkerProps,
+  YMapProps,
+  YMapScaleControlProps,
+} from 'ymaps3';
 
 // Инициализация Yandex Maps
 let ymaps3: any;
@@ -35,23 +32,15 @@ export async function initYMaps() {
     // Загружаем Yandex Maps API
     ymaps3 = await (window as any).ymaps3;
 
-    ymaps3.import.registerCdn(
-      "https://cdn.jsdelivr.net/npm/{package}",
-      "@yandex/ymaps3-default-ui-theme@latest",
-    );
+    ymaps3.import.registerCdn('https://cdn.jsdelivr.net/npm/{package}', '@yandex/ymaps3-default-ui-theme@latest');
 
     // Инициализируем reactify
-    const [ymaps3React] = await Promise.all([
-      ymaps3.import("@yandex/ymaps3-reactify"),
-      ymaps3.ready,
-    ]);
+    const [ymaps3React] = await Promise.all([ymaps3.import('@yandex/ymaps3-reactify'), ymaps3.ready]);
 
     // Создаем reactify и экспортируем компоненты
     reactify = ymaps3React.reactify.bindTo(React, ReactDom);
     const components = reactify.module(ymaps3);
-    const themeComponents = reactify.module(
-      await ymaps3.import("@yandex/ymaps3-default-ui-theme"),
-    );
+    const themeComponents = reactify.module(await ymaps3.import('@yandex/ymaps3-default-ui-theme'));
 
     YMap = components.YMap;
     YMapDefaultSchemeLayer = components.YMapDefaultSchemeLayer;
@@ -66,7 +55,8 @@ export async function initYMaps() {
 
     return true;
   } catch (error) {
-    console.error("Ошибка при инициализации Yandex Maps:", error);
+    console.error('Ошибка при инициализации Yandex Maps:', error);
+
     return false;
   }
 }
@@ -75,13 +65,13 @@ export async function initYMaps() {
 export {
   reactify,
   YMap,
-  YMapDefaultSchemeLayer,
-  YMapDefaultFeaturesLayer,
-  YMapMarker,
-  YMapControls,
   YMapControlButton,
-  YMapScaleControl,
-  YMapListener,
+  YMapControls,
+  YMapDefaultFeaturesLayer,
+  YMapDefaultSchemeLayer,
   YMapGeolocationControl,
+  YMapListener,
+  YMapMarker,
+  YMapScaleControl,
   YMapZoomControl,
 };
