@@ -21,7 +21,7 @@ export default function SearchPage() {
   const { isWideScreen } = useIsMobile();
   const { searchQuery, setSearchQuery } = useQueryParams([]);
   const { attractions, isAttractionsLoading } = useData();
-  const [foundAttractions, setFoundAttractions] = useState<Attraction[]>([]);
+  const [foundAttractions, setFoundAttractions] = useState<Attraction[]>(attractions);
 
   const onSearch = useCallback(() => {
     setFoundAttractions(
