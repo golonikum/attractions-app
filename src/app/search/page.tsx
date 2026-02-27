@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { useRouter } from "next/navigation";
-import { FoundCountStub, LoadingStub } from "@/components/ui/stubs";
-import { useQueryParams } from "@/hooks/useQueryParams";
-import { useData } from "@/contexts/DataContext";
-import { useIsMobile } from "@/hooks/useIsMobile";
-import { AttractionTable } from "@/components/attraction/AttractionTable";
-import { AttractionCard } from "@/components/attraction/AttractionCard";
-import { useCallback, useEffect, useState } from "react";
-import { locateItemOnMainMap } from "@/lib/locateItemOnMainMap";
-import { EmptyListState } from "@/components/group/EmptyListState";
-import { useDebounceCallback } from "@/hooks/useDebounceCallback";
-import { Attraction } from "@/types/attraction";
+import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { useRouter } from 'next/navigation';
+import { FoundCountStub, LoadingStub } from '@/components/ui/stubs';
+import { useQueryParams } from '@/hooks/useQueryParams';
+import { useData } from '@/contexts/DataContext';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { AttractionTable } from '@/components/attraction/AttractionTable';
+import { AttractionCard } from '@/components/attraction/AttractionCard';
+import { useCallback, useEffect, useState } from 'react';
+import { locateItemOnMainMap } from '@/lib/locateItemOnMainMap';
+import { EmptyListState } from '@/components/group/EmptyListState';
+import { useDebounceCallback } from '@/hooks/useDebounceCallback';
+import { Attraction } from '@/types/attraction';
 
 export default function SearchPage() {
   const router = useRouter();
@@ -26,7 +26,7 @@ export default function SearchPage() {
       attractions.filter((item) => {
         const search = searchQuery.toLowerCase();
         const lowerName = item.name.toLowerCase();
-        const lowerDescription = item.description?.toLowerCase() || "";
+        const lowerDescription = item.description?.toLowerCase() || '';
 
         return lowerName.includes(search) || lowerDescription.includes(search);
       }),
@@ -45,24 +45,18 @@ export default function SearchPage() {
 
   const emptyState = (
     <EmptyListState
-      message={
-        searchQuery
-          ? "Нет объектов, соответствующих поисковому запросу"
-          : "Нет объектов"
-      }
-      description={
-        searchQuery
-          ? "Попробуйте изменить поисковый запрос."
-          : "У вас пока нет созданных объектов."
-      }
+      message={searchQuery ? 'Нет объектов, соответствующих поисковому запросу' : 'Нет объектов'}
+      description={searchQuery ? 'Попробуйте изменить поисковый запрос.' : 'У вас пока нет созданных объектов.'}
     />
   );
 
   return (
     <ProtectedRoute>
       <div
-        className={`container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4 ${isWideScreen ? "overflow-hidden" : ""}`}
-        style={isWideScreen ? { height: "calc(100vh)" } : {}}
+        className={`container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4 ${
+          isWideScreen ? 'overflow-hidden' : ''
+        }`}
+        style={isWideScreen ? { height: 'calc(100vh)' } : {}}
       >
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="w-full space-y-4 md:space-y-0 md:space-x-4 md:flex md:flex-row md:w-auto md:items-center">
@@ -75,18 +69,12 @@ export default function SearchPage() {
                 onChange={(e) => setSearchQuery(e.target.value?.trim())}
               />
             </div>
-            <FoundCountStub
-              count={foundAttractions.length}
-              hasFilters={!!searchQuery}
-            />
+            <FoundCountStub count={foundAttractions.length} hasFilters={!!searchQuery} />
           </div>
         </div>
 
         {isWideScreen ? (
-          <div
-            className="flex-1 flex flex-row gap-4"
-            style={{ height: "calc(100vh - 150px)" }}
-          >
+          <div className="flex-1 flex flex-row gap-4" style={{ height: 'calc(100vh - 150px)' }}>
             <div className="overflow-x-auto flex-1">
               {foundAttractions.length === 0 ? (
                 emptyState
