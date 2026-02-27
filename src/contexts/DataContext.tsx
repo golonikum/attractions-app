@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, Dispatch, SetStateAction, useContext } from 'react';
+import { createContext, Dispatch, SetStateAction, useContext, useMemo } from 'react';
 
 import { useGetAllAttractions } from '@/hooks/useGetAllAttractions';
 import { useGetAllGroups } from '@/hooks/useGetAllGroups';
@@ -19,6 +19,7 @@ type DataProviderState = {
   isAttractionsLoading: boolean;
   setAttractions: Dispatch<SetStateAction<Attraction[]>>;
   reload: (props?: { groups?: boolean; attractions?: boolean }) => Promise<void>;
+  attractionsMap: Record<string, Attraction[]>;
 };
 
 const initialState: DataProviderState = {
@@ -29,6 +30,7 @@ const initialState: DataProviderState = {
   isAttractionsLoading: false,
   setAttractions: () => {},
   reload: () => Promise.resolve(),
+  attractionsMap: {},
 };
 
 export const DataProviderContext = createContext<DataProviderState>(initialState);
@@ -41,6 +43,23 @@ export function DataProvider({ children, ...props }: DataProviderProps) {
     isLoading: isAttractionsLoading,
   } = useGetAllAttractions();
   const { groups, setGroups, fetchData: fetchGroups, isLoading: isGroupsLoading } = useGetAllGroups();
+
+  const attractionsMap = useMemo(
+    () =>
+      attractions.reduce(
+        (res, cur) => {
+          if (!res[cur.groupId]) {
+            res[cur.groupId] = [cur];
+          } else {
+            res[cur.groupId].push(cur);
+          }
+
+          return res;
+        },
+        {} as Record<string, Attraction[]>,
+      ),
+    [attractions],
+  );
 
   const value: DataProviderState = {
     groups,
@@ -58,6 +77,7 @@ export function DataProvider({ children, ...props }: DataProviderProps) {
         await fetchAttractions();
       }
     },
+    attractionsMap,
   };
 
   return (

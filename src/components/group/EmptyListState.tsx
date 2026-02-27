@@ -1,4 +1,4 @@
-import { MapPin } from 'lucide-react';
+import { MapPin, Plus } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
@@ -23,7 +23,7 @@ export function EmptyListState({
       {onButtonClick ? (
         <div className="mt-6">
           <Button onClick={onButtonClick}>
-            <MapPin className="mr-2 h-4 w-4" />
+            <Plus className="mr-2 h-4 w-4" />
             {buttonLabel}
           </Button>
         </div>

@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
+import { fetchProxy } from '@/lib/fetchProxy';
 import { User } from '@/types/user';
 
 interface AuthContextType {
@@ -24,7 +25,7 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
     // Check authentication status with API
     const checkAuth = async () => {
       try {
-        const response = await fetch('/api/auth');
+        const response = await fetchProxy('/api/auth');
         const data = await response.json();
 
         if (data.authenticated && data.user) {

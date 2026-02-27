@@ -11,7 +11,6 @@ import { useLocation } from '@/hooks/useLocation';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { useUpdateRequests } from '@/hooks/useUpdateRequests';
 import { DEFAULT_GROUP_ZOOM } from '@/lib/constants';
-import { Attraction } from '@/types/attraction';
 import { CreateGroupRequest, Group, GroupWithAttractions } from '@/types/group';
 
 import { EmptyListState } from '@/components/group/EmptyListState';
@@ -45,22 +44,6 @@ export default function GroupsPage() {
     setSelectedCoordinates,
   });
   const { groups, isGroupsLoading, attractions, isAttractionsLoading } = useData();
-  const attractionsMap = useMemo(
-    () =>
-      attractions.reduce(
-        (res, cur) => {
-          if (!res[cur.groupId]) {
-            res[cur.groupId] = [cur];
-          } else {
-            res[cur.groupId].push(cur);
-          }
-
-          return res;
-        },
-        {} as Record<string, Attraction[]>,
-      ),
-    [attractions],
-  );
   const isLoading = isGroupsLoading || isAttractionsLoading;
   const { createGroup, deleteGroup, updateGroup } = useUpdateRequests();
 
@@ -206,7 +189,6 @@ export default function GroupsPage() {
                   onDelete={handleDeleteGroup}
                   onUpdate={getHandleUpdate}
                   onLocate={handleLocateGroup}
-                  attractionsMap={attractionsMap}
                 />
               )}
             </div>
@@ -223,7 +205,6 @@ export default function GroupsPage() {
                     group={group}
                     onDelete={handleDeleteGroup}
                     onUpdate={getHandleUpdate(group.id)}
-                    attractionsMap={attractionsMap}
                   />
                 ))}
               </div>

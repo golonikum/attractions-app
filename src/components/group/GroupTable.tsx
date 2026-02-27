@@ -6,7 +6,7 @@ type GroupTableProps = Omit<GroupTableRowProps, 'group'> & {
   groups: Group[];
 };
 
-export function GroupTable({ groups, onDelete, onUpdate, onLocate, attractionsMap }: GroupTableProps) {
+export function GroupTable({ groups, onDelete, onUpdate, onLocate }: GroupTableProps) {
   return (
     <div className="hidden md:block overflow-x-hidden">
       <table className="min-w-full divide-y divide-gray-200">
@@ -40,14 +40,7 @@ export function GroupTable({ groups, onDelete, onUpdate, onLocate, attractionsMa
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {groups.map((group) => (
-            <GroupTableRow
-              key={group.id}
-              group={group}
-              onDelete={onDelete}
-              onUpdate={onUpdate}
-              onLocate={onLocate}
-              attractionsMap={attractionsMap}
-            />
+            <GroupTableRow key={group.id} group={group} onDelete={onDelete} onUpdate={onUpdate} onLocate={onLocate} />
           ))}
         </tbody>
       </table>

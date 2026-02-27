@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+import { useData } from '@/contexts/DataContext';
 import { Attraction } from '@/types/attraction';
 import { CreateGroupRequest, Group } from '@/types/group';
 
@@ -16,14 +17,14 @@ export type GroupTableRowProps = {
   onDelete: (id: string) => void;
   onUpdate: (id: string) => (updateData: CreateGroupRequest) => Promise<void>;
   onLocate: (group: Group) => void;
-  attractionsMap: Record<string, Attraction[]>;
 };
 
-export const GroupTableRow = ({ group, onDelete, onUpdate, onLocate, attractionsMap }: GroupTableRowProps) => {
+export const GroupTableRow = ({ group, onDelete, onUpdate, onLocate }: GroupTableRowProps) => {
   const router = useRouter();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { attractionsMap } = useData();
 
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();

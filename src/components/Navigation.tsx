@@ -16,6 +16,7 @@ const navItems = [
   { href: '/groups', label: 'Города' },
   { href: '/gallery', label: 'Галерея' },
   { href: '/search', label: 'Поиск' },
+  { href: '/notes', label: 'Заметки' },
 ];
 
 export function Navigation() {

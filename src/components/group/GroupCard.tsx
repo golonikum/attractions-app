@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+import { useData } from '@/contexts/DataContext';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { locateItemOnMainMap } from '@/lib/locateItemOnMainMap';
-import { Attraction } from '@/types/attraction';
 import { CreateGroupRequest, Group } from '@/types/group';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,15 +18,15 @@ interface GroupCardProps {
   group: Group;
   onDelete: (id: string) => void;
   onUpdate: (formData: CreateGroupRequest) => Promise<void>;
-  attractionsMap: Record<string, Attraction[]>;
 }
 
-export function GroupCard({ group, onDelete, onUpdate, attractionsMap }: GroupCardProps) {
+export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
   const router = useRouter();
   const { isWideScreen } = useIsMobile();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { attractionsMap } = useData();
 
   const handleCardClick = () => {
     router.push(`/groups/${group.id}`);

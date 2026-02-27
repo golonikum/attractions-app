@@ -47,3 +47,9 @@ export interface NoteType {
   date: string;
   note: string;
 }
+
+export interface NoteWithAttractionIdType {
+  date: string;
+  note: string;
+  attractionId: string;
+}
