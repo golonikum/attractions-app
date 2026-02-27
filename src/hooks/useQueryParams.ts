@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { capitalizeFirstLetter } from '@/lib/utils';
 
-type FieldsAndSetters<T extends readonly string[]> = T extends readonly (infer Name extends string)[]
+type FieldsAndSetters<T extends string[]> = T extends (infer Name extends string)[]
   ? {
       [K in Name as `selected${Capitalize<K>}`]: string[];
     } & {
@@ -15,7 +15,7 @@ type SearchQuerySetters = {
   setSearchQuery: (value: string) => void;
 };
 
-const getInitStateFromUrl = <T extends readonly string[]>(names: T) => {
+const getInitStateFromUrl = <T extends string[]>(names: T) => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : { get: () => '' };
   const newState: Record<string, string[]> = {};
   const searchParam = params.get('search');
@@ -31,9 +31,7 @@ const getInitStateFromUrl = <T extends readonly string[]>(names: T) => {
   };
 };
 
-export const useQueryParams = <T extends readonly string[]>(
-  names: string[],
-): FieldsAndSetters<T> & SearchQuerySetters => {
+export const useQueryParams = <T extends string[]>(names: string[]): FieldsAndSetters<T> & SearchQuerySetters => {
   const [state, setState] = useState<Record<string, string[]>>(getInitStateFromUrl(names));
 
   // Обновляем URL при изменении фильтров

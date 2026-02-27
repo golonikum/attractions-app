@@ -37,7 +37,7 @@ export default function GroupDetailPage() {
     'tag',
     'zoom',
     'coordinates',
-  ] as const);
+  ]);
   const { location, setLocation } = useLocation({
     selectedZoom,
     setSelectedZoom,

@@ -19,7 +19,7 @@ import { FoundCountStub, LoadingStub } from '@/components/ui/stubs';
 export default function SearchPage() {
   const router = useRouter();
   const { isWideScreen } = useIsMobile();
-  const { searchQuery, setSearchQuery } = useQueryParams([] as const);
+  const { searchQuery, setSearchQuery } = useQueryParams([]);
   const { attractions, isAttractionsLoading } = useData();
   const [foundAttractions, setFoundAttractions] = useState<Attraction[]>([]);
 

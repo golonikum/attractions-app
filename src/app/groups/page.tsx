@@ -36,7 +36,7 @@ export default function GroupsPage() {
     setSelectedZoom,
     selectedCoordinates,
     setSelectedCoordinates,
-  } = useQueryParams(['tag', 'zoom', 'coordinates'] as const);
+  } = useQueryParams(['tag', 'zoom', 'coordinates']);
   const { isWideScreen } = useIsMobile();
   const { location, setLocation } = useLocation({
     selectedZoom,

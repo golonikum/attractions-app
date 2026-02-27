@@ -15,7 +15,7 @@ export default function MainPage() {
   const { selectedZoom, setSelectedZoom, selectedCoordinates, setSelectedCoordinates } = useQueryParams([
     'zoom',
     'coordinates',
-  ] as const);
+  ]);
   const { location, setLocation } = useLocation({
     selectedZoom,
     setSelectedZoom,
