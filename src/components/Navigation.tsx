@@ -13,6 +13,7 @@ const navItems = [
   { href: "/main", label: "Карта" },
   { href: "/groups", label: "Города" },
   { href: "/gallery", label: "Галерея" },
+  { href: "/search", label: "Поиск" },
 ];
 
 export function Navigation() {

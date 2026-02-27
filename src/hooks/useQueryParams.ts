@@ -60,8 +60,10 @@ export const useQueryParams = <T extends readonly string[]>(
       params.delete("search");
     }
 
-    const newUrl = `${window.location.pathname}?${params.toString()}`;
-    window.history.pushState({}, "", newUrl);
+    if (params.toString()) {
+      const newUrl = `${window.location.pathname}?${params.toString()}`;
+      window.history.pushState({}, "", newUrl);
+    }
   }, [state, names]);
 
   return {

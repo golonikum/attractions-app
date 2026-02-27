@@ -13,11 +13,15 @@ type ThemeProviderProps = {
 type ThemeProviderState = {
   theme: Theme;
   setTheme: (theme: Theme) => void;
+  isMobile: boolean;
+  isWideScreen: boolean;
 };
 
 const initialState: ThemeProviderState = {
   theme: "light",
   setTheme: () => null,
+  isMobile: false,
+  isWideScreen: false,
 };
 
 export const ThemeProviderContext =
@@ -35,6 +39,25 @@ export function ThemeProvider({
         (localStorage?.getItem(storageKey) as Theme)) ||
       defaultTheme,
   );
+  const [isMobile, setIsMobile] = useState(false);
+  const [isWideScreen, setIsWideScreen] = useState(false);
+
+  // Check screen size
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+      setIsWideScreen(window.innerWidth >= 1024);
+    };
+
+    // Initial check
+    checkScreenSize();
+
+    // Add event listener
+    window.addEventListener("resize", checkScreenSize);
+
+    // Clean up
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -60,6 +83,8 @@ export function ThemeProvider({
       localStorage?.setItem(storageKey, theme);
       setTheme(theme);
     },
+    isMobile,
+    isWideScreen,
   };
 
   return (

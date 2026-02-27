@@ -15,11 +15,12 @@ import { Tag } from "../ui/Tag";
 
 export type AttractionTableRowProps = {
   attraction: Attraction;
-  onDelete: (id: string) => void;
-  onUpdate: (
+  onDelete?: (id: string) => void;
+  onUpdate?: (
     id: string,
   ) => (updateData: CreateAttractionRequest) => Promise<void>;
   onLocate: (attraction: Attraction) => void;
+  hasDnd?: boolean;
 };
 
 export const AttractionTableRow = ({
@@ -27,6 +28,7 @@ export const AttractionTableRow = ({
   onDelete,
   onUpdate,
   onLocate,
+  hasDnd = true,
 }: AttractionTableRowProps) => {
   const router = useRouter();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -70,7 +72,7 @@ export const AttractionTableRow = ({
       {...attributes}
       {...listeners}
     >
-      <td className="px-4 py-2  cursor-move">☰</td>
+      {hasDnd && <td className="px-4 py-2  cursor-move">☰</td>}
       <td
         className="px-4 py-2  whitespace-nowrap cursor-pointer"
         onClick={handleAttractionClick(attraction)}
@@ -101,26 +103,30 @@ export const AttractionTableRow = ({
         <div className="flex justify-end space-x-1">
           <ShowOnMapButton onClick={onLocateAttractionClick} view="icon" />
           <OpenInYandexMapButton attraction={attraction} view="icon" />
-          <NewAttractionDialog
-            isOpen={isEditDialogOpen}
-            setIsOpen={setIsEditDialogOpen}
-            handleSubmit={onUpdate(attraction.id)}
-            isSubmitting={isSubmitting}
-            setIsSubmitting={setIsSubmitting}
-            attraction={attraction}
-          />
-          <RemoveButton onClick={handleDeleteClick} />
+          {!!onUpdate && (
+            <NewAttractionDialog
+              isOpen={isEditDialogOpen}
+              setIsOpen={setIsEditDialogOpen}
+              handleSubmit={onUpdate(attraction.id)}
+              isSubmitting={isSubmitting}
+              setIsSubmitting={setIsSubmitting}
+              attraction={attraction}
+            />
+          )}
+          {!!onDelete && <RemoveButton onClick={handleDeleteClick} />}
         </div>
-        <ConfirmDialog
-          isOpen={isDeleteDialogOpen}
-          onClose={() => setIsDeleteDialogOpen(false)}
-          onConfirm={() => onDelete(attraction.id)}
-          title="Удалить объект?"
-          description={`Вы уверены, что хотите удалить "${attraction.name}"?`}
-          confirmText="Удалить"
-          cancelText="Отмена"
-          variant="destructive"
-        />
+        {!!onDelete && (
+          <ConfirmDialog
+            isOpen={isDeleteDialogOpen}
+            onClose={() => setIsDeleteDialogOpen(false)}
+            onConfirm={() => onDelete(attraction.id)}
+            title="Удалить объект?"
+            description={`Вы уверены, что хотите удалить "${attraction.name}"?`}
+            confirmText="Удалить"
+            cancelText="Отмена"
+            variant="destructive"
+          />
+        )}
       </td>
     </tr>
   );

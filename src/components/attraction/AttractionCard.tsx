@@ -26,8 +26,8 @@ type AttractionItem = Attraction;
 
 interface AttractionCardProps {
   attraction: AttractionItem;
-  onDelete: (id: string) => void;
-  onUpdate: (data: CreateAttractionRequest) => Promise<void>;
+  onDelete?: (id: string) => void;
+  onUpdate?: (data: CreateAttractionRequest) => Promise<void>;
 }
 
 export function AttractionCard({
@@ -65,27 +65,31 @@ export function AttractionCard({
             </div>
             {attraction.category && <Tag text={attraction.category} />}
           </div>
-          <div className="flex space-x-1">
-            <NewAttractionDialog
-              attraction={attraction}
-              isOpen={isEditDialogOpen}
-              setIsOpen={setIsEditDialogOpen}
-              handleSubmit={onUpdate}
-              isSubmitting={isSubmitting}
-              setIsSubmitting={setIsSubmitting}
+          {!!onUpdate && (
+            <div className="flex space-x-1">
+              <NewAttractionDialog
+                attraction={attraction}
+                isOpen={isEditDialogOpen}
+                setIsOpen={setIsEditDialogOpen}
+                handleSubmit={onUpdate}
+                isSubmitting={isSubmitting}
+                setIsSubmitting={setIsSubmitting}
+              />
+              {!!onDelete && <RemoveButton onClick={handleDeleteClick} />}
+            </div>
+          )}
+          {!!onDelete && (
+            <ConfirmDialog
+              isOpen={isDeleteDialogOpen}
+              onClose={() => setIsDeleteDialogOpen(false)}
+              onConfirm={() => onDelete(attraction.id)}
+              title="Удалить объект?"
+              description="Вы уверены, что хотите удалить эту объект?"
+              confirmText="Удалить"
+              cancelText="Отмена"
+              variant="destructive"
             />
-            <RemoveButton onClick={handleDeleteClick} />
-          </div>
-          <ConfirmDialog
-            isOpen={isDeleteDialogOpen}
-            onClose={() => setIsDeleteDialogOpen(false)}
-            onConfirm={() => onDelete(attraction.id)}
-            title="Удалить объект?"
-            description="Вы уверены, что хотите удалить эту объект?"
-            confirmText="Удалить"
-            cancelText="Отмена"
-            variant="destructive"
-          />
+          )}
         </div>
       </CardHeader>
       <CardContent className="flex flex-col gap-6 justify-between">

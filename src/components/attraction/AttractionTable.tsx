@@ -19,9 +19,12 @@ import {
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { CSSProperties, useCallback } from "react";
 
-type AttractionTableProps = Omit<AttractionTableRowProps, "attraction"> & {
+type AttractionTableProps = Omit<
+  AttractionTableRowProps,
+  "attraction" | "hasDnd"
+> & {
   attractions: Attraction[];
-  onOrderChanged: (attractions: Attraction[]) => void;
+  onOrderChanged?: (attractions: Attraction[]) => void;
   isDisabled?: boolean;
 };
 
@@ -48,7 +51,7 @@ export function AttractionTable({
       if (active.id !== over?.id) {
         const oldIndex = attractions.findIndex((i) => i.id === active.id);
         const newIndex = attractions.findIndex((i) => i.id === over!.id);
-        onOrderChanged(arrayMove(attractions, oldIndex, newIndex));
+        onOrderChanged?.(arrayMove(attractions, oldIndex, newIndex));
       }
     },
     [attractions, onOrderChanged],
@@ -78,7 +81,7 @@ export function AttractionTable({
           <table className="min-w-full divide-y divide-gray-200" style={style}>
             <thead className="bg-gray-50">
               <tr>
-                <th style={{ width: "50px" }}></th>
+                {onOrderChanged ? <th style={{ width: "50px" }}></th> : <></>}
                 <th
                   scope="col"
                   className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -114,6 +117,7 @@ export function AttractionTable({
                   onDelete={onDelete}
                   onUpdate={onUpdate}
                   onLocate={onLocate}
+                  hasDnd={!!onOrderChanged}
                 />
               ))}
             </tbody>
