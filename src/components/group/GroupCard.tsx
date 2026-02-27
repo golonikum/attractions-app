@@ -14,14 +14,21 @@ import { RemoveButton, ShowOnMapButton } from "../ui/buttons";
 import { NewGroupDialog } from "./NewGroupDialog";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { locateItemOnMainMap } from "@/lib/locateItemOnMainMap";
+import { Attraction } from "@/types/attraction";
 
 interface GroupCardProps {
   group: Group;
   onDelete: (id: string) => void;
   onUpdate: (formData: CreateGroupRequest) => Promise<void>;
+  attractionsMap: Record<string, Attraction[]>;
 }
 
-export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
+export function GroupCard({
+  group,
+  onDelete,
+  onUpdate,
+  attractionsMap,
+}: GroupCardProps) {
   const router = useRouter();
   const { isWideScreen } = useIsMobile();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -50,7 +57,14 @@ export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
             className="flex-1 flex flex-col gap-2 cursor-pointer"
             onClick={handleCardClick}
           >
-            <CardTitle className="text-lg/5">{group.name}</CardTitle>
+            <CardTitle className="text-lg/5">
+              {group.name}{" "}
+              {!!attractionsMap[group.id]?.length && (
+                <span className="font-normal text-gray-400">
+                  ({attractionsMap[group.id].length})
+                </span>
+              )}
+            </CardTitle>
             {group.tag && <Tag text={group.tag} />}
           </div>
           {isWideScreen && (

@@ -49,7 +49,10 @@ export const GroupTableRow = ({
         onClick={handleGroupClick(group)}
       >
         <div className="text-sm font-medium text-gray-900">
-          {group.name} ({attractionsMap[group.id]?.length || 0})
+          {group.name}{" "}
+          <span className="font-normal text-gray-400">
+            ({attractionsMap[group.id]?.length || 0})
+          </span>
         </div>
       </td>
       <td

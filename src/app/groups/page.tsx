@@ -228,6 +228,7 @@ export default function GroupsPage() {
                 group={group}
                 onDelete={handleDeleteGroup}
                 onUpdate={getHandleUpdate(group.id)}
+                attractionsMap={attractionsMap}
               />
             ))}
           </div>
