@@ -8,18 +8,21 @@ import { useData } from "@/contexts/DataContext";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { AttractionTable } from "@/components/attraction/AttractionTable";
 import { AttractionCard } from "@/components/attraction/AttractionCard";
-import { useMemo } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { locateItemOnMainMap } from "@/lib/locateItemOnMainMap";
 import { EmptyListState } from "@/components/group/EmptyListState";
+import { useDebounceCallback } from "@/hooks/useDebounceCallback";
+import { Attraction } from "@/types/attraction";
 
 export default function SearchPage() {
   const router = useRouter();
   const { isWideScreen } = useIsMobile();
   const { searchQuery, setSearchQuery } = useQueryParams([] as const);
   const { attractions, isAttractionsLoading } = useData();
+  const [foundAttractions, setFoundAttractions] = useState<Attraction[]>([]);
 
-  const foundAttractions = useMemo(
-    () =>
+  const onSearch = useCallback(() => {
+    setFoundAttractions(
       attractions.filter((item) => {
         const search = searchQuery.toLowerCase();
         const lowerName = item.name.toLowerCase();
@@ -27,8 +30,14 @@ export default function SearchPage() {
 
         return lowerName.includes(search) || lowerDescription.includes(search);
       }),
-    [searchQuery, attractions],
-  );
+    );
+  }, [searchQuery, attractions]);
+
+  const debounceSearch = useDebounceCallback(onSearch, 500);
+
+  useEffect(() => {
+    debounceSearch();
+  }, [searchQuery, debounceSearch]);
 
   if (isAttractionsLoading) {
     return <LoadingStub />;
