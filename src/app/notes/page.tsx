@@ -124,7 +124,7 @@ export default function NotesPage() {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <FoundCountStub count={foundNotes.length} hasFilters={!!searchQuery} />
+            <FoundCountStub count={foundNotes.length} hasFilters={hasFilters} />
           </div>
         </div>
 
