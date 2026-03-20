@@ -5,7 +5,7 @@ import { withAuth } from '@/lib/serverAuth';
 export async function GET(request: NextRequest) {
   return withAuth(request, async () => {
     const response = await fetch(
-      `https://geocode-maps.yandex.ru/1.x/?geocode=достопримечательности%20Саратова&format=json&results=15&apikey=${process.env.YA_MAPS_API_KEY}`,
+      `https://geocode-maps.yandex.ru/v1?apikey=${process.env.YA_MAPS_API_KEY}&lang=ru_RU&geocode=достопримечательности%20Саратова&format=json&results=15`,
       {
         method: 'GET',
         headers: {
