@@ -31,7 +31,7 @@ export default function MainPage() {
 
   return (
     <ProtectedRoute>
-      <div className="container lg:max-w-full mx-auto pt-20 px-4 pb-8" style={{ height: 'calc(100vh)' }}>
+      <div className="max-w-full pt-[65px] h-full" style={{ height: 'calc(100vh)' }}>
         <div className="flex flex-col gap-4 justify-between items-center" style={{ height: '100%' }}>
           <div style={{ width: '100%', flex: '1 0 0' }}>
             <Map
