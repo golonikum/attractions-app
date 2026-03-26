@@ -14,7 +14,6 @@ import { Group } from '@/types/group';
 
 import { AttractionInfoCard } from '@/components/attraction/AttractionInfoCard';
 import { NewAttractionDialog } from '@/components/attraction/NewAttractionDialog';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { BackButton, OpenInYandexMapButton, RemoveButton, ShowOnMapButton } from '@/components/ui/buttons';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { LoadingStub, NotFoundStub } from '@/components/ui/stubs';
@@ -96,48 +95,46 @@ export default function AttractionDetailPage() {
   }
 
   return (
-    <ProtectedRoute>
-      <div className="container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4">
-        <div className="flex items-center gap-2">
-          {group && <BackButton />}
+    <div className="container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4">
+      <div className="flex items-center gap-2">
+        {group && <BackButton />}
 
-          <div className="ml-auto flex space-x-1">
-            {isWideScreen && (
-              <>
-                <ShowOnMapButton
-                  view="icon"
-                  onClick={() => {
-                    locateItemOnMainMap({ router, item: attraction });
-                  }}
-                />
-                <OpenInYandexMapButton view="icon" attraction={attraction} />
-              </>
-            )}
-            <NewAttractionDialog
-              attraction={attraction}
-              isOpen={isEditDialogOpen}
-              setIsOpen={setIsEditDialogOpen}
-              handleSubmit={handleSubmit}
-              isSubmitting={isSubmitting}
-              setIsSubmitting={setIsSubmitting}
-            />
-            <RemoveButton onClick={handleDeleteClick} />
-          </div>
+        <div className="ml-auto flex space-x-1">
+          {isWideScreen && (
+            <>
+              <ShowOnMapButton
+                view="icon"
+                onClick={() => {
+                  locateItemOnMainMap({ router, item: attraction });
+                }}
+              />
+              <OpenInYandexMapButton view="icon" attraction={attraction} />
+            </>
+          )}
+          <NewAttractionDialog
+            attraction={attraction}
+            isOpen={isEditDialogOpen}
+            setIsOpen={setIsEditDialogOpen}
+            handleSubmit={handleSubmit}
+            isSubmitting={isSubmitting}
+            setIsSubmitting={setIsSubmitting}
+          />
+          <RemoveButton onClick={handleDeleteClick} />
         </div>
-
-        <AttractionInfoCard attraction={attraction} group={group} />
-
-        <ConfirmDialog
-          isOpen={isDeleteDialogOpen}
-          onClose={() => setIsDeleteDialogOpen(false)}
-          onConfirm={handleConfirmDelete}
-          title="Удалить объект?"
-          description="Вы уверены, что хотите удалить этот объект?"
-          confirmText="Удалить"
-          cancelText="Отмена"
-          variant="destructive"
-        />
       </div>
-    </ProtectedRoute>
+
+      <AttractionInfoCard attraction={attraction} group={group} />
+
+      <ConfirmDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Удалить объект?"
+        description="Вы уверены, что хотите удалить этот объект?"
+        confirmText="Удалить"
+        cancelText="Отмена"
+        variant="destructive"
+      />
+    </div>
   );
 }
