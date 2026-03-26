@@ -54,7 +54,7 @@ export const useQueryParams = <T extends string[]>(names: string[]): FieldsAndSe
     }
 
     const newUrl = `${window.location.pathname}${params.toString() ? '?' : ''}${params.toString()}`;
-    window.history.pushState({}, '', newUrl);
+    window.history.replaceState({}, '', newUrl);
   }, [state, names]);
 
   return {

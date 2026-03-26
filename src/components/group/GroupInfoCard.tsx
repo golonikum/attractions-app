@@ -21,7 +21,7 @@ export function GroupInfoCard({ group, attractions }: GroupInfoCardProps) {
       group,
       DEFAULT_TAG_ZOOM,
     )}&tag=${group.tag?.replace(' ', '+')}`;
-    window.history.pushState({}, '', newUrl);
+    window.history.replaceState({}, '', newUrl);
 
     router.push('/groups');
   };
