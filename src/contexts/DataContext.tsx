@@ -9,6 +9,8 @@ import { Group } from '@/types/group';
 
 type DataProviderProps = {
   children: React.ReactNode;
+  attractions: Attraction[];
+  groups: Group[];
 };
 
 type DataProviderState = {
@@ -35,14 +37,14 @@ const initialState: DataProviderState = {
 
 export const DataProviderContext = createContext<DataProviderState>(initialState);
 
-export function DataProvider({ children, ...props }: DataProviderProps) {
+export function DataProvider({ children, attractions: cachedAttractions, groups: cachedGroups }: DataProviderProps) {
   const {
     attractions,
     setAttractions,
     fetchData: fetchAttractions,
     isLoading: isAttractionsLoading,
-  } = useGetAllAttractions();
-  const { groups, setGroups, fetchData: fetchGroups, isLoading: isGroupsLoading } = useGetAllGroups();
+  } = useGetAllAttractions(cachedAttractions);
+  const { groups, setGroups, fetchData: fetchGroups, isLoading: isGroupsLoading } = useGetAllGroups(cachedGroups);
 
   const attractionsMap = useMemo(
     () =>
@@ -80,11 +82,7 @@ export function DataProvider({ children, ...props }: DataProviderProps) {
     attractionsMap,
   };
 
-  return (
-    <DataProviderContext.Provider {...props} value={value}>
-      {children}
-    </DataProviderContext.Provider>
-  );
+  return <DataProviderContext.Provider value={value}>{children}</DataProviderContext.Provider>;
 }
 
 export const useData = () => {
