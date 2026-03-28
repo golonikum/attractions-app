@@ -10,10 +10,8 @@ export async function GET(request: NextRequest) {
 
     const response = await fetch(url, {
       method: 'GET',
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-      },
     });
+    console.log([...response.headers.entries()]);
     const data = await response.json();
 
     return NextResponse.json(
