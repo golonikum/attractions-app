@@ -4,8 +4,8 @@ import { toast } from 'sonner';
 import { getAllGroups } from '@/services/groupService';
 import { Group } from '@/types/group';
 
-export const useGetAllGroups = (cachedGroups: Group[] = []) => {
-  const [groups, setGroups] = useState<Group[]>(cachedGroups);
+export const useGetAllGroups = () => {
+  const [groups, setGroups] = useState<Group[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = async () => {

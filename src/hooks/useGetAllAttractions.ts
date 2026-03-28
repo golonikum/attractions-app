@@ -4,8 +4,8 @@ import { toast } from 'sonner';
 import { getAllAttractions } from '@/services/attractionService';
 import { Attraction } from '@/types/attraction';
 
-export const useGetAllAttractions = (cachedAttractions: Attraction[] = []) => {
-  const [attractions, setAttractions] = useState<Attraction[]>(cachedAttractions);
+export const useGetAllAttractions = () => {
+  const [attractions, setAttractions] = useState<Attraction[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = async () => {

@@ -7,7 +7,6 @@ import { Toaster } from 'sonner';
 import { AuthContextProvider } from '@/contexts/AuthContext';
 import { DataProvider } from '@/contexts/DataContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
-import { getSharedData } from '@/lib/getSharedData';
 
 import PWALayout from '@/components/pwa/PWALayout';
 
@@ -59,13 +58,11 @@ export const viewport: Viewport = {
   themeColor: '#000000',
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const data = await getSharedData();
-
   return (
     <html lang="ru" suppressHydrationWarning>
       <head>
@@ -77,7 +74,7 @@ export default async function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider defaultTheme="light">
           <AuthContextProvider>
-            <DataProvider {...data}>
+            <DataProvider>
               <PWALayout>
                 <Suspense>{children}</Suspense>
                 <Toaster position="top-right" richColors />
