@@ -1,10 +1,9 @@
-import { fetchProxy } from '@/lib/fetchProxy';
 import { getAuthHeaders } from '@/lib/getAuthHeaders';
 
 const API_URL = '/api/import';
 
 export const importAttractionsFor = async (): Promise<any> => {
-  const response = await fetchProxy(`${API_URL}`, {
+  const response = await fetch(`${API_URL}`, {
     method: 'GET',
     headers: getAuthHeaders(),
   });

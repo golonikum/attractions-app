@@ -1,4 +1,3 @@
-import { fetchProxy } from '@/lib/fetchProxy';
 import { getAuthHeaders } from '@/lib/getAuthHeaders';
 import { CreateGroupRequest, Group, UpdateGroupRequest } from '@/types/group';
 
@@ -6,7 +5,7 @@ const API_URL = '/api/groups';
 
 // Get all groups for the current user
 export const getAllGroups = async (): Promise<Group[]> => {
-  const response = await fetchProxy(API_URL, {
+  const response = await fetch(API_URL, {
     method: 'GET',
     headers: getAuthHeaders(),
   });
@@ -22,7 +21,7 @@ export const getAllGroups = async (): Promise<Group[]> => {
 
 // Get a specific group by ID
 export const getGroupById = async (id: string): Promise<Group> => {
-  const response = await fetchProxy(`${API_URL}/${id}`, {
+  const response = await fetch(`${API_URL}/${id}`, {
     method: 'GET',
     headers: getAuthHeaders(),
   });

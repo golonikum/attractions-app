@@ -1,4 +1,3 @@
-import { fetchProxy } from '@/lib/fetchProxy';
 import { getAuthHeaders } from '@/lib/getAuthHeaders';
 import { Attraction, CreateAttractionRequest, UpdateAttractionRequest } from '@/types/attraction';
 
@@ -7,7 +6,7 @@ const API_URL = '/api/attractions';
 // Get authorization header
 
 export const getAttractionsByGroupId = async (groupId: string): Promise<Attraction[]> => {
-  const response = await fetchProxy(`${API_URL}?groupId=${groupId}`, {
+  const response = await fetch(`${API_URL}?groupId=${groupId}`, {
     method: 'GET',
     headers: getAuthHeaders(),
   });
@@ -22,7 +21,7 @@ export const getAttractionsByGroupId = async (groupId: string): Promise<Attracti
 };
 
 export const getAllAttractions = async (): Promise<Attraction[]> => {
-  const response = await fetchProxy(`${API_URL}`, {
+  const response = await fetch(`${API_URL}`, {
     method: 'GET',
     headers: getAuthHeaders(),
   });
@@ -37,7 +36,7 @@ export const getAllAttractions = async (): Promise<Attraction[]> => {
 };
 
 export const getAttractionById = async (id: string): Promise<Attraction | null> => {
-  const response = await fetchProxy(`${API_URL}/${id}`, {
+  const response = await fetch(`${API_URL}/${id}`, {
     method: 'GET',
     headers: getAuthHeaders(),
   });
