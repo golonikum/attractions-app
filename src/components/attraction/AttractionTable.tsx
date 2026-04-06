@@ -63,7 +63,7 @@ export function AttractionTable({
           <table className="min-w-full divide-y divide-gray-200" style={style}>
             <thead className="bg-gray-50">
               <tr>
-                {onOrderChanged ? <th style={{ width: '50px' }}></th> : <></>}
+                {onOrderChanged ? <th className="w-[50px]"></th> : <></>}
                 <th
                   scope="col"
                   className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -72,8 +72,7 @@ export function AttractionTable({
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  style={{ minWidth: '200px' }}
+                  className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px]"
                 >
                   Название
                 </th>

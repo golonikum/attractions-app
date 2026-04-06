@@ -95,9 +95,8 @@ export default function NotesPage() {
   return (
     <div
       className={`container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4 ${
-        isWideScreen ? 'overflow-hidden' : ''
+        isWideScreen ? 'overflow-hidden h-screen' : ''
       }`}
-      style={isWideScreen ? { height: 'calc(100vh)' } : {}}
     >
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div className="w-full space-y-4 md:space-y-0 md:space-x-4 md:flex md:flex-row md:w-auto md:items-center">
@@ -127,7 +126,7 @@ export default function NotesPage() {
       </div>
 
       {isWideScreen ? (
-        <div className="flex-1 flex flex-row gap-4" style={{ height: 'calc(100vh - 150px)' }}>
+        <div className="flex-1 flex flex-row gap-4 h-[calc(100vh-150px)]">
           <div className="overflow-x-auto flex-1">
             {foundNotes.length === 0 ? emptyState : <NotesTable notes={foundNotes} />}
           </div>

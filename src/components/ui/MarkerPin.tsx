@@ -29,21 +29,11 @@ export const MarkerPin: FC<{
         <MapPin
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className={`h-8 w-8 shrink-0 relative hover:text-blue-500 hover:fill-blue-200 ${classNames}`}
-          style={{ top: '-32px', left: '-16px', cursor: 'pointer' }}
+          className={`h-8 w-8 shrink-0 relative hover:text-blue-500 hover:fill-blue-200 cursor-pointer left-[-16px] top-[-32px] ${classNames}`}
           onClick={onClick}
         />
         {(isHovered || isActive) && title && (
-          <div
-            className="text-xs shrink-0 absolute px-2 py-0.5 overflow-hidden rounded-md bg-background shadow-md whitespace-nowrap"
-            style={{
-              top: '4px',
-              transform: 'translateX(-50%)',
-              maxWidth: '256px',
-              textOverflow: 'ellipsis',
-              zIndex: 10,
-            }}
-          >
+          <div className="text-ellipsis z-10 -translate-x-1/2 text-xs shrink-0 absolute top-1 px-2 max-w-[256px] py-0.5 overflow-hidden rounded-md bg-background shadow-md whitespace-nowrap">
             {title}
           </div>
         )}

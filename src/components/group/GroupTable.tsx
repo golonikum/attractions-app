@@ -14,15 +14,13 @@ export function GroupTable({ groups, onDelete, onUpdate, onLocate }: GroupTableP
           <tr>
             <th
               scope="col"
-              className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              style={{ width: '150px' }}
+              className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[150px]"
             >
               Название
             </th>
             <th
               scope="col"
-              className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              style={{ width: '220px' }}
+              className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[220px]"
             >
               Регион
             </th>
@@ -31,8 +29,7 @@ export function GroupTable({ groups, onDelete, onUpdate, onLocate }: GroupTableP
             </th>
             <th
               scope="col"
-              className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              style={{ width: '180px' }}
+              className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[180px]"
             >
               Действия
             </th>

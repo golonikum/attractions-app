@@ -169,9 +169,8 @@ export default function GroupDetailPage() {
     <ProtectedRoute>
       <div
         className={`container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4 ${
-          isWideScreen ? 'overflow-hidden' : ''
+          isWideScreen ? 'overflow-hidden h-screen' : ''
         }`}
-        style={isWideScreen ? { height: 'calc(100vh)' } : {}}
       >
         <div className="flex items-center">
           <BackButton route="/groups" />
@@ -203,8 +202,8 @@ export default function GroupDetailPage() {
         </div>
 
         {isWideScreen ? (
-          <div className="flex-1 flex flex-row gap-4" style={{ height: 'calc(100vh - 150px)' }}>
-            <div style={{ height: '100%', minWidth: '600px' }}>
+          <div className="flex-1 flex flex-row gap-4 h-[calc(100vh-150px)]">
+            <div className="h-full min-w-[600px]">
               <Map
                 location={location}
                 setLocation={setLocation}

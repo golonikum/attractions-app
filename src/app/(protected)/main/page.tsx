@@ -29,9 +29,9 @@ export default function MainPage() {
   }
 
   return (
-    <div className="max-w-full pt-[65px] h-full" style={{ height: 'calc(100vh)' }}>
-      <div className="flex flex-col gap-4 justify-between items-center" style={{ height: '100%' }}>
-        <div style={{ width: '100%', flex: '1 0 0' }}>
+    <div className="max-w-full pt-[65px] h-full h-screen">
+      <div className="flex flex-col gap-4 justify-between items-center h-full">
+        <div className="w-full flex-1">
           <Map
             items={attractions}
             onItemClick={(id) => {

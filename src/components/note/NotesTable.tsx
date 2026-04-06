@@ -17,8 +17,7 @@ export function NotesTable({ notes }: NotesTableProps) {
             </th>
             <th
               scope="col"
-              className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              style={{ minWidth: '200px' }}
+              className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px]"
             >
               Название
             </th>
