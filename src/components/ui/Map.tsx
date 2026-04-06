@@ -3,6 +3,7 @@ import { Minus, Plus } from 'lucide-react';
 import { YMapCenterLocation, YMapZoomLocation } from 'ymaps3';
 
 import { ThemeProviderContext } from '@/contexts/ThemeContext';
+import { useDebounceCallback } from '@/hooks/useDebounceCallback';
 import { useMapReady } from '@/hooks/useMapReady';
 import { DEFAULT_LOCATION } from '@/lib/constants';
 import { isAttraction } from '@/lib/utils';
@@ -31,11 +32,7 @@ type MapPropsType = {
 export const Map: FC<MapPropsType> = ({ items, location = DEFAULT_LOCATION, setLocation, onItemClick }) => {
   const { isMapReady } = useMapReady();
   const { theme } = useContext(ThemeProviderContext);
-  // const [location, setLocation] = useState(defaultLocation);
-
-  // useEffect(() => {
-  //   setLocation(defaultLocation);
-  // }, [defaultLocation]);
+  const setLocationDebounced = useDebounceCallback(setLocation, 500);
 
   const onClickZoom = (operation: 'plus' | 'minus') => () => {
     setLocation((val) => ({
@@ -50,7 +47,7 @@ export const Map: FC<MapPropsType> = ({ items, location = DEFAULT_LOCATION, setL
       <YMapDefaultFeaturesLayer />
       <YMapListener
         onUpdate={(args) => {
-          setLocation(args.location);
+          setLocationDebounced(args.location);
         }}
       />
       <YMapControls position="left top">

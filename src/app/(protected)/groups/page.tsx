@@ -17,7 +17,6 @@ import { EmptyListState } from '@/components/group/EmptyListState';
 import { GroupCard } from '@/components/group/GroupCard';
 import { GroupTable } from '@/components/group/GroupTable';
 import { NewGroupDialog } from '@/components/group/NewGroupDialog';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { Map } from '@/components/ui/Map';
 import { MultiSelect } from '@/components/ui/MultiSelect';
 import { FoundCountStub, LoadingStub } from '@/components/ui/stubs';
