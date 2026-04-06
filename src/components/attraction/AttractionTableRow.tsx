@@ -64,7 +64,7 @@ export const AttractionTableRow = ({
     >
       {hasDnd && <td className="px-4 py-2  cursor-move">☰</td>}
       <td className="px-4 py-2  whitespace-nowrap cursor-pointer" onClick={handleAttractionClick(attraction)}>
-        <AttractionImage attraction={attraction} className="h-24 w-24 rounded-md" />
+        <AttractionImage attraction={attraction} className="h-24 w-24 rounded-md" showFavorite />
       </td>
       <td className="px-4 py-2  cursor-pointer" onClick={handleAttractionClick(attraction)}>
         <div className="text-sm font-medium">{attraction.name}</div>
