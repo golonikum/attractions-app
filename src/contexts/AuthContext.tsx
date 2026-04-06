@@ -44,8 +44,10 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
       setIsLoading(false);
     };
 
-    checkAuth();
-  }, [router, path]);
+    if (!user) {
+      checkAuth();
+    }
+  }, [router, path, user]);
 
   const login = (userData: User) => {
     setUser(userData);

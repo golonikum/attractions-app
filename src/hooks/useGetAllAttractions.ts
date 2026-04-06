@@ -27,7 +27,7 @@ export const useGetAllAttractions = () => {
     if (user) {
       fetchData();
     }
-  }, [user]);
+  }, [user?.id]);
 
   return {
     isLoading,

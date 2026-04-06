@@ -27,7 +27,7 @@ export const useGetAllGroups = () => {
     if (user) {
       fetchData();
     }
-  }, [user]);
+  }, [user?.id]);
 
   return {
     isLoading,
