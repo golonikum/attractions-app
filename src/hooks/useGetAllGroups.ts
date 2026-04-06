@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
+import { useAuth } from '@/contexts/AuthContext';
 import { getAllGroups } from '@/services/groupService';
 import { Group } from '@/types/group';
 
 export const useGetAllGroups = () => {
+  const { user } = useAuth();
   const [groups, setGroups] = useState<Group[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -22,8 +24,10 @@ export const useGetAllGroups = () => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (user) {
+      fetchData();
+    }
+  }, [user]);
 
   return {
     isLoading,

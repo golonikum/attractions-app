@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
+import { useAuth } from '@/contexts/AuthContext';
 import { getAllAttractions } from '@/services/attractionService';
 import { Attraction } from '@/types/attraction';
 
 export const useGetAllAttractions = () => {
+  const { user } = useAuth();
   const [attractions, setAttractions] = useState<Attraction[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -22,8 +24,10 @@ export const useGetAllAttractions = () => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (user) {
+      fetchData();
+    }
+  }, [user]);
 
   return {
     isLoading,
