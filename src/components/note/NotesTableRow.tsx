@@ -32,16 +32,16 @@ export const NotesTableRow = ({ note }: NotesTableRowProps) => {
         <AttractionImage attraction={attraction} className="h-24 w-24 rounded-md" />
       </td>
       <td className="px-4 py-2  cursor-pointer">
-        <div className="text-sm font-medium text-gray-900">
+        <div className="text-sm font-medium">
           {attraction.name} ({group?.name})
         </div>
         {attraction.category && <Tag text={attraction.category} />}
       </td>
       <td className="px-4 py-2  cursor-pointer">
-        <div className="text-sm text-gray-900 line-clamp-4">{note.date}</div>
+        <div className="text-sm line-clamp-4">{note.date}</div>
       </td>
       <td className="px-4 py-2  cursor-pointer">
-        <div className="text-sm text-gray-900 line-clamp-4">{note.note}</div>
+        <div className="text-sm line-clamp-4">{note.note}</div>
       </td>
     </tr>
   );

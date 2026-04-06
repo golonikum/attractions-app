@@ -51,8 +51,8 @@ export function NoteCard({ note }: NoteCardProps) {
         </div>
       </CardHeader>
       <CardContent className="flex flex-col gap-6 justify-between">
-        <CardDescription className="text-gray-600 whitespace-pre-wrap">{note.date}</CardDescription>
-        <CardDescription className="text-gray-600 whitespace-pre-wrap">{note.note}</CardDescription>
+        <CardDescription className="whitespace-pre-wrap">{note.date}</CardDescription>
+        <CardDescription className="whitespace-pre-wrap">{note.note}</CardDescription>
       </CardContent>
     </Card>
   );

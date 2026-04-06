@@ -91,7 +91,7 @@ export function AttractionTable({
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="divide-y divide-gray-200">
               {attractions.map((attraction) => (
                 <AttractionTableRow
                   key={attraction.id}

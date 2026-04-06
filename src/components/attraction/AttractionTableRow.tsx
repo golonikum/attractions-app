@@ -67,11 +67,11 @@ export const AttractionTableRow = ({
         <AttractionImage attraction={attraction} className="h-24 w-24 rounded-md" />
       </td>
       <td className="px-4 py-2  cursor-pointer" onClick={handleAttractionClick(attraction)}>
-        <div className="text-sm font-medium text-gray-900">{attraction.name}</div>
+        <div className="text-sm font-medium">{attraction.name}</div>
         {attraction.category && <Tag text={attraction.category} />}
       </td>
       <td className="px-4 py-2  cursor-pointer" onClick={handleAttractionClick(attraction)}>
-        <div className="text-sm text-gray-900 line-clamp-4">{attraction.description || 'Нет описания'}</div>
+        <div className="text-sm line-clamp-4">{attraction.description || 'Нет описания'}</div>
       </td>
       <td className="px-4 py-2  whitespace-nowrap text-sm font-medium">
         <div className="flex justify-end space-x-1">

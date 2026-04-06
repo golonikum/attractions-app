@@ -30,7 +30,7 @@ export function NotesTable({ notes }: NotesTableProps) {
             </th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="divide-y divide-gray-200">
           {notes.map((note, index) => (
             <NotesTableRow key={index} note={note} />
           ))}

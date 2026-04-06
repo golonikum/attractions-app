@@ -38,7 +38,7 @@ export function GroupInfoCard({ group, attractions }: GroupInfoCardProps) {
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-gray-600">{group.description}</p>
+        <p>{group.description}</p>
       </CardContent>
     </Card>
   );

@@ -35,7 +35,7 @@ export const MarkerPin: FC<{
         />
         {(isHovered || isActive) && title && (
           <div
-            className="text-xs shrink-0 absolute px-2 py-0.5 overflow-hidden rounded-md bg-white shadow-md whitespace-nowrap text-black-0"
+            className="text-xs shrink-0 absolute px-2 py-0.5 overflow-hidden rounded-md bg-background shadow-md whitespace-nowrap"
             style={{
               top: '4px',
               transform: 'translateX(-50%)',

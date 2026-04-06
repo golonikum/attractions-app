@@ -43,15 +43,15 @@ export const GroupTableRow = ({ group, onDelete, onUpdate, onLocate }: GroupTabl
   return (
     <tr>
       <td className="px-4 py-2  cursor-pointer" onClick={handleGroupClick(group)}>
-        <div className="text-sm font-medium text-gray-900">
-          {group.name} <span className="font-normal text-gray-400">({attractionsMap[group.id]?.length || 0})</span>
+        <div className="text-sm font-medium">
+          {group.name} <span className="font-normal">({attractionsMap[group.id]?.length || 0})</span>
         </div>
       </td>
       <td className="px-4 py-2  cursor-pointer" onClick={handleGroupClick(group)}>
         {group.tag && <Tag text={group.tag} />}
       </td>
       <td className="px-4 py-2  cursor-pointer" onClick={handleGroupClick(group)}>
-        <div className="text-sm text-gray-900 line-clamp-4">
+        <div className="text-sm line-clamp-4">
           <GroupTableCellDescription description={group.description} />
         </div>
       </td>

@@ -84,7 +84,7 @@ export function AttractionCard({ attraction, onDelete, onUpdate }: AttractionCar
           (isDescriptionHidden ? (
             <ShowDescriptionButton onClick={() => setIsDescriptionHidden(false)} />
           ) : (
-            <CardDescription className="text-gray-600 whitespace-pre-wrap">{attraction.description}</CardDescription>
+            <CardDescription className="whitespace-pre-wrap">{attraction.description}</CardDescription>
           ))}
 
         <div className="flex flex-col gap-4">

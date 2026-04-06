@@ -38,7 +38,7 @@ export function GroupTable({ groups, onDelete, onUpdate, onLocate }: GroupTableP
             </th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="divide-y divide-gray-200">
           {groups.map((group) => (
             <GroupTableRow key={group.id} group={group} onDelete={onDelete} onUpdate={onUpdate} onLocate={onLocate} />
           ))}
