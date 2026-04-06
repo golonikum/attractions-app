@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 
 import { getInitialLocation } from '@/lib/getInitialLocation';
 
+import { useDebounceCallback } from './useDebounceCallback';
+
 export const useLocation = ({
   selectedCoordinates,
   selectedZoom,
@@ -20,5 +22,7 @@ export const useLocation = ({
     setSelectedCoordinates([`${location.center[0]}`, `${location.center[1]}`]);
   }, [location]);
 
-  return { location, setLocation };
+  const setLocationDebounced = useDebounceCallback(setLocation, 500);
+
+  return { location, setLocation: setLocationDebounced };
 };
