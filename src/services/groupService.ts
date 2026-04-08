@@ -1,82 +1,17 @@
-import { getAuthHeaders } from '@/lib/getAuthHeaders';
 import { CreateGroupRequest, Group, UpdateGroupRequest } from '@/types/group';
 
-const API_URL = '/api/groups';
+import { request } from './request';
 
-// Get all groups for the current user
-export const getAllGroups = async (): Promise<Group[]> => {
-  const response = await fetch(API_URL, {
-    method: 'GET',
-    headers: getAuthHeaders(),
-  });
+const GROUPS_API_URL = '/groups';
 
-  if (!response.ok) {
-    throw new Error('Failed to fetch groups');
-  }
+export const getAllGroups = async () => request.get<{ groups: Group[] }>(GROUPS_API_URL);
 
-  const data = await response.json();
+export const getGroupById = async (id: string) => request.get<{ group: Group }>(`${GROUPS_API_URL}/${id}`);
 
-  return data.groups;
-};
+export const createGroup = async (groupData: CreateGroupRequest) =>
+  request.post<{ group: Group | null }>(GROUPS_API_URL, groupData);
 
-// Get a specific group by ID
-export const getGroupById = async (id: string): Promise<Group> => {
-  const response = await fetch(`${API_URL}/${id}`, {
-    method: 'GET',
-    headers: getAuthHeaders(),
-  });
+export const updateGroup = async (id: string, groupData: UpdateGroupRequest) =>
+  request.put<{ group: Group | null }>(`${GROUPS_API_URL}/${id}`, groupData);
 
-  if (!response.ok) {
-    throw new Error('Failed to fetch group');
-  }
-
-  const data = await response.json();
-
-  return data.group;
-};
-
-// Create a new group
-export const createGroup = async (groupData: CreateGroupRequest): Promise<Group> => {
-  const response = await fetch(API_URL, {
-    method: 'POST',
-    headers: getAuthHeaders(),
-    body: JSON.stringify(groupData),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to create group');
-  }
-
-  const data = await response.json();
-
-  return data.group;
-};
-
-// Update an existing group
-export const updateGroup = async (id: string, groupData: UpdateGroupRequest): Promise<Group> => {
-  const response = await fetch(`${API_URL}/${id}`, {
-    method: 'PUT',
-    headers: getAuthHeaders(),
-    body: JSON.stringify(groupData),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to update group');
-  }
-
-  const data = await response.json();
-
-  return data.group;
-};
-
-// Delete a group
-export const deleteGroup = async (id: string): Promise<void> => {
-  const response = await fetch(`${API_URL}/${id}`, {
-    method: 'DELETE',
-    headers: getAuthHeaders(),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to delete group');
-  }
-};
+export const deleteGroup = async (id: string) => request.delete<void>(`${GROUPS_API_URL}/${id}`);

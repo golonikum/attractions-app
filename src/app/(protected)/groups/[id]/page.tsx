@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
+import { useData } from '@/contexts/DataContext';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { useLocation } from '@/hooks/useLocation';
 import { useQueryParams } from '@/hooks/useQueryParams';
@@ -11,7 +12,7 @@ import { useUpdateRequests } from '@/hooks/useUpdateRequests';
 import { DEFAULT_ATTRACTION_ZOOM } from '@/lib/constants';
 import { locateItemOnMainMap } from '@/lib/locateItemOnMainMap';
 import { getAttractionsByGroupId, updateOrder } from '@/services/attractionService';
-import { getGroupById, updateGroup } from '@/services/groupService';
+import { updateGroup } from '@/services/groupService';
 import { Attraction, CreateAttractionRequest } from '@/types/attraction';
 import { CreateGroupRequest, Group } from '@/types/group';
 
@@ -54,24 +55,17 @@ export default function GroupDetailPage() {
   const [isSubmittingAttraction, setIsSubmittingAttraction] = useState(false);
   const { isWideScreen } = useIsMobile();
   const { createAttraction, deleteAttraction, updateAttraction } = useUpdateRequests();
+  const { groups } = useData();
 
   const loadAttractions = useCallback(async () => {
-    const attractionsData = await getAttractionsByGroupId(groupId);
-    setAttractions(attractionsData);
+    const { data } = await getAttractionsByGroupId(groupId);
+    setAttractions(data.attractions);
   }, [groupId]);
 
   // Загрузка данных группы при монтировании компонента
   useEffect(() => {
-    const fetchGroupData = async () => {
+    const fetchAttractionsData = async () => {
       try {
-        const groupData = await getGroupById(groupId);
-        setGroup(groupData);
-        setLocation({
-          center: [groupData.coordinates[1], groupData.coordinates[0]],
-          zoom: groupData.zoom,
-        });
-
-        // Загрузка объектов для группы
         await loadAttractions();
       } catch (error) {
         toast.error('Не удалось загрузить данные группы');
@@ -81,15 +75,29 @@ export default function GroupDetailPage() {
       }
     };
 
-    if (groupId) {
-      fetchGroupData();
+    if (group) {
+      fetchAttractionsData();
     }
-  }, [groupId, router]);
+  }, [group, router]);
+
+  useEffect(() => {
+    if (groupId && groups.length) {
+      const foundGroup = groups.find((g) => g.id === groupId);
+
+      if (foundGroup) {
+        setGroup(foundGroup);
+        setLocation({
+          center: [foundGroup.coordinates[1], foundGroup.coordinates[0]],
+          zoom: foundGroup.zoom,
+        });
+      }
+    }
+  }, [groupId, groups]);
 
   // Обработчик отправки формы редактирования группы
   const handleSubmit = async (formData: CreateGroupRequest) => {
-    const updatedGroup = await updateGroup(groupId, formData);
-    setGroup(updatedGroup);
+    const { data } = await updateGroup(groupId, formData);
+    setGroup(data.group);
   };
 
   // Обработчик удаления объекта
@@ -108,7 +116,10 @@ export default function GroupDetailPage() {
     const newAttraction = await createAttraction({
       ...formData,
     });
-    setAttractions([...attractions, newAttraction]);
+
+    if (newAttraction) {
+      setAttractions([...attractions, newAttraction]);
+    }
   };
 
   // Обработчик обновления объекта

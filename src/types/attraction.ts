@@ -30,18 +30,7 @@ export interface CreateAttractionRequest {
   notes?: Array<NoteType>;
 }
 
-export interface UpdateAttractionRequest {
-  name?: string;
-  category?: string;
-  imageUrl?: string;
-  yaMapUrl?: string;
-  description?: string;
-  isVisited?: boolean;
-  isFavorite?: boolean;
-  coordinates?: [number, number]; // [долгота, широта]
-  order?: number;
-  notes?: Array<NoteType>;
-}
+export type UpdateAttractionRequest = Partial<Omit<CreateAttractionRequest, 'groupId'>>;
 
 export interface NoteType {
   date: string;

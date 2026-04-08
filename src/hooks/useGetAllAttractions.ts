@@ -14,8 +14,8 @@ export const useGetAllAttractions = () => {
     setIsLoading(true);
 
     try {
-      const data = await getAllAttractions();
-      setAttractions(data);
+      const { data } = await getAllAttractions();
+      setAttractions(data.attractions);
     } catch (error) {
       toast.error('Не удалось загрузить данные объектов');
     } finally {

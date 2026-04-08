@@ -24,10 +24,4 @@ export interface CreateGroupRequest {
   zoom: number;
 }
 
-export interface UpdateGroupRequest {
-  name?: string;
-  description?: string;
-  tag?: string;
-  coordinates?: [number, number];
-  zoom?: number;
-}
+export type UpdateGroupRequest = Partial<CreateGroupRequest>;

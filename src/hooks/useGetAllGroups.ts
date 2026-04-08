@@ -14,8 +14,8 @@ export const useGetAllGroups = () => {
     setIsLoading(true);
 
     try {
-      const groupsData = await getAllGroups();
-      setGroups(groupsData);
+      const { data } = await getAllGroups();
+      setGroups(data.groups);
     } catch (error) {
       toast.error('Не удалось загрузить данные городов');
     } finally {

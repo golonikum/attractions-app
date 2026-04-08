@@ -35,12 +35,12 @@ export default function AttractionDetailPage() {
   useEffect(() => {
     const fetchAttractionData = async () => {
       try {
-        const attractionData = await getAttractionById(attractionId);
-        setAttraction(attractionData);
+        const { data: attractionData } = await getAttractionById(attractionId);
+        setAttraction(attractionData.attraction);
 
         // Загрузка группы, к которой принадлежит достопримечательность
-        const groupData = await getGroupById(attractionData!.groupId);
-        setGroup(groupData);
+        const { data: groupData } = await getGroupById(attractionData.attraction!.groupId);
+        setGroup(groupData.group);
       } catch (error) {
         toast.error('Не удалось загрузить данные достопримечательности');
         router.push('/groups');

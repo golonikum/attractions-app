@@ -8,25 +8,33 @@ export const useUpdateRequests = () => {
   const { setGroups, setAttractions } = useData();
 
   return {
+    // Groups
     createGroup: async (groupData: CreateGroupRequest) => {
-      const newGroup = await createGroup(groupData);
-      setGroups((groups) => [newGroup, ...groups]);
+      const { data } = await createGroup(groupData);
+      const newGroup = data.group;
+
+      if (newGroup) {
+        setGroups((groups) => [newGroup, ...groups]);
+      }
 
       return newGroup;
     },
     updateGroup: async (id: string, formData: UpdateGroupRequest) => {
-      const updatedGroup = await updateGroup(id, formData);
+      const { data } = await updateGroup(id, formData);
+      const updatedGroup = data.group;
 
-      setGroups((groups) => {
-        const newGroups = [...groups];
-        const index = groups.findIndex((item) => item.id === id);
+      if (updatedGroup) {
+        setGroups((groups) => {
+          const newGroups = [...groups];
+          const index = groups.findIndex((item) => item.id === id);
 
-        if (index !== -1) {
-          newGroups.splice(index, 1, updatedGroup);
-        }
+          if (index !== -1) {
+            newGroups.splice(index, 1, updatedGroup);
+          }
 
-        return newGroups;
-      });
+          return newGroups;
+        });
+      }
 
       return updatedGroup;
     },
@@ -34,26 +42,33 @@ export const useUpdateRequests = () => {
       await deleteGroup(id);
       setGroups((groups) => groups.filter((group) => group.id !== id));
     },
-
+    // Attractions
     createAttraction: async (attractionData: CreateAttractionRequest) => {
-      const newAttraction = await createAttraction(attractionData);
-      setAttractions((attractions) => [...attractions, newAttraction]);
+      const { data } = await createAttraction(attractionData);
+      const newAttraction = data.attraction;
+
+      if (newAttraction) {
+        setAttractions((attractions) => [...attractions, newAttraction]);
+      }
 
       return newAttraction;
     },
     updateAttraction: async (id: string, formData: UpdateAttractionRequest) => {
-      const updatedAttraction = await updateAttraction(id, formData);
+      const { data } = await updateAttraction(id, formData);
+      const updatedAttraction = data.attraction;
 
-      setAttractions((attractions) => {
-        const newAttractions = [...attractions];
-        const index = attractions.findIndex((item) => item.id === id);
+      if (updatedAttraction) {
+        setAttractions((attractions) => {
+          const newAttractions = [...attractions];
+          const index = attractions.findIndex((item) => item.id === id);
 
-        if (index !== -1) {
-          newAttractions.splice(index, 1, updatedAttraction);
-        }
+          if (index !== -1) {
+            newAttractions.splice(index, 1, updatedAttraction);
+          }
 
-        return newAttractions;
-      });
+          return newAttractions;
+        });
+      }
 
       return updatedAttraction;
     },

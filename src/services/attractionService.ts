@@ -1,108 +1,24 @@
-import { getAuthHeaders } from '@/lib/getAuthHeaders';
 import { Attraction, CreateAttractionRequest, UpdateAttractionRequest } from '@/types/attraction';
 
-const API_URL = '/api/attractions';
+import { request } from './request';
 
-// Get authorization header
+const ATTRACTIONS_API_URL = '/attractions';
 
-export const getAttractionsByGroupId = async (groupId: string): Promise<Attraction[]> => {
-  const response = await fetch(`${API_URL}?groupId=${groupId}`, {
-    method: 'GET',
-    headers: getAuthHeaders(),
-  });
+export const getAttractionsByGroupId = async (groupId: string) =>
+  request.get<{ attractions: Attraction[] }>(ATTRACTIONS_API_URL, { params: { groupId } });
 
-  if (!response.ok) {
-    throw new Error('Не удалось загрузить объекта');
-  }
+export const getAllAttractions = async () => request.get<{ attractions: Attraction[] }>(ATTRACTIONS_API_URL);
 
-  const data = await response.json();
+export const getAttractionById = async (id: string) =>
+  request.get<{ attraction: Attraction | null }>(`${ATTRACTIONS_API_URL}/${id}`);
 
-  return data.attractions || [];
-};
+export const createAttraction = async (attractionData: CreateAttractionRequest) =>
+  request.post<{ attraction: Attraction | null }>(ATTRACTIONS_API_URL, attractionData);
 
-export const getAllAttractions = async (): Promise<Attraction[]> => {
-  const response = await fetch(`${API_URL}`, {
-    method: 'GET',
-    headers: getAuthHeaders(),
-  });
+export const updateAttraction = async (id: string, updateData: UpdateAttractionRequest) =>
+  request.put<{ attraction: Attraction | null }>(`${ATTRACTIONS_API_URL}/${id}`, updateData);
 
-  if (!response.ok) {
-    throw new Error('Не удалось загрузить объекты');
-  }
+export const deleteAttraction = async (id: string) => request.delete<void>(`${ATTRACTIONS_API_URL}/${id}`);
 
-  const data = await response.json();
-
-  return data.attractions || [];
-};
-
-export const getAttractionById = async (id: string): Promise<Attraction | null> => {
-  const response = await fetch(`${API_URL}/${id}`, {
-    method: 'GET',
-    headers: getAuthHeaders(),
-  });
-
-  if (!response.ok) {
-    throw new Error('Не удалось загрузить объект');
-  }
-
-  const data = await response.json();
-
-  return data.attraction || null;
-};
-
-export const createAttraction = async (attractionData: CreateAttractionRequest): Promise<Attraction> => {
-  const response = await fetch(API_URL, {
-    method: 'POST',
-    headers: getAuthHeaders(),
-    body: JSON.stringify(attractionData),
-  });
-
-  if (!response.ok) {
-    throw new Error('Не удалось создать объект');
-  }
-
-  const data = await response.json();
-
-  return data.attraction;
-};
-
-export const updateAttraction = async (id: string, updateData: UpdateAttractionRequest): Promise<Attraction> => {
-  const response = await fetch(`${API_URL}/${id}`, {
-    method: 'PUT',
-    headers: getAuthHeaders(),
-    body: JSON.stringify(updateData),
-  });
-
-  if (!response.ok) {
-    throw new Error('Не удалось обновить объект');
-  }
-
-  const data = await response.json();
-
-  return data.attraction;
-};
-
-export const deleteAttraction = async (id: string): Promise<void> => {
-  const response = await fetch(`${API_URL}/${id}`, {
-    method: 'DELETE',
-    headers: getAuthHeaders(),
-  });
-
-  if (!response.ok) {
-    throw new Error('Не удалось удалить объект');
-  }
-};
-
-export const updateOrder = async (groupId: string, attractions: { id: string; order: number }[]) => {
-  const response = await fetch('/api/order', {
-    method: 'PUT',
-    headers: getAuthHeaders(),
-    body: JSON.stringify({ groupId, attractions }),
-  });
-
-  if (!response.ok) {
-    throw new Error('Ошибка обновления порядка');
-  }
-
-  return response.json();
-};
+export const updateOrder = async (groupId: string, attractions: { id: string; order: number }[]) =>
+  request.put<void>('/order', { groupId, attractions });

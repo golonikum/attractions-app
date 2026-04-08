@@ -121,8 +121,6 @@ export const NewAttractionDialog = ({
                 onSelectionChange={(value) => {
                   const newId = groups.find(({ name }) => name === value[0])?.id;
 
-                  debugger;
-
                   if (newId) {
                     setFormData((val) => ({ ...val, groupId: newId }));
                   }
