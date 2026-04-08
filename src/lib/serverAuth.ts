@@ -18,8 +18,7 @@ export async function verifyPassword(password: string, hashedPassword: string): 
 
 export function generateToken(user: PrismaUser): string {
   return sign({ id: user.id, email: user.email }, JWT_SECRET, {
-    // expiresIn: '7d',
-    expiresIn: '1m',
+    expiresIn: '7d',
   });
 }
 
