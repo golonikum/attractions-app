@@ -68,7 +68,7 @@ export default function RootLayout({
       <head>
         <Script
           src={`https://api-maps.yandex.ru/v3/?apikey=${process.env.YA_MAPS_API_KEY}&lang=ru_RU`}
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
         />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
