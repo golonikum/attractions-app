@@ -1,47 +1,14 @@
-'use client';
+import { DataProvider } from '@/contexts/DataContext';
+import { fetchAttractions } from '@/lib/data';
 
-import { useRouter } from 'next/navigation';
+import MainContainer from '@/components/main/MainContainer';
 
-import { useData } from '@/contexts/DataContext';
-import { useLocation } from '@/hooks/useLocation';
-import { useQueryParams } from '@/hooks/useQueryParams';
-
-import { Map } from '@/components/ui/Map';
-import { LoadingStub } from '@/components/ui/stubs';
-
-export default function MainPage() {
-  const router = useRouter();
-  const { selectedZoom, setSelectedZoom, selectedCoordinates, setSelectedCoordinates } = useQueryParams([
-    'zoom',
-    'coordinates',
-  ]);
-  const { location, setLocation } = useLocation({
-    selectedZoom,
-    setSelectedZoom,
-    selectedCoordinates,
-    setSelectedCoordinates,
-  });
-  const { attractions, isAttractionsLoading } = useData();
-  const isLoading = isAttractionsLoading;
-
-  if (isLoading) {
-    return <LoadingStub />;
-  }
+export default async function MainPage() {
+  const attractions = await fetchAttractions();
 
   return (
-    <div className="max-w-full pt-[65px] h-full h-screen">
-      <div className="flex flex-col gap-4 justify-between items-center h-full">
-        <div className="w-full flex-1">
-          <Map
-            items={attractions}
-            onItemClick={(id) => {
-              router.push(`/attractions/${id}`);
-            }}
-            location={location}
-            setLocation={setLocation}
-          />
-        </div>
-      </div>
-    </div>
+    <DataProvider attractions={attractions} groups={[]}>
+      <MainContainer />
+    </DataProvider>
   );
 }

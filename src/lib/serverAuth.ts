@@ -53,11 +53,15 @@ export async function verifyTokenFromCookie() {
 }
 
 export const getUserId = (request: NextRequest) => {
+  const token = request.cookies.get('token')?.value;
+
+  return getUserIdFromToken(token);
+};
+
+export const getUserIdFromToken = (token?: string) => {
   let error;
 
   // Verify authentication token
-  const token = request.cookies.get('token')?.value;
-
   if (!token) {
     error = NextResponse.json({ error: 'Не авторизован' }, { status: 401 });
   }
