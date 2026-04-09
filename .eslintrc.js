@@ -6,7 +6,7 @@ module.exports = {
   parserOptions: {
     project: './tsconfig.json',
   },
-  plugins: ['import', 'simple-import-sort', 'react-hooks', 'react'],
+  plugins: ['import', 'simple-import-sort', 'react-hooks', 'react', 'react-compiler'],
   ignorePatterns: ['**/*.test.ts', '**/*.test.tsx', '**/*.stories.tsx', 'setupTests.ts'],
   settings: {
     'import/resolver': {

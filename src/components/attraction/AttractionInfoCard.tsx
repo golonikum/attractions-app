@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { locateItemOnMainMap } from '@/lib/locateItemOnMainMap';
+import { cn } from '@/lib/utils';
 import { Attraction } from '@/types/attraction';
 import { Group } from '@/types/group';
 
@@ -42,13 +43,18 @@ export function AttractionInfoCard({ attraction, group }: AttractionInfoCardProp
         </div>
       </CardHeader>
 
-      <CardContent className={`flex gap-4 ${isWideScreen ? 'flex-row' : 'flex-col'}`}>
-        <AttractionImage
-          attraction={attraction}
-          className={`rounded-md ${isWideScreen ? 'h-full w-1/2' : 'h-96 w-full'}`}
-        />
+      <CardContent
+        className={cn(
+          'relative flex gap-4',
+          isWideScreen && 'h-[calc(100vh-300px)] flex-row',
+          !isWideScreen && 'flex-col',
+        )}
+      >
+        <div className={cn('relative flex-shrink-0', isWideScreen ? 'h-full w-1/2' : 'h-96 w-full')}>
+          <AttractionImage attraction={attraction} className="rounded-md" />
+        </div>
 
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 overflow-y-auto">
           {attraction.description && <p className="whitespace-pre-wrap">{attraction.description}</p>}
 
           {attraction.notes && attraction.notes.length > 0 && (

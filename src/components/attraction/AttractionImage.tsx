@@ -1,4 +1,5 @@
-import { Image, Star } from 'lucide-react';
+import { Image as ImageIcon, Star } from 'lucide-react';
+import Image from 'next/image';
 
 import { Attraction } from '@/types/attraction';
 
@@ -13,15 +14,11 @@ export const AttractionImage = ({
 }) =>
   attraction.imageUrl ? (
     <>
-      {showFavorite ? (
-        <div className="relative w-full h-full">
-          <img src={attraction.imageUrl} alt={attraction.name} className={`object-cover ${className}`} />
-          {attraction.isFavorite && <Star className="h-5 w-5 text-yellow-500 fill-current absolute top-1 left-1" />}
-        </div>
-      ) : (
-        <img src={attraction.imageUrl} alt={attraction.name} className={`object-cover ${className}`} />
+      <Image fill src={attraction.imageUrl} alt={attraction.name} className={`object-cover ${className}`} />
+      {showFavorite && attraction.isFavorite && (
+        <Star className="h-5 w-5 text-yellow-500 fill-current absolute top-1 left-1" />
       )}
     </>
   ) : (
-    <Image className="h-8 w-8 text-gray-400" />
+    <ImageIcon className="h-full w-full text-gray-400" />
   );

@@ -38,8 +38,8 @@ export function AttractionCard({ attraction, onDelete, onUpdate }: AttractionCar
   return (
     <Card isFavorite={attraction.isFavorite} isVisited={attraction.isVisited}>
       <div className="aspect-video bg-gray-100 flex items-center justify-center">
-        <Link href={`/attractions/${attraction.id}`} className="cursor-pointer">
-          <AttractionImage attraction={attraction} className="w-full h-full" />
+        <Link href={`/attractions/${attraction.id}`} className="cursor-pointer relative h-96 w-full flex-shrink-0">
+          <AttractionImage attraction={attraction} />
         </Link>
       </div>
       <CardHeader>

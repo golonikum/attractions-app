@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useData } from '@/contexts/DataContext';
-import { Attraction } from '@/types/attraction';
 import { CreateGroupRequest, Group } from '@/types/group';
 
 import { RemoveButton, ShowOnMapButton } from '../ui/buttons';

@@ -29,7 +29,9 @@ export const NotesTableRow = ({ note }: NotesTableRowProps) => {
   return (
     <tr className={attraction.isVisited ? 'bg-green-50' : ''} onClick={handleClick}>
       <td className="px-4 py-2  whitespace-nowrap cursor-pointer">
-        <AttractionImage attraction={attraction} className="h-24 w-24 rounded-md" showFavorite />
+        <div className="relative h-24 w-24 flex-shrink-0">
+          <AttractionImage attraction={attraction} className="rounded-md" showFavorite />
+        </div>
       </td>
       <td className="px-4 py-2  cursor-pointer">
         <div className="text-sm font-medium">
