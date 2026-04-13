@@ -17,9 +17,9 @@ const fetchCachedGroups = unstable_cache(
 
     return groups as any as Group[];
   },
-  ['static-attractions'], // unique cache key
+  ['static-groups'], // unique cache key
   {
-    tags: ['attractions'], // для revalidateTag('categories')
+    tags: ['groups'], // для revalidateTag('categories')
     revalidate: 24 * 60 * 60, // 24 часа (или 'max' для max-age)
   },
 );
