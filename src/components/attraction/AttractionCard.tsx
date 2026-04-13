@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { locateItemOnMainMap } from '@/lib/locateItemOnMainMap';
+import { locateItemOnMainMapHref } from '@/lib/locateItemOnMainMapHref';
 import { Attraction, CreateAttractionRequest } from '@/types/attraction';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -89,11 +89,7 @@ export function AttractionCard({ attraction, onDelete, onUpdate }: AttractionCar
 
         <div className="flex flex-col gap-4">
           <OpenInYandexMapButton attraction={attraction} />
-          <ShowOnMapButton
-            onClick={() => {
-              locateItemOnMainMap({ router, item: attraction });
-            }}
-          />
+          <ShowOnMapButton href={locateItemOnMainMapHref(attraction)} />
         </div>
       </CardContent>
     </Card>

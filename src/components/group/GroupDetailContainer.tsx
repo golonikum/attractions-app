@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 import { useData } from '@/contexts/DataContext';
@@ -10,7 +9,7 @@ import { useLocation } from '@/hooks/useLocation';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { useUpdateRequests } from '@/hooks/useUpdateRequests';
 import { DEFAULT_ATTRACTION_ZOOM } from '@/lib/constants';
-import { locateItemOnMainMap } from '@/lib/locateItemOnMainMap';
+import { locateItemOnMainMapHref } from '@/lib/locateItemOnMainMapHref';
 import { updateOrder } from '@/services/attractionService';
 import { updateGroup } from '@/services/groupService';
 import { Attraction, CreateAttractionRequest } from '@/types/attraction';
@@ -27,8 +26,6 @@ import { BackButton, ShowOnMapButton } from '@/components/ui/buttons';
 import { Map } from '@/components/ui/Map';
 
 export default function GroupDetailContainer() {
-  const router = useRouter();
-
   // UGLYHACK: to avoid useParams re-rendering
   const pathName = window.document.location.pathname;
   const groupId = pathName.match(/\/groups\/.+/) ? pathName.replace(/^.+groups\/(.+)$/gim, '$1') : '';
@@ -155,12 +152,7 @@ export default function GroupDetailContainer() {
         <div className="flex items-center">
           <BackButton route="/groups" />
           <div className="ml-auto flex space-x-1">
-            <ShowOnMapButton
-              view="icon"
-              onClick={() => {
-                locateItemOnMainMap({ router, item: group });
-              }}
-            />
+            <ShowOnMapButton view="icon" href={locateItemOnMainMapHref(group)} />
             <NewGroupDialog
               groupData={group}
               handleSubmit={handleSubmit}

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { useIsMobile } from '@/hooks/useIsMobile';
-import { locateItemOnMainMap } from '@/lib/locateItemOnMainMap';
+import { locateItemOnMainMapHref } from '@/lib/locateItemOnMainMapHref';
 import { cn } from '@/lib/utils';
 import { Attraction } from '@/types/attraction';
 import { Group } from '@/types/group';
@@ -75,11 +75,7 @@ export function AttractionInfoCard({ attraction, group }: AttractionInfoCardProp
           {!isWideScreen && (
             <>
               <OpenInYandexMapButton attraction={attraction} />
-              <ShowOnMapButton
-                onClick={() => {
-                  locateItemOnMainMap({ router, item: attraction });
-                }}
-              />
+              <ShowOnMapButton href={locateItemOnMainMapHref(attraction)} />
             </>
           )}
         </div>

@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { useUpdateRequests } from '@/hooks/useUpdateRequests';
-import { locateItemOnMainMap } from '@/lib/locateItemOnMainMap';
+import { locateItemOnMainMapHref } from '@/lib/locateItemOnMainMapHref';
 import { getAttractionById } from '@/services/attractionService';
 import { getGroupById } from '@/services/groupService';
 import { Attraction, CreateAttractionRequest } from '@/types/attraction';
@@ -102,12 +102,7 @@ export default function AttractionDetailContainer() {
         <div className="ml-auto flex space-x-1">
           {isWideScreen && (
             <>
-              <ShowOnMapButton
-                view="icon"
-                onClick={() => {
-                  locateItemOnMainMap({ router, item: attraction });
-                }}
-              />
+              <ShowOnMapButton view="icon" href={locateItemOnMainMapHref(attraction)} />
               <OpenInYandexMapButton view="icon" attraction={attraction} />
             </>
           )}

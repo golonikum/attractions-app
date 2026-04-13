@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 import { useData } from '@/contexts/DataContext';
 import { useIsMobile } from '@/hooks/useIsMobile';
-import { locateItemOnMainMap } from '@/lib/locateItemOnMainMap';
+import { locateItemOnMainMapHref } from '@/lib/locateItemOnMainMapHref';
 import { CreateGroupRequest, Group } from '@/types/group';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,7 +21,6 @@ interface GroupCardProps {
 }
 
 export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
-  const router = useRouter();
   const { isWideScreen } = useIsMobile();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -33,10 +31,6 @@ export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
     e.stopPropagation();
     e.preventDefault();
     setIsDeleteDialogOpen(true);
-  };
-
-  const handleLocate = () => {
-    locateItemOnMainMap({ router, item: group });
   };
 
   return (
@@ -54,7 +48,6 @@ export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
               {group.tag && <Tag text={group.tag} />}
             </div>
           </Link>
-          {isWideScreen && <ShowOnMapButton onClick={handleLocate} view="icon" />}
           <NewGroupDialog
             groupData={group}
             handleSubmit={onUpdate}
@@ -80,7 +73,7 @@ export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
       <Link className="flex-1" href={`/groups/${group.id}`}>
         <CardContent className="cursor-pointer flex flex-col gap-4 justify-between flex-1">
           <CardDescription>{group.description}</CardDescription>
-          {!isWideScreen && <ShowOnMapButton onClick={handleLocate} />}
+          {!isWideScreen && <ShowOnMapButton href={locateItemOnMainMapHref(group)} />}
         </CardContent>
       </Link>
     </Card>
