@@ -1,5 +1,6 @@
 import { FC, useContext } from 'react';
 import { Minus, Plus } from 'lucide-react';
+import Link from 'next/link';
 import { YMapCenterLocation, YMapZoomLocation } from 'ymaps3';
 
 import { ThemeProviderContext } from '@/contexts/ThemeContext';
@@ -26,10 +27,10 @@ type MapPropsType = {
   items?: Attraction[] | GroupWithAttractions[];
   location?: YMapCenterLocation & YMapZoomLocation;
   setLocation: React.Dispatch<React.SetStateAction<YMapCenterLocation & YMapZoomLocation>>;
-  onItemClick?: (id: string) => void;
+  getLink: (id: string) => string;
 };
 
-export const Map: FC<MapPropsType> = ({ items, location = DEFAULT_LOCATION, setLocation, onItemClick }) => {
+export const Map: FC<MapPropsType> = ({ items, location = DEFAULT_LOCATION, setLocation, getLink }) => {
   const { isMapReady } = useMapReady();
   const { theme } = useContext(ThemeProviderContext);
   const setLocationDebounced = useDebounceCallback(setLocation, 500);
@@ -74,14 +75,14 @@ export const Map: FC<MapPropsType> = ({ items, location = DEFAULT_LOCATION, setL
           : item.attractions.some((attraction) => attraction.isVisited);
 
         return (
-          <MarkerPin
-            key={item.id}
-            coordinates={[item.coordinates[1], item.coordinates[0]]}
-            visited={isVisited}
-            title={item.name}
-            onClick={() => onItemClick?.(item.id)}
-            isActive={isActive}
-          />
+          <Link href={getLink(item.id)} key={item.id}>
+            <MarkerPin
+              coordinates={[item.coordinates[1], item.coordinates[0]]}
+              visited={isVisited}
+              title={item.name}
+              isActive={isActive}
+            />
+          </Link>
         );
       })}
     </YMap>

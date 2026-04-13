@@ -25,7 +25,6 @@ import { NewGroupDialog } from '@/components/group/NewGroupDialog';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { BackButton, ShowOnMapButton } from '@/components/ui/buttons';
 import { Map } from '@/components/ui/Map';
-import { NotFoundStub } from '@/components/ui/stubs';
 
 export default function GroupDetailContainer() {
   const router = useRouter();
@@ -189,9 +188,7 @@ export default function GroupDetailContainer() {
                 location={location}
                 setLocation={setLocation}
                 items={attractions}
-                onItemClick={(id) => {
-                  router.push(`/attractions/${id}`);
-                }}
+                getLink={(id) => `/attractions/${id}`}
               />
             </div>
 

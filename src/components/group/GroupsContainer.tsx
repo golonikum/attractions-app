@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 import { DataProvider, useData } from '@/contexts/DataContext';
@@ -22,7 +21,6 @@ import { MultiSelect } from '@/components/ui/MultiSelect';
 import { FoundCountStub } from '@/components/ui/stubs';
 
 export default function GroupsContainer() {
-  const router = useRouter();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const {
@@ -167,9 +165,7 @@ export default function GroupsContainer() {
                 location={location}
                 setLocation={setLocation}
                 items={filteredGroups}
-                onItemClick={(id) => {
-                  router.push(`/groups/${id}`);
-                }}
+                getLink={(id) => `/groups/${id}`}
               />
             </div>
 
