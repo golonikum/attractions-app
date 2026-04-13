@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { useData } from '@/contexts/DataContext';
@@ -28,10 +29,6 @@ export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { attractionsMap } = useData();
 
-  const handleCardClick = () => {
-    router.push(`/groups/${group.id}`);
-  };
-
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
@@ -46,15 +43,17 @@ export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
     <Card className="overflow-hidden flex flex-col">
       <CardHeader>
         <div className="flex justify-between items-start space-x-1">
-          <div className="flex-1 flex flex-col gap-2 cursor-pointer" onClick={handleCardClick}>
-            <CardTitle className="text-lg/5">
-              {group.name}{' '}
-              {!!attractionsMap[group.id]?.length && (
-                <span className="font-normal text-gray-400">({attractionsMap[group.id].length})</span>
-              )}
-            </CardTitle>
-            {group.tag && <Tag text={group.tag} />}
-          </div>
+          <Link className="flex-1" href={`/groups/${group.id}`}>
+            <div className="flex-1 flex flex-col gap-2 cursor-pointer">
+              <CardTitle className="text-lg/5">
+                {group.name}{' '}
+                {!!attractionsMap[group.id]?.length && (
+                  <span className="font-normal text-gray-400">({attractionsMap[group.id].length})</span>
+                )}
+              </CardTitle>
+              {group.tag && <Tag text={group.tag} />}
+            </div>
+          </Link>
           {isWideScreen && <ShowOnMapButton onClick={handleLocate} view="icon" />}
           <NewGroupDialog
             groupData={group}
@@ -78,10 +77,12 @@ export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
           />
         </div>
       </CardHeader>
-      <CardContent className="cursor-pointer flex flex-col gap-4 justify-between flex-1" onClick={handleCardClick}>
-        <CardDescription>{group.description}</CardDescription>
-        {!isWideScreen && <ShowOnMapButton onClick={handleLocate} />}
-      </CardContent>
+      <Link className="flex-1" href={`/groups/${group.id}`}>
+        <CardContent className="cursor-pointer flex flex-col gap-4 justify-between flex-1">
+          <CardDescription>{group.description}</CardDescription>
+          {!isWideScreen && <ShowOnMapButton onClick={handleLocate} />}
+        </CardContent>
+      </Link>
     </Card>
   );
 }

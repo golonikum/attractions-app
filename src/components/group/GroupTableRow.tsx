@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 import { useData } from '@/contexts/DataContext';
 import { CreateGroupRequest, Group } from '@/types/group';
@@ -19,7 +19,6 @@ export type GroupTableRowProps = {
 };
 
 export const GroupTableRow = ({ group, onDelete, onUpdate, onLocate }: GroupTableRowProps) => {
-  const router = useRouter();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -31,28 +30,28 @@ export const GroupTableRow = ({ group, onDelete, onUpdate, onLocate }: GroupTabl
     setIsDeleteDialogOpen(true);
   };
 
-  const handleGroupClick = (item: Group) => () => {
-    router.push(`/groups/${item.id}`);
-  };
-
   const onLocateClick = () => {
     onLocate(group);
   };
 
   return (
     <tr>
-      <td className="px-4 py-2  cursor-pointer" onClick={handleGroupClick(group)}>
-        <div className="text-sm font-medium">
-          {group.name} <span className="font-normal">({attractionsMap[group.id]?.length || 0})</span>
-        </div>
+      <td className="px-4 py-2  cursor-pointer">
+        <Link href={`/groups/${group.id}`}>
+          <div className="text-sm font-medium">
+            {group.name} <span className="font-normal">({attractionsMap[group.id]?.length || 0})</span>
+          </div>
+        </Link>
       </td>
-      <td className="px-4 py-2  cursor-pointer" onClick={handleGroupClick(group)}>
-        {group.tag && <Tag text={group.tag} />}
+      <td className="px-4 py-2  cursor-pointer">
+        <Link href={`/groups/${group.id}`}>{group.tag && <Tag text={group.tag} />}</Link>
       </td>
-      <td className="px-4 py-2  cursor-pointer" onClick={handleGroupClick(group)}>
-        <div className="text-sm line-clamp-4">
-          <GroupTableCellDescription description={group.description} />
-        </div>
+      <td className="px-4 py-2  cursor-pointer">
+        <Link href={`/groups/${group.id}`}>
+          <div className="text-sm line-clamp-4">
+            <GroupTableCellDescription description={group.description} />
+          </div>
+        </Link>
       </td>
       <td className="px-4 py-2  whitespace-nowrap text-sm font-medium">
         <div className="flex space-x-1">

@@ -1,4 +1,5 @@
 import { Calendar } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { useIsMobile } from '@/hooks/useIsMobile';
@@ -30,14 +31,11 @@ export function AttractionInfoCard({ attraction, group }: AttractionInfoCardProp
         <div className="flex gap-4 justify-between items-start">
           <CardTitle className="flex flex-col gap-2 flex-start">
             {attraction.name}{' '}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => router.push(`/groups/${group?.id}`)}
-              className="mr-4 cursor-pointer w-fit"
-            >
-              {group?.name}
-            </Button>
+            <Link href={`/groups/${group?.id}`}>
+              <Button variant="ghost" size="sm" className="mr-4 cursor-pointer w-fit">
+                {group?.name}
+              </Button>
+            </Link>
           </CardTitle>
           {attraction.category && <Tag text={attraction.category} variant="default" />}
         </div>

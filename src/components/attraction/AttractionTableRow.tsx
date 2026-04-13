@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 import { Attraction, CreateAttractionRequest } from '@/types/attraction';
 
@@ -27,7 +27,6 @@ export const AttractionTableRow = ({
   onLocate,
   hasDnd = true,
 }: AttractionTableRowProps) => {
-  const router = useRouter();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -46,10 +45,6 @@ export const AttractionTableRow = ({
     setIsDeleteDialogOpen(true);
   };
 
-  const handleAttractionClick = (item: Attraction) => () => {
-    router.push(`/attractions/${item.id}`);
-  };
-
   const onLocateAttractionClick = () => {
     onLocate(attraction);
   };
@@ -63,17 +58,23 @@ export const AttractionTableRow = ({
       {...listeners}
     >
       {hasDnd && <td className="px-4 py-2  cursor-move">☰</td>}
-      <td className="px-4 py-2  whitespace-nowrap cursor-pointer" onClick={handleAttractionClick(attraction)}>
-        <div className="relative h-24 w-24 flex-shrink-0">
-          <AttractionImage attraction={attraction} className="rounded-md" showFavorite />
-        </div>
+      <td className="px-4 py-2  whitespace-nowrap cursor-pointer">
+        <Link href={`/attractions/${attraction.id}`}>
+          <div className="relative h-24 w-24 flex-shrink-0">
+            <AttractionImage attraction={attraction} className="rounded-md" showFavorite />
+          </div>
+        </Link>
       </td>
-      <td className="px-4 py-2  cursor-pointer" onClick={handleAttractionClick(attraction)}>
-        <div className="text-sm font-medium">{attraction.name}</div>
-        {attraction.category && <Tag text={attraction.category} />}
+      <td className="px-4 py-2  cursor-pointer">
+        <Link href={`/attractions/${attraction.id}`}>
+          <div className="text-sm font-medium">{attraction.name}</div>
+          {attraction.category && <Tag text={attraction.category} />}
+        </Link>
       </td>
-      <td className="px-4 py-2  cursor-pointer" onClick={handleAttractionClick(attraction)}>
-        <div className="text-sm line-clamp-4">{attraction.description || 'Нет описания'}</div>
+      <td className="px-4 py-2  cursor-pointer">
+        <Link href={`/attractions/${attraction.id}`}>
+          <div className="text-sm line-clamp-4">{attraction.description || 'Нет описания'}</div>
+        </Link>
       </td>
       <td className="px-4 py-2  whitespace-nowrap text-sm font-medium">
         <div className="flex justify-end space-x-1">
