@@ -26,8 +26,8 @@ export function NoteCard({ note }: NoteCardProps) {
   return (
     <Link href={`/attractions/${attraction.id}`}>
       <Card isFavorite={attraction.isFavorite} isVisited={attraction.isVisited}>
-        <div className="aspect-video bg-gray-100 flex items-center justify-center">
-          <AttractionImage attraction={attraction} className="w-full h-full" />
+        <div className="aspect-video bg-gray-100 flex items-center justify-center relative h-96 w-full flex-shrink-0">
+          <AttractionImage attraction={attraction} />
         </div>
         <CardHeader>
           <div className="flex justify-between items-start">
