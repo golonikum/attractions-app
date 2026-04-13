@@ -1,12 +1,8 @@
 import { Attraction } from '@/types/attraction';
 import { Group } from '@/types/group';
 
-import { getLocationSearchParams } from './getLocationSearchParams';
+import { locateItemOnMainMapHref } from './locateItemOnMainMapHref';
 
-// TODO: remove
 export const locateItemOnMainMap = ({ router, item }: { router: any; item: Group | Attraction }) => {
-  const newUrl = `${window.location.pathname}${getLocationSearchParams(item)}`;
-  window.history.replaceState({}, '', newUrl);
-
-  router.push('/main');
+  router.push(locateItemOnMainMapHref(item));
 };
