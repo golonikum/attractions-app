@@ -1,7 +1,5 @@
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
-import { DEFAULT_TAG_ZOOM } from '@/lib/constants';
-import { getLocationSearchParams } from '@/lib/getLocationSearchParams';
 import { Attraction } from '@/types/attraction';
 import { Group } from '@/types/group';
 
@@ -14,17 +12,16 @@ interface GroupInfoCardProps {
 }
 
 export function GroupInfoCard({ group, attractions }: GroupInfoCardProps) {
-  const router = useRouter();
+  // const router = useRouter();
 
-  const onTagClick = () => {
-    const newUrl = `${window.location.pathname}${getLocationSearchParams(
-      group,
-      DEFAULT_TAG_ZOOM,
-    )}&tag=${group.tag?.replace(' ', '+')}`;
-    window.history.replaceState({}, '', newUrl);
-
-    router.push('/groups');
-  };
+  // const onTagClick = () => {
+  //   const newUrl = `${window.location.pathname}${getLocationSearchParams(
+  //     group,
+  //     DEFAULT_TAG_ZOOM,
+  //   )}&tag=${group.tag?.replace(' ', '+')}`;
+  //   window.history.replaceState({}, '', newUrl);
+  //   router.push('/groups');
+  // };
 
   return (
     <Card className="shrink-0">
@@ -34,7 +31,11 @@ export function GroupInfoCard({ group, attractions }: GroupInfoCardProps) {
             {group.name}{' '}
             {!!attractions.length && <span className="font-normal text-gray-400">({attractions.length})</span>}
           </CardTitle>
-          {group.tag && <Tag className="cursor-pointer" text={group.tag} variant="default" onClick={onTagClick} />}
+          {group.tag && (
+            <Link href={`/groups?tag=${group.tag?.replace(' ', '+')}`}>
+              <Tag className="cursor-pointer" text={group.tag} variant="default" />
+            </Link>
+          )}
         </div>
       </CardHeader>
       <CardContent>
