@@ -1,19 +1,31 @@
-import { cookies } from 'next/headers';
+import { unstable_cache } from 'next/cache';
 
 import { Group } from '@/types/group';
 
 import { prisma } from '../db';
-import { getUserIdFromToken } from '../serverAuth';
 
-export const fetchGroups = async () => {
-  const cookieStore = await cookies();
-  const token = cookieStore.get('token')?.value;
-  const { userId } = getUserIdFromToken(token);
+import { getUserIdFromCookies } from './getUserIdFromCookies';
 
-  const groups = await prisma.group.findMany({
-    where: { userId },
-    orderBy: [{ tag: 'asc' }, { name: 'asc' }],
-  });
+const fetchCachedGroups = unstable_cache(
+  async (userId?: string) => {
+    'use cache';
 
-  return groups as any as Group[];
-};
+    const groups = await prisma.group.findMany({
+      where: { userId },
+      orderBy: [{ tag: 'asc' }, { name: 'asc' }],
+    });
+
+    return groups as any as Group[];
+  },
+  ['static-attractions'], // unique cache key
+  {
+    tags: ['attractions'], // для revalidateTag('categories')
+    revalidate: 24 * 60 * 60, // 24 часа (или 'max' для max-age)
+  },
+);
+
+export async function fetchGroups() {
+  const userId = await getUserIdFromCookies();
+
+  return fetchCachedGroups(userId);
+}
