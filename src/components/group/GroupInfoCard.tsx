@@ -12,17 +12,6 @@ interface GroupInfoCardProps {
 }
 
 export function GroupInfoCard({ group, attractions }: GroupInfoCardProps) {
-  // const router = useRouter();
-
-  // const onTagClick = () => {
-  //   const newUrl = `${window.location.pathname}${getLocationSearchParams(
-  //     group,
-  //     DEFAULT_TAG_ZOOM,
-  //   )}&tag=${group.tag?.replace(' ', '+')}`;
-  //   window.history.replaceState({}, '', newUrl);
-  //   router.push('/groups');
-  // };
-
   return (
     <Card className="shrink-0">
       <CardHeader>
