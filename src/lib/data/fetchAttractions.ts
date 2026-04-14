@@ -1,38 +1,25 @@
-import { unstable_cache } from 'next/cache';
+import { cookies } from 'next/headers';
 
 import { Attraction } from '@/types/attraction';
 
 import { prisma } from '../db';
+import { getUserIdFromToken } from '../serverAuth';
 
-import { getUserIdFromCookies } from './getUserIdFromCookies';
+export const fetchAttractions = async (groupId?: string) => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('token')?.value;
+  const { userId } = getUserIdFromToken(token);
+  const whereClause: any = { userId };
 
-const fetchCachedAttractions = unstable_cache(
-  async (userId?: string, groupId?: string) => {
-    'use cache';
+  if (groupId) {
+    // If groupId is provided, get attractions for that group
+    whereClause.groupId = groupId;
+  }
 
-    const whereClause: any = { userId };
+  const attractions = await prisma.attraction.findMany({
+    where: whereClause,
+    orderBy: { order: 'asc' },
+  });
 
-    if (groupId) {
-      // If groupId is provided, get attractions for that group
-      whereClause.groupId = groupId;
-    }
-
-    const attractions = await prisma.attraction.findMany({
-      where: whereClause,
-      orderBy: { order: 'asc' },
-    });
-
-    return attractions as any as Attraction[];
-  },
-  ['static-attractions'], // unique cache key
-  {
-    tags: ['attractions'], // для revalidateTag('categories')
-    revalidate: 24 * 60 * 60, // 24 часа (или 'max' для max-age)
-  },
-);
-
-export async function fetchAttractions(groupId?: string) {
-  const userId = await getUserIdFromCookies();
-
-  return fetchCachedAttractions(userId, groupId);
-}
+  return attractions as any as Attraction[];
+};

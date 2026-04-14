@@ -8,7 +8,6 @@ import { AuthContextProvider } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 
 import PWALayout from '@/components/pwa/PWALayout';
-import { LoadingStub } from '@/components/ui/stubs';
 
 import './globals.css';
 
@@ -73,14 +72,12 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider defaultTheme="light">
-          <Suspense fallback={<LoadingStub />}>
-            <AuthContextProvider>
-              <PWALayout>
-                <Suspense>{children}</Suspense>
-                <Toaster position="top-right" richColors />
-              </PWALayout>
-            </AuthContextProvider>
-          </Suspense>
+          <AuthContextProvider>
+            <PWALayout>
+              <Suspense>{children}</Suspense>
+              <Toaster position="top-right" richColors />
+            </PWALayout>
+          </AuthContextProvider>
         </ThemeProvider>
       </body>
     </html>
