@@ -1,3 +1,4 @@
+import { cacheTag } from 'next/cache';
 import { cookies } from 'next/headers';
 
 import { Attraction } from '@/types/attraction';
@@ -5,16 +6,11 @@ import { Attraction } from '@/types/attraction';
 import { prisma } from '../db';
 import { getUserIdFromToken } from '../serverAuth';
 
-export const fetchAttractions = async (groupId?: string) => {
-  const cookieStore = await cookies();
-  const token = cookieStore.get('token')?.value;
-  const { userId } = getUserIdFromToken(token);
-  const whereClause: any = { userId };
+const fetchAttractionsWithUser = async (userId: string | undefined) => {
+  'use cache';
+  cacheTag('attractions');
 
-  if (groupId) {
-    // If groupId is provided, get attractions for that group
-    whereClause.groupId = groupId;
-  }
+  const whereClause: any = { userId };
 
   const attractions = await prisma.attraction.findMany({
     where: whereClause,
@@ -22,4 +18,12 @@ export const fetchAttractions = async (groupId?: string) => {
   });
 
   return attractions as any as Attraction[];
+};
+
+export const fetchAttractions = async () => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('token')?.value;
+  const { userId } = getUserIdFromToken(token);
+
+  return fetchAttractionsWithUser(userId);
 };

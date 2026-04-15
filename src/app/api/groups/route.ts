@@ -1,3 +1,4 @@
+import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { prisma } from '@/lib/db';
@@ -50,6 +51,8 @@ export async function POST(request: NextRequest) {
         zoom,
       },
     });
+
+    revalidateTag('groups', { expire: 0 });
 
     return NextResponse.json({ group }, { status: 201 });
   });
