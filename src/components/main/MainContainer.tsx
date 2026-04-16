@@ -6,8 +6,10 @@ import { useQueryParams } from '@/hooks/useQueryParams';
 
 import { Map } from '@/components/ui/Map';
 
+import { LoadingStub } from '../ui/stubs';
+
 export default function MainContainer() {
-  const { attractions } = useData();
+  const { attractions, isAttractionsLoading } = useData();
   const { selectedZoom, setSelectedZoom, selectedCoordinates, setSelectedCoordinates } = useQueryParams([
     'zoom',
     'coordinates',
@@ -19,7 +21,9 @@ export default function MainContainer() {
     setSelectedCoordinates,
   });
 
-  return (
+  return isAttractionsLoading ? (
+    <LoadingStub />
+  ) : (
     <div className="max-w-full pt-[65px] h-full h-screen">
       <div className="flex flex-col gap-4 justify-between items-center h-full">
         <div className="w-full flex-1">
