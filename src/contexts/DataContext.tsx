@@ -1,42 +1,48 @@
 'use client';
 
-import { createContext, Dispatch, SetStateAction, useContext, useMemo, useState } from 'react';
+import { createContext, Dispatch, SetStateAction, useContext, useMemo } from 'react';
 
+import { useGetAllAttractions } from '@/hooks/useGetAllAttractions';
+import { useGetAllGroups } from '@/hooks/useGetAllGroups';
 import { Attraction } from '@/types/attraction';
 import { Group } from '@/types/group';
 
 type DataProviderProps = {
-  groups: Group[];
-  attractions: Attraction[];
   children: React.ReactNode;
 };
 
 type DataProviderState = {
   groups: Group[];
+  isGroupsLoading: boolean;
   setGroups: Dispatch<SetStateAction<Group[]>>;
   attractions: Attraction[];
+  isAttractionsLoading: boolean;
   setAttractions: Dispatch<SetStateAction<Attraction[]>>;
+  reload: (props?: { groups?: boolean; attractions?: boolean }) => Promise<void>;
   attractionsMap: Record<string, Attraction[]>;
 };
 
 const initialState: DataProviderState = {
   groups: [],
+  isGroupsLoading: false,
   setGroups: () => {},
   attractions: [],
+  isAttractionsLoading: false,
   setAttractions: () => {},
+  reload: () => Promise.resolve(),
   attractionsMap: {},
 };
 
 export const DataProviderContext = createContext<DataProviderState>(initialState);
 
-export function DataProvider({
-  children,
-  attractions: initialAttractions,
-  groups: initialGroups,
-  ...props
-}: DataProviderProps) {
-  const [groups, setGroups] = useState<Group[]>(initialGroups);
-  const [attractions, setAttractions] = useState<Attraction[]>(initialAttractions);
+export function DataProvider({ children, ...props }: DataProviderProps) {
+  const {
+    attractions,
+    setAttractions,
+    fetchData: fetchAttractions,
+    isLoading: isAttractionsLoading,
+  } = useGetAllAttractions();
+  const { groups, setGroups, fetchData: fetchGroups, isLoading: isGroupsLoading } = useGetAllGroups();
 
   const attractionsMap = useMemo(
     () =>
@@ -57,9 +63,20 @@ export function DataProvider({
 
   const value: DataProviderState = {
     groups,
+    isGroupsLoading,
     setGroups,
     attractions,
+    isAttractionsLoading,
     setAttractions,
+    reload: async ({ groups: g, attractions: a } = {}) => {
+      if (g) {
+        await fetchGroups(true);
+      }
+
+      if (a) {
+        await fetchAttractions(true);
+      }
+    },
     attractionsMap,
   };
 

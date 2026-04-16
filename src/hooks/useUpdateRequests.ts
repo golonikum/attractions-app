@@ -5,7 +5,7 @@ import { CreateAttractionRequest, UpdateAttractionRequest } from '@/types/attrac
 import { CreateGroupRequest, UpdateGroupRequest } from '@/types/group';
 
 export const useUpdateRequests = () => {
-  const { setGroups, setAttractions } = useData();
+  const { setGroups, setAttractions, reload } = useData();
 
   return {
     // Groups
@@ -15,6 +15,7 @@ export const useUpdateRequests = () => {
 
       if (newGroup) {
         setGroups((groups) => [newGroup, ...groups]);
+        reload({ groups: true });
       }
 
       return newGroup;
@@ -34,6 +35,7 @@ export const useUpdateRequests = () => {
 
           return newGroups;
         });
+        reload({ groups: true });
       }
 
       return updatedGroup;
@@ -41,6 +43,7 @@ export const useUpdateRequests = () => {
     deleteGroup: async (id: string) => {
       await deleteGroup(id);
       setGroups((groups) => groups.filter((group) => group.id !== id));
+      reload({ groups: true });
     },
     // Attractions
     createAttraction: async (attractionData: CreateAttractionRequest) => {
@@ -49,6 +52,7 @@ export const useUpdateRequests = () => {
 
       if (newAttraction) {
         setAttractions((attractions) => [...attractions, newAttraction]);
+        reload({ attractions: true });
       }
 
       return newAttraction;
@@ -68,6 +72,7 @@ export const useUpdateRequests = () => {
 
           return newAttractions;
         });
+        reload({ attractions: true });
       }
 
       return updatedAttraction;
@@ -75,6 +80,7 @@ export const useUpdateRequests = () => {
     deleteAttraction: async (id: string) => {
       await deleteAttraction(id);
       setAttractions((attractions) => attractions.filter((attraction) => attraction.id !== id));
+      reload({ attractions: true });
     },
   };
 };

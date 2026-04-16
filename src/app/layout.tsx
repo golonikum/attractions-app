@@ -5,6 +5,7 @@ import Script from 'next/script';
 import { Toaster } from 'sonner';
 
 import { AuthContextProvider } from '@/contexts/AuthContext';
+import { DataProvider } from '@/contexts/DataContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 
 import PWALayout from '@/components/pwa/PWALayout';
@@ -75,10 +76,12 @@ export default function RootLayout({
         <ThemeProvider defaultTheme="light">
           <Suspense fallback={<LoadingStub />}>
             <AuthContextProvider>
-              <PWALayout>
-                <Suspense>{children}</Suspense>
-                <Toaster position="top-right" richColors />
-              </PWALayout>
+              <DataProvider>
+                <PWALayout>
+                  <Suspense>{children}</Suspense>
+                  <Toaster position="top-right" richColors />
+                </PWALayout>
+              </DataProvider>
             </AuthContextProvider>
           </Suspense>
         </ThemeProvider>

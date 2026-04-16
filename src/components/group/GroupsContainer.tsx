@@ -122,85 +122,83 @@ export default function GroupsContainer() {
   );
 
   return (
-    <DataProvider attractions={attractions} groups={groups}>
-      <div
-        className={`container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4 ${
-          isWideScreen ? 'overflow-hidden h-screen' : ''
-        }`}
-      >
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          {/* Фильтры по тегам и поиск */}
-          <div className="w-full space-y-4 md:space-y-0 md:space-x-4 md:flex md:flex-row md:w-auto md:items-center">
-            <div className="flex-1 shrink-0">
-              <input
-                type="text"
-                placeholder="Поиск..."
-                className="w-full h-10 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            <MultiSelect
-              options={allTags}
-              selectedOptions={selectedTag}
-              onSelectionChange={setSelectedTag}
-              placeholder="Фильтровать по регионам"
+    <div
+      className={`container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4 ${
+        isWideScreen ? 'overflow-hidden h-screen' : ''
+      }`}
+    >
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        {/* Фильтры по тегам и поиск */}
+        <div className="w-full space-y-4 md:space-y-0 md:space-x-4 md:flex md:flex-row md:w-auto md:items-center">
+          <div className="flex-1 shrink-0">
+            <input
+              type="text"
+              placeholder="Поиск..."
+              className="w-full h-10 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <FoundCountStub count={filteredGroups.length} hasFilters={selectedTag.length > 0 || !!searchQuery.trim()} />
           </div>
-          <NewGroupDialog
-            handleSubmit={handleSubmit}
-            isOpen={isCreateDialogOpen}
-            setIsOpen={setIsCreateDialogOpen}
-            isSubmitting={isSubmitting}
-            setIsSubmitting={setIsSubmitting}
-            selectedTag={selectedTag.length === 1 ? selectedTag[0] : undefined}
+          <MultiSelect
+            options={allTags}
+            selectedOptions={selectedTag}
+            onSelectionChange={setSelectedTag}
+            placeholder="Фильтровать по регионам"
           />
+          <FoundCountStub count={filteredGroups.length} hasFilters={selectedTag.length > 0 || !!searchQuery.trim()} />
         </div>
+        <NewGroupDialog
+          handleSubmit={handleSubmit}
+          isOpen={isCreateDialogOpen}
+          setIsOpen={setIsCreateDialogOpen}
+          isSubmitting={isSubmitting}
+          setIsSubmitting={setIsSubmitting}
+          selectedTag={selectedTag.length === 1 ? selectedTag[0] : undefined}
+        />
+      </div>
 
-        {isWideScreen ? (
-          <div className="flex-1 flex flex-row gap-4 h-[calc(100vh-150px)]">
-            <div className="h-full min-w-[800px]">
-              <Map
-                location={location}
-                setLocation={setLocation}
-                items={filteredGroups}
-                getLink={(id) => `/groups/${id}`}
-              />
-            </div>
-
-            <div className="overflow-x-auto flex-1">
-              {filteredGroups.length === 0 ? (
-                emptyState
-              ) : (
-                <GroupTable
-                  groups={filteredGroups}
-                  onDelete={handleDeleteGroup}
-                  onUpdate={getHandleUpdate}
-                  onLocate={handleLocateGroup}
-                />
-              )}
-            </div>
+      {isWideScreen ? (
+        <div className="flex-1 flex flex-row gap-4 h-[calc(100vh-150px)]">
+          <div className="h-full min-w-[800px]">
+            <Map
+              location={location}
+              setLocation={setLocation}
+              items={filteredGroups}
+              getLink={(id) => `/groups/${id}`}
+            />
           </div>
-        ) : (
-          <>
+
+          <div className="overflow-x-auto flex-1">
             {filteredGroups.length === 0 ? (
               emptyState
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredGroups.map((group) => (
-                  <GroupCard
-                    key={group.id}
-                    group={group}
-                    onDelete={handleDeleteGroup}
-                    onUpdate={getHandleUpdate(group.id)}
-                  />
-                ))}
-              </div>
+              <GroupTable
+                groups={filteredGroups}
+                onDelete={handleDeleteGroup}
+                onUpdate={getHandleUpdate}
+                onLocate={handleLocateGroup}
+              />
             )}
-          </>
-        )}
-      </div>
-    </DataProvider>
+          </div>
+        </div>
+      ) : (
+        <>
+          {filteredGroups.length === 0 ? (
+            emptyState
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredGroups.map((group) => (
+                <GroupCard
+                  key={group.id}
+                  group={group}
+                  onDelete={handleDeleteGroup}
+                  onUpdate={getHandleUpdate(group.id)}
+                />
+              ))}
+            </div>
+          )}
+        </>
+      )}
+    </div>
   );
 }
