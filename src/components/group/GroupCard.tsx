@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { RowComponentProps } from 'react-window';
 import Link from 'next/link';
 
 import { useData } from '@/contexts/DataContext';
@@ -15,12 +16,13 @@ import { Tag } from '../ui/Tag';
 import { NewGroupDialog } from './NewGroupDialog';
 
 interface GroupCardProps {
-  group: Group;
+  groups: Group[];
   onDelete: (id: string) => void;
-  onUpdate: (formData: CreateGroupRequest) => Promise<void>;
+  onUpdate: (id: string) => (formData: CreateGroupRequest) => Promise<void>;
 }
 
-export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
+export function GroupCard({ groups, onDelete, onUpdate, style, index }: RowComponentProps<GroupCardProps>) {
+  const group = groups[index];
   const { isWideScreen } = useIsMobile();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -34,48 +36,50 @@ export function GroupCard({ group, onDelete, onUpdate }: GroupCardProps) {
   };
 
   return (
-    <Card className="overflow-hidden flex flex-col">
-      <CardHeader>
-        <div className="flex justify-between items-start space-x-1">
-          <Link className="flex-1" href={`/groups/${group.id}`}>
-            <div className="flex-1 flex flex-col gap-2 cursor-pointer">
-              <CardTitle className="text-lg/5">
-                {group.name}{' '}
-                {!!attractionsMap[group.id]?.length && (
-                  <span className="font-normal text-gray-400">({attractionsMap[group.id].length})</span>
-                )}
-              </CardTitle>
-              {group.tag && <Tag text={group.tag} />}
-            </div>
-          </Link>
-          <NewGroupDialog
-            groupData={group}
-            handleSubmit={onUpdate}
-            isOpen={isEditDialogOpen}
-            setIsOpen={setIsEditDialogOpen}
-            isSubmitting={isSubmitting}
-            setIsSubmitting={setIsSubmitting}
-          />
-          <RemoveButton onClick={handleDeleteClick} />
+    <div style={style}>
+      <Card className="overflow-hidden flex flex-col mb-4">
+        <CardHeader>
+          <div className="flex justify-between items-start space-x-1">
+            <Link className="flex-1 max-w-[calc(100%_-_80px)]" href={`/groups/${group.id}`}>
+              <div className="flex-1 flex flex-col gap-2 cursor-pointer">
+                <CardTitle className="text-lg/5 truncate">
+                  {group.name}{' '}
+                  {!!attractionsMap[group.id]?.length && (
+                    <span className="font-normal text-gray-400">({attractionsMap[group.id].length})</span>
+                  )}
+                </CardTitle>
+                {group.tag && <Tag text={group.tag} className="truncate" />}
+              </div>
+            </Link>
+            <NewGroupDialog
+              groupData={group}
+              handleSubmit={onUpdate(group.id)}
+              isOpen={isEditDialogOpen}
+              setIsOpen={setIsEditDialogOpen}
+              isSubmitting={isSubmitting}
+              setIsSubmitting={setIsSubmitting}
+            />
+            <RemoveButton onClick={handleDeleteClick} />
 
-          <ConfirmDialog
-            isOpen={isDeleteDialogOpen}
-            onClose={() => setIsDeleteDialogOpen(false)}
-            onConfirm={() => onDelete(group.id)}
-            title="Удалить группу?"
-            description="Вы уверены, что хотите удалить эту группу? Все связанные объекта также будут удалены."
-            confirmText="Удалить"
-            cancelText="Отмена"
-            variant="destructive"
-          />
-        </div>
-      </CardHeader>
-      <Link className="flex-1" href={`/groups/${group.id}`}>
-        <CardContent className="cursor-pointer flex flex-col gap-4 justify-between flex-1">
-          <CardDescription>{group.description}</CardDescription>
-          {!isWideScreen && <ShowOnMapButton href={locateItemOnMainMapHref(group)} />}
-        </CardContent>
-      </Link>
-    </Card>
+            <ConfirmDialog
+              isOpen={isDeleteDialogOpen}
+              onClose={() => setIsDeleteDialogOpen(false)}
+              onConfirm={() => onDelete(group.id)}
+              title="Удалить группу?"
+              description="Вы уверены, что хотите удалить эту группу? Все связанные объекта также будут удалены."
+              confirmText="Удалить"
+              cancelText="Отмена"
+              variant="destructive"
+            />
+          </div>
+        </CardHeader>
+        <Link className="flex-1" href={`/groups/${group.id}`}>
+          <CardContent className="cursor-pointer flex flex-col gap-4 justify-between flex-1">
+            <CardDescription className="truncate">{group.description}</CardDescription>
+            {!isWideScreen && <ShowOnMapButton href={locateItemOnMainMapHref(group)} />}
+          </CardContent>
+        </Link>
+      </Card>
+    </div>
   );
 }

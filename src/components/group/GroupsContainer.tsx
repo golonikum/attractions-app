@@ -1,9 +1,10 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { List } from 'react-window';
 import { toast } from 'sonner';
 
-import { DataProvider, useData } from '@/contexts/DataContext';
+import { useData } from '@/contexts/DataContext';
 import { useFiltersInitialOptions } from '@/hooks/useFiltersInitialOptions';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { useLocation } from '@/hooks/useLocation';
@@ -168,7 +169,7 @@ export default function GroupsContainer() {
             />
           </div>
 
-          <div className="overflow-x-auto flex-1">
+          <div className="overflow-visible flex-1">
             {filteredGroups.length === 0 ? (
               emptyState
             ) : (
@@ -186,16 +187,12 @@ export default function GroupsContainer() {
           {filteredGroups.length === 0 ? (
             emptyState
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredGroups.map((group) => (
-                <GroupCard
-                  key={group.id}
-                  group={group}
-                  onDelete={handleDeleteGroup}
-                  onUpdate={getHandleUpdate(group.id)}
-                />
-              ))}
-            </div>
+            <List
+              rowComponent={GroupCard}
+              rowCount={filteredGroups.length}
+              rowHeight={216}
+              rowProps={{ onDelete: handleDeleteGroup, onUpdate: getHandleUpdate, groups: filteredGroups }}
+            />
           )}
         </>
       )}
