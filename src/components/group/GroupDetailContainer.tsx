@@ -11,7 +11,6 @@ import { useUpdateRequests } from '@/hooks/useUpdateRequests';
 import { DEFAULT_ATTRACTION_ZOOM } from '@/lib/constants';
 import { locateItemOnMainMapHref } from '@/lib/locateItemOnMainMapHref';
 import { updateOrder } from '@/services/attractionService';
-import { updateGroup } from '@/services/groupService';
 import { Attraction, CreateAttractionRequest } from '@/types/attraction';
 import { CreateGroupRequest, Group } from '@/types/group';
 
@@ -50,7 +49,7 @@ export default function GroupDetailContainer() {
   const [isAddAttractionDialogOpen, setIsAddAttractionDialogOpen] = useState(false);
   const [isSubmittingAttraction, setIsSubmittingAttraction] = useState(false);
   const { isWideScreen } = useIsMobile();
-  const { createAttraction, deleteAttraction, updateAttraction } = useUpdateRequests();
+  const { createAttraction, deleteAttraction, updateAttraction, updateGroup } = useUpdateRequests();
 
   useEffect(() => {
     if (groupId && groups.length) {
@@ -68,8 +67,8 @@ export default function GroupDetailContainer() {
 
   // Обработчик отправки формы редактирования группы
   const handleSubmit = async (formData: CreateGroupRequest) => {
-    const { data } = await updateGroup(groupId, formData);
-    setGroup(data.group);
+    const updatedGroup = await updateGroup(groupId, formData);
+    setGroup(updatedGroup);
   };
 
   // Обработчик удаления объекта
