@@ -10,7 +10,8 @@ export const TableCell: FC<PropsWithChildren<{ className?: string; column: Table
   children,
 }) => (
   <div
-    className={cn('px-4 py-2 flex items-center shrink-0', column.width ? `w-[${column.width}px]` : 'flex-1', className)}
+    className={cn('px-4 py-2 flex items-center shrink-0', !column.width && 'flex-1', className)}
+    style={{ width: `${column.width}px` }}
   >
     {children}
   </div>
