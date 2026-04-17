@@ -18,7 +18,7 @@ export function GroupTable({ groups, onDelete, onUpdate, onLocate }: GroupTableP
           <TableHeaderCell column={column} key={column.label} />
         ))}
       </div>
-      <div className="flex flex-1 flex-col">
+      <div className="h-full">
         <List
           rowComponent={GroupTableRow}
           rowCount={groups.length}

@@ -73,12 +73,13 @@ export function GroupCard({ groups, onDelete, onUpdate, style, index }: RowCompo
             />
           </div>
         </CardHeader>
-        <Link className="flex-1" href={`/groups/${group.id}`}>
-          <CardContent className="cursor-pointer flex flex-col gap-4 justify-between flex-1">
+
+        <CardContent className="cursor-pointer flex flex-col gap-4 justify-between flex-1">
+          <Link className="flex-1" href={`/groups/${group.id}`}>
             <CardDescription className="truncate">{group.description}</CardDescription>
-            {!isWideScreen && <ShowOnMapButton href={locateItemOnMainMapHref(group)} />}
-          </CardContent>
-        </Link>
+          </Link>
+          {!isWideScreen && <ShowOnMapButton href={locateItemOnMainMapHref(group)} />}
+        </CardContent>
       </Card>
     </div>
   );
