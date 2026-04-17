@@ -21,11 +21,7 @@ interface GroupCardProps {
   onUpdate: (id: string) => (formData: CreateGroupRequest) => Promise<void>;
 }
 
-let counter = 0;
-
 export function GroupCard({ groups, onDelete, onUpdate, style, index }: RowComponentProps<GroupCardProps>) {
-  console.log('render', ++counter);
-
   const group = groups[index];
   const { isWideScreen } = useIsMobile();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
