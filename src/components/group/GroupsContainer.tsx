@@ -187,12 +187,14 @@ export default function GroupsContainer() {
           {filteredGroups.length === 0 ? (
             emptyState
           ) : (
-            <List
-              rowComponent={GroupCard}
-              rowCount={filteredGroups.length}
-              rowHeight={216}
-              rowProps={{ onDelete: handleDeleteGroup, onUpdate: getHandleUpdate, groups: filteredGroups }}
-            />
+            <div className="h-[calc(100vh_-_320px)]">
+              <List
+                rowComponent={GroupCard}
+                rowCount={filteredGroups.length}
+                rowHeight={216}
+                rowProps={{ onDelete: handleDeleteGroup, onUpdate: getHandleUpdate, groups: filteredGroups }}
+              />
+            </div>
           )}
         </>
       )}

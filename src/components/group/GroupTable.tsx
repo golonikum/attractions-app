@@ -12,20 +12,18 @@ type GroupTableProps = Omit<GroupTableRowProps, 'group'> & {
 
 export function GroupTable({ groups, onDelete, onUpdate, onLocate }: GroupTableProps) {
   return (
-    <div className=" h-[calc(100%)] overflow-auto flex flex-col width-fit">
+    <div className="h-full overflow-auto flex flex-col width-fit">
       <div className="bg-gray-50 h-8 flex sticky top-0 z-10">
         {GROUP_TABLE_COLUMNS.map((column) => (
           <TableHeaderCell column={column} key={column.label} />
         ))}
       </div>
-      <div className="h-full">
-        <List
-          rowComponent={GroupTableRow}
-          rowCount={groups.length}
-          rowHeight={52}
-          rowProps={{ onDelete, onLocate, onUpdate, groups }}
-        />
-      </div>
+      <List
+        rowComponent={GroupTableRow}
+        rowCount={groups.length}
+        rowHeight={52}
+        rowProps={{ onDelete, onLocate, onUpdate, groups }}
+      />
     </div>
   );
 }
