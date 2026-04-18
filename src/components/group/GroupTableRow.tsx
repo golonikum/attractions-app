@@ -17,7 +17,7 @@ export const GROUP_TABLE_COLUMNS = [
   { label: 'Название', width: 180 },
   { label: 'Регион', width: 200 },
   { label: 'Описание' },
-  { label: 'Действия', width: 180 },
+  { label: 'Действия', width: 160 },
 ];
 
 export type GroupTableRowProps = {

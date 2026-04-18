@@ -6,8 +6,6 @@ const GROUPS_API_URL = '/groups';
 
 export const getAllGroups = async () => request.get<{ groups: Group[] }>(GROUPS_API_URL);
 
-export const getGroupById = async (id: string) => request.get<{ group: Group }>(`${GROUPS_API_URL}/${id}`);
-
 export const createGroup = async (groupData: CreateGroupRequest) =>
   request.post<{ group: Group | null }>(GROUPS_API_URL, groupData);
 

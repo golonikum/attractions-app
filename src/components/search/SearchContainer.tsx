@@ -23,7 +23,7 @@ export default function SearchContainer() {
   const { isWideScreen } = useIsMobile();
   const { searchQuery, setSearchQuery } = useQueryParams([]);
   const { attractions, isAttractionsLoading, isGroupsLoading } = useData();
-  const [foundAttractions, setFoundAttractions] = useState<Attraction[]>(attractions);
+  const [foundAttractions, setFoundAttractions] = useState<Attraction[]>([]);
 
   const onSearch = useCallback(() => {
     setFoundAttractions(
@@ -42,6 +42,12 @@ export default function SearchContainer() {
   useEffect(() => {
     debounceSearch();
   }, [searchQuery, debounceSearch]);
+
+  useEffect(() => {
+    if (attractions.length && !isAttractionsLoading) {
+      onSearch();
+    }
+  }, [attractions, isAttractionsLoading]);
 
   const emptyState = (
     <EmptyListState

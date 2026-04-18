@@ -4,11 +4,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
+import { useData } from '@/contexts/DataContext';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { useUpdateRequests } from '@/hooks/useUpdateRequests';
 import { locateItemOnMainMapHref } from '@/lib/locateItemOnMainMapHref';
-import { getAttractionById } from '@/services/attractionService';
-import { getGroupById } from '@/services/groupService';
 import { Attraction, CreateAttractionRequest } from '@/types/attraction';
 import { Group } from '@/types/group';
 
@@ -23,34 +22,33 @@ export default function AttractionDetailContainer() {
   const router = useRouter();
   const attractionId = params.id as string;
 
+  const { groups, attractions, isAttractionsLoading, isGroupsLoading } = useData();
   const { isWideScreen } = useIsMobile();
   const [attraction, setAttraction] = useState<Attraction | null>(null);
   const [group, setGroup] = useState<Group | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { deleteAttraction, updateAttraction } = useUpdateRequests();
 
-  // Загрузка данных достопримечательности при монтировании компонента
   useEffect(() => {
-    const fetchAttractionData = async () => {
-      try {
-        const { data: attractionData } = await getAttractionById(attractionId);
-        setAttraction(attractionData.attraction);
+    if (!isAttractionsLoading && attractions.length) {
+      const foundAttraction = attractions.find((item) => item.id === attractionId);
 
-        // Загрузка группы, к которой принадлежит достопримечательность
-        const { data: groupData } = await getGroupById(attractionData.attraction!.groupId);
-        setGroup(groupData.group);
-      } catch (error) {
-        toast.error('Не удалось загрузить данные достопримечательности');
-        router.push('/groups');
-      } finally {
-        setIsLoading(false);
+      if (foundAttraction) {
+        setAttraction(foundAttraction);
       }
-    };
+    }
+  }, [isAttractionsLoading, attractions]);
 
-    fetchAttractionData();
-  }, [attractionId, router]);
+  useEffect(() => {
+    if (!isGroupsLoading && attraction && groups.length) {
+      const foundGroup = groups.find((item) => item.id === attraction.groupId);
+
+      if (foundGroup) {
+        setGroup(foundGroup);
+      }
+    }
+  }, [isGroupsLoading, groups, attraction]);
 
   // Обработчик отправки формы редактирования достопримечательности
   const handleSubmit = async (formData: CreateAttractionRequest) => {
@@ -86,7 +84,7 @@ export default function AttractionDetailContainer() {
     setIsDeleteDialogOpen(false);
   };
 
-  if (isLoading) {
+  if (isAttractionsLoading || isGroupsLoading) {
     return <LoadingStub />;
   }
 

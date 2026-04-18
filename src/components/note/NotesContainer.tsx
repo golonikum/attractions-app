@@ -7,13 +7,14 @@ import { useDebounceCallback } from '@/hooks/useDebounceCallback';
 import { useFiltersInitialOptions } from '@/hooks/useFiltersInitialOptions';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { useQueryParams } from '@/hooks/useQueryParams';
+import { cn } from '@/lib/utils';
 import { Attraction, NoteWithAttractionIdType } from '@/types/attraction';
 
 import { EmptyListState } from '@/components/group/EmptyListState';
 import { NoteCard } from '@/components/note/NoteCard';
 import { NotesTable } from '@/components/note/NotesTable';
 import { MultiSelect } from '@/components/ui/MultiSelect';
-import { FoundCountStub } from '@/components/ui/stubs';
+import { FoundCountStub, LoadingStub } from '@/components/ui/stubs';
 
 const extractNotesFromAttractions = (attractions: Attraction[], searchQuery?: string) => {
   let notes: NoteWithAttractionIdType[] = [];
@@ -44,8 +45,8 @@ export default function NotesContainer() {
     'tag',
     'group',
   ]);
-  const { attractions, groups } = useData();
-  const [foundNotes, setFoundNotes] = useState<NoteWithAttractionIdType[]>(extractNotesFromAttractions(attractions));
+  const { attractions, groups, isAttractionsLoading, isGroupsLoading } = useData();
+  const [foundNotes, setFoundNotes] = useState<NoteWithAttractionIdType[]>([]);
   const { allTags, allGroups } = useFiltersInitialOptions({
     groups,
     attractions,
@@ -79,6 +80,12 @@ export default function NotesContainer() {
     debounceSearch();
   }, [searchQuery, debounceSearch]);
 
+  useEffect(() => {
+    if (attractions.length && !isAttractionsLoading) {
+      onSearch();
+    }
+  }, [attractions, isAttractionsLoading]);
+
   const hasFilters = !!searchQuery || !!selectedTag.length || !!selectedGroup.length;
 
   const emptyState = (
@@ -88,11 +95,14 @@ export default function NotesContainer() {
     />
   );
 
-  return (
+  return isAttractionsLoading || isGroupsLoading ? (
+    <LoadingStub />
+  ) : (
     <div
-      className={`container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4 ${
-        isWideScreen ? 'overflow-hidden h-screen' : ''
-      }`}
+      className={cn(
+        'container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4',
+        isWideScreen && 'overflow-hidden h-screen',
+      )}
     >
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div className="w-full space-y-4 md:space-y-0 md:space-x-4 md:flex md:flex-row md:w-auto md:items-center">
