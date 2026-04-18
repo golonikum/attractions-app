@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { Pane, SplitPane, usePersistence } from 'react-split-pane';
 import { List } from 'react-window';
 import { toast } from 'sonner';
 
@@ -20,8 +21,10 @@ import { NewGroupDialog } from '@/components/group/NewGroupDialog';
 import { Map } from '@/components/ui/Map';
 import { MultiSelect } from '@/components/ui/MultiSelect';
 import { FoundCountStub } from '@/components/ui/stubs';
+import { CustomDivider } from '@/components/ui/table';
 
 export default function GroupsContainer() {
+  const [sizes, setSizes] = usePersistence({ key: 'groups-layout' });
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const {
@@ -160,27 +163,30 @@ export default function GroupsContainer() {
 
       {isWideScreen ? (
         <div className="flex-1 flex flex-row gap-4 h-[calc(100vh-150px)]">
-          <div className="h-full min-w-[800px]">
-            <Map
-              location={location}
-              setLocation={setLocation}
-              items={filteredGroups}
-              getLink={(id) => `/groups/${id}`}
-            />
-          </div>
-
-          <div className="overflow-visible flex-1">
-            {filteredGroups.length === 0 ? (
-              emptyState
-            ) : (
-              <GroupTable
-                groups={filteredGroups}
-                onDelete={handleDeleteGroup}
-                onUpdate={getHandleUpdate}
-                onLocate={handleLocateGroup}
+          <SplitPane direction="horizontal" divider={CustomDivider} onResize={setSizes}>
+            <Pane size={sizes[0] || 800} minSize={400}>
+              <Map
+                location={location}
+                setLocation={setLocation}
+                items={filteredGroups}
+                getLink={(id) => `/groups/${id}`}
               />
-            )}
-          </div>
+            </Pane>
+            <Pane size={sizes[1]} minSize="600px">
+              <div className="h-full w-[calc(100%_-_16px)]">
+                {filteredGroups.length === 0 ? (
+                  emptyState
+                ) : (
+                  <GroupTable
+                    groups={filteredGroups}
+                    onDelete={handleDeleteGroup}
+                    onUpdate={getHandleUpdate}
+                    onLocate={handleLocateGroup}
+                  />
+                )}
+              </div>
+            </Pane>
+          </SplitPane>
         </div>
       ) : (
         <>

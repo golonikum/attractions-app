@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Pane, SplitPane, usePersistence } from 'react-split-pane';
 import { toast } from 'sonner';
 
 import { useData } from '@/contexts/DataContext';
@@ -24,11 +25,14 @@ import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { BackButton, ShowOnMapButton } from '@/components/ui/buttons';
 import { Map } from '@/components/ui/Map';
 
+import { CustomDivider } from '../ui/table';
+
 export default function GroupDetailContainer() {
   // UGLYHACK: to avoid useParams re-rendering
   const pathName = window.document.location.pathname;
   const groupId = pathName.match(/\/groups\/.+/) ? pathName.replace(/^.+groups\/(.+)$/gim, '$1') : '';
 
+  const [sizes, setSizes] = usePersistence({ key: 'group-layout' });
   const { groups, attractions: allAttractions, setAttractions } = useData();
   const attractions = allAttractions.filter((attraction) => attraction.groupId === groupId);
   const { selectedZoom, setSelectedZoom, selectedCoordinates, setSelectedCoordinates } = useQueryParams([
@@ -174,7 +178,38 @@ export default function GroupDetailContainer() {
 
         {isWideScreen ? (
           <div className="flex-1 flex flex-row gap-4 h-[calc(100vh-150px)]">
-            <div className="h-full min-w-[600px]">
+            <SplitPane direction="horizontal" dividerSize={16} divider={CustomDivider} onResize={setSizes}>
+              <Pane size={sizes[0] || 600} minSize={400}>
+                <Map
+                  location={location}
+                  setLocation={setLocation}
+                  items={attractions}
+                  getLink={(id) => `/attractions/${id}`}
+                />
+              </Pane>
+              <Pane size={sizes[1]} minSize="600px">
+                <div className="flex flex-1 flex-col gap-4 overflow-x-hidden h-full w-[calc(100%_-_16px)]">
+                  <GroupInfoCard group={group} attractions={attractions} />
+
+                  <div className="overflow-x-auto">
+                    {attractions.length === 0 ? (
+                      emptyState
+                    ) : (
+                      <AttractionTable
+                        attractions={attractions}
+                        isDisabled={isUpdating}
+                        onOrderChanged={handleUpdateOrder}
+                        onDelete={handleDeleteAttraction}
+                        onUpdate={handleUpdateAttraction}
+                        onLocate={handleLocateAttraction}
+                      />
+                    )}
+                  </div>
+                </div>
+              </Pane>
+            </SplitPane>
+
+            {/* <div className="h-full min-w-[600px]">
               <Map
                 location={location}
                 setLocation={setLocation}
@@ -182,7 +217,6 @@ export default function GroupDetailContainer() {
                 getLink={(id) => `/attractions/${id}`}
               />
             </div>
-
             <div className="flex flex-1 flex-col gap-4 overflow-x-hidden">
               <GroupInfoCard group={group} attractions={attractions} />
 
@@ -200,7 +234,7 @@ export default function GroupDetailContainer() {
                   />
                 )}
               </div>
-            </div>
+            </div> */}
           </div>
         ) : (
           <>
