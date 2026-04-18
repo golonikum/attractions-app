@@ -1,6 +1,5 @@
 import { Calendar } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { locateItemOnMainMapHref } from '@/lib/locateItemOnMainMapHref';
@@ -23,7 +22,6 @@ interface AttractionInfoCardProps {
 
 export function AttractionInfoCard({ attraction, group }: AttractionInfoCardProps) {
   const { isWideScreen } = useIsMobile();
-  const router = useRouter();
 
   return (
     <Card isFavorite={attraction.isFavorite} isVisited={attraction.isVisited}>

@@ -28,9 +28,10 @@ type MapPropsType = {
   location?: YMapCenterLocation & YMapZoomLocation;
   setLocation: React.Dispatch<React.SetStateAction<YMapCenterLocation & YMapZoomLocation>>;
   getLink: (id: string) => string;
+  onClick?: (id: string) => void;
 };
 
-export const Map: FC<MapPropsType> = ({ items, location = DEFAULT_LOCATION, setLocation, getLink }) => {
+export const Map: FC<MapPropsType> = ({ items, location = DEFAULT_LOCATION, setLocation, getLink, onClick }) => {
   const { isMapReady } = useMapReady();
   const { theme } = useContext(ThemeProviderContext);
   const setLocationDebounced = useDebounceCallback(setLocation, 500);
@@ -42,6 +43,25 @@ export const Map: FC<MapPropsType> = ({ items, location = DEFAULT_LOCATION, setL
     }));
   };
 
+  const renderMarker = ({
+    item,
+    isVisited,
+    isActive,
+  }: {
+    item: Attraction | GroupWithAttractions;
+    isActive: boolean;
+    isVisited?: boolean;
+  }) => (
+    <MarkerPin
+      key={item.id}
+      coordinates={[item.coordinates[1], item.coordinates[0]]}
+      visited={isVisited}
+      title={item.name}
+      isActive={isActive}
+      onClick={() => onClick?.(item.id)}
+    />
+  );
+
   return isMapReady ? (
     <YMap location={{ ...location }} mode="raster" zoomStrategy="zoomToCenter" theme={theme}>
       <YMapDefaultSchemeLayer />
@@ -51,13 +71,13 @@ export const Map: FC<MapPropsType> = ({ items, location = DEFAULT_LOCATION, setL
           setLocationDebounced(args.location);
         }}
       />
-      <YMapControls position="left top">
+      <YMapControls position="left bottom">
         <YMapScaleControl />
       </YMapControls>
-      <YMapControls position="right top">
+      <YMapControls position="left top">
         <YMapGeolocationControl />
       </YMapControls>
-      <YMapControls position="right" orientation="vertical">
+      <YMapControls position="left" orientation="vertical">
         <YMapControlButton onClick={onClickZoom('plus')} disabled={location.zoom === 20}>
           <Plus />
         </YMapControlButton>
@@ -74,14 +94,11 @@ export const Map: FC<MapPropsType> = ({ items, location = DEFAULT_LOCATION, setL
           ? item.isVisited
           : item.attractions.some((attraction) => attraction.isVisited);
 
-        return (
+        return onClick ? (
+          renderMarker({ item, isVisited, isActive })
+        ) : (
           <Link href={getLink(item.id)} key={item.id}>
-            <MarkerPin
-              coordinates={[item.coordinates[1], item.coordinates[0]]}
-              visited={isVisited}
-              title={item.name}
-              isActive={isActive}
-            />
+            {renderMarker({ item, isVisited, isActive })}
           </Link>
         );
       })}

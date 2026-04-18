@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 import { locateItemOnMainMapHref } from '@/lib/locateItemOnMainMapHref';
@@ -17,9 +17,10 @@ interface AttractionCardProps {
   attraction: Attraction;
   onDelete?: (id: string) => void;
   onUpdate?: (data: CreateAttractionRequest) => Promise<void>;
+  isShowOnMapButton?: boolean;
 }
 
-export function AttractionCard({ attraction, onDelete, onUpdate }: AttractionCardProps) {
+export function AttractionCard({ attraction, onDelete, onUpdate, isShowOnMapButton = true }: AttractionCardProps) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -30,8 +31,12 @@ export function AttractionCard({ attraction, onDelete, onUpdate }: AttractionCar
     setIsDeleteDialogOpen(true);
   };
 
+  useEffect(() => {
+    setIsDescriptionHidden(true);
+  }, [attraction.id]);
+
   return (
-    <Card isFavorite={attraction.isFavorite} isVisited={attraction.isVisited}>
+    <Card isFavorite={attraction.isFavorite} isVisited={attraction.isVisited} className="overflow-y-auto w-full">
       <div className="aspect-video bg-gray-100 flex items-center justify-center">
         <Link href={`/attractions/${attraction.id}`} className="cursor-pointer relative h-96 w-full flex-shrink-0">
           <AttractionImage attraction={attraction} />
@@ -84,7 +89,7 @@ export function AttractionCard({ attraction, onDelete, onUpdate }: AttractionCar
 
         <div className="flex flex-col gap-4">
           <OpenInYandexMapButton attraction={attraction} />
-          <ShowOnMapButton href={locateItemOnMainMapHref(attraction)} />
+          {isShowOnMapButton && <ShowOnMapButton href={locateItemOnMainMapHref(attraction)} />}
         </div>
       </CardContent>
     </Card>
