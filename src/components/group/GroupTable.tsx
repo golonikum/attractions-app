@@ -1,29 +1,15 @@
 import { List } from 'react-window';
 
-import { Group } from '@/types/group';
-
-import { TableHeaderCell } from '../ui/table';
+import { Table } from '../ui/table';
 
 import { GROUP_TABLE_COLUMNS, GroupTableRow, GroupTableRowProps } from './GroupTableRow';
 
-type GroupTableProps = Omit<GroupTableRowProps, 'group'> & {
-  groups: Group[];
-};
+type GroupTableProps = GroupTableRowProps;
 
-export function GroupTable({ groups, onDelete, onUpdate, onLocate }: GroupTableProps) {
+export function GroupTable(props: GroupTableProps) {
   return (
-    <div className="h-full overflow-auto flex flex-col width-fit">
-      <div className="bg-gray-50 h-8 flex sticky top-0 z-10">
-        {GROUP_TABLE_COLUMNS.map((column) => (
-          <TableHeaderCell column={column} key={column.label} />
-        ))}
-      </div>
-      <List
-        rowComponent={GroupTableRow}
-        rowCount={groups.length}
-        rowHeight={52}
-        rowProps={{ onDelete, onLocate, onUpdate, groups }}
-      />
-    </div>
+    <Table columns={GROUP_TABLE_COLUMNS}>
+      <List rowComponent={GroupTableRow} rowCount={props.groups.length} rowHeight={52} rowProps={props} />
+    </Table>
   );
 }

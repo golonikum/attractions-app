@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 import { locateItemOnMainMapHref } from '@/lib/locateItemOnMainMapHref';
 import { Attraction, CreateAttractionRequest } from '@/types/attraction';
@@ -14,11 +13,8 @@ import { Tag } from '../ui/Tag';
 import { AttractionImage } from './AttractionImage';
 import { NewAttractionDialog } from './NewAttractionDialog';
 
-// Используем тип Attraction из types/attraction.ts вместо интерфейса AttractionItem
-type AttractionItem = Attraction;
-
 interface AttractionCardProps {
-  attraction: AttractionItem;
+  attraction: Attraction;
   onDelete?: (id: string) => void;
   onUpdate?: (data: CreateAttractionRequest) => Promise<void>;
 }
@@ -28,7 +24,6 @@ export function AttractionCard({ attraction, onDelete, onUpdate }: AttractionCar
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDescriptionHidden, setIsDescriptionHidden] = useState(true);
-  const router = useRouter();
 
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();

@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { List } from 'react-window';
 import { useRouter } from 'next/navigation';
 
 import { useData } from '@/contexts/DataContext';
@@ -8,18 +9,20 @@ import { useDebounceCallback } from '@/hooks/useDebounceCallback';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { locateItemOnMainMap } from '@/lib/locateItemOnMainMap';
+import { cn } from '@/lib/utils';
 import { Attraction } from '@/types/attraction';
 
-import { AttractionCard } from '@/components/attraction/AttractionCard';
-import { AttractionTable } from '@/components/attraction/AttractionTable';
 import { EmptyListState } from '@/components/group/EmptyListState';
-import { FoundCountStub } from '@/components/ui/stubs';
+import { FoundCountStub, LoadingStub } from '@/components/ui/stubs';
+
+import { SearchAttractionCard } from './SearchAttractionCard';
+import { SearchAttractionTable } from './SearchAttractionTable';
 
 export default function SearchContainer() {
   const router = useRouter();
   const { isWideScreen } = useIsMobile();
   const { searchQuery, setSearchQuery } = useQueryParams([]);
-  const { attractions } = useData();
+  const { attractions, isAttractionsLoading, isGroupsLoading } = useData();
   const [foundAttractions, setFoundAttractions] = useState<Attraction[]>(attractions);
 
   const onSearch = useCallback(() => {
@@ -47,11 +50,14 @@ export default function SearchContainer() {
     />
   );
 
-  return (
+  return isAttractionsLoading || isGroupsLoading ? (
+    <LoadingStub />
+  ) : (
     <div
-      className={`container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4 ${
-        isWideScreen ? 'overflow-hidden h-screen' : ''
-      }`}
+      className={cn(
+        'container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4',
+        isWideScreen && 'overflow-hidden h-screen',
+      )}
     >
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div className="w-full space-y-4 md:space-y-0 md:space-x-4 md:flex md:flex-row md:w-auto md:items-center">
@@ -74,7 +80,7 @@ export default function SearchContainer() {
             {foundAttractions.length === 0 ? (
               emptyState
             ) : (
-              <AttractionTable
+              <SearchAttractionTable
                 attractions={foundAttractions}
                 onLocate={(attraction) => {
                   locateItemOnMainMap({ router, item: attraction });
@@ -88,10 +94,13 @@ export default function SearchContainer() {
           {foundAttractions.length === 0 ? (
             emptyState
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {foundAttractions.map((attraction) => (
-                <AttractionCard key={attraction.id} attraction={attraction} />
-              ))}
+            <div className="h-[calc(100vh_-_210px)]">
+              <List
+                rowComponent={SearchAttractionCard}
+                rowCount={foundAttractions.length}
+                rowHeight={522}
+                rowProps={{ attractions: foundAttractions }}
+              />
             </div>
           )}
         </>

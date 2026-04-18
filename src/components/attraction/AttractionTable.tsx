@@ -1,11 +1,13 @@
-import { CSSProperties, useCallback } from 'react';
+import { useCallback } from 'react';
 import { closestCenter, DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 import { Attraction } from '@/types/attraction';
 
-import { AttractionTableRow, AttractionTableRowProps } from './AttractionTableRow';
+import { Table } from '../ui/table';
+
+import { ATTRACTIONS_TABLE_COLUMNS, AttractionTableRow, AttractionTableRowProps } from './AttractionTableRow';
 
 type AttractionTableProps = Omit<AttractionTableRowProps, 'attraction' | 'hasDnd'> & {
   attractions: Attraction[];
@@ -42,14 +44,7 @@ export function AttractionTable({
     [attractions, onOrderChanged],
   );
 
-  const style: CSSProperties = isDisabled
-    ? {
-        pointerEvents: 'none',
-        opacity: 0.6,
-        cursor: 'not-allowed',
-        userSelect: 'none',
-      }
-    : {};
+  const className = isDisabled ? 'pointer-events-none opacity-60 cursor-not-allowed select-none' : undefined;
 
   return (
     <DndContext
@@ -59,51 +54,21 @@ export function AttractionTable({
       onDragEnd={handleDragEnd}
     >
       <SortableContext items={attractions.map((d) => d.id)} strategy={verticalListSortingStrategy}>
-        <div className="hidden md:block overflow-x-hidden">
-          <table className="min-w-full divide-y divide-gray-200" style={style}>
-            <thead className="bg-gray-50">
-              <tr>
-                {onOrderChanged ? <th className="w-[50px]"></th> : <></>}
-                <th
-                  scope="col"
-                  className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Изображение
-                </th>
-                <th
-                  scope="col"
-                  className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px]"
-                >
-                  Название
-                </th>
-                <th
-                  scope="col"
-                  className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Описание
-                </th>
-                <th
-                  scope="col"
-                  className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Действия
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {attractions.map((attraction) => (
-                <AttractionTableRow
-                  key={attraction.id}
-                  attraction={attraction}
-                  onDelete={onDelete}
-                  onUpdate={onUpdate}
-                  onLocate={onLocate}
-                  hasDnd={!!onOrderChanged}
-                />
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <Table
+          columns={ATTRACTIONS_TABLE_COLUMNS.filter((col) => !!onOrderChanged || !!col.label)}
+          className={className}
+        >
+          {attractions.map((attraction) => (
+            <AttractionTableRow
+              key={attraction.id}
+              attraction={attraction}
+              onDelete={onDelete}
+              onUpdate={onUpdate}
+              onLocate={onLocate}
+              hasDnd={!!onOrderChanged}
+            />
+          ))}
+        </Table>
       </SortableContext>
     </DndContext>
   );

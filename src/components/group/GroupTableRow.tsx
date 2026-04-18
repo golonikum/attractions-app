@@ -7,7 +7,7 @@ import { CreateGroupRequest, Group } from '@/types/group';
 
 import { RemoveButton, ShowOnMapButton } from '../ui/buttons';
 import { ConfirmDialog } from '../ui/ConfirmDialog';
-import { TableCell } from '../ui/table';
+import { TableCell, TableRow } from '../ui/table';
 import { Tag } from '../ui/Tag';
 
 import { GroupTableCellDescription } from './GroupTableCellDescription';
@@ -52,7 +52,7 @@ export const GroupTableRow = ({
   };
 
   return (
-    <div className="flex border-b-1 border-gray-200" style={style}>
+    <TableRow style={style}>
       <TableCell column={GROUP_TABLE_COLUMNS[0]}>
         <Link href={`/groups/${group.id}`}>
           <div className="text-sm font-medium">
@@ -94,6 +94,6 @@ export const GroupTableRow = ({
           variant="destructive"
         />
       </TableCell>
-    </div>
+    </TableRow>
   );
 };

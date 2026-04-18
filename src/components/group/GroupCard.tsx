@@ -41,7 +41,7 @@ export function GroupCard({ groups, onDelete, onUpdate, style, index }: RowCompo
         <CardHeader>
           <div className="flex justify-between items-start space-x-1">
             <Link className="flex-1 max-w-[calc(100%_-_80px)]" href={`/groups/${group.id}`}>
-              <div className="flex-1 flex flex-col gap-2 cursor-pointer">
+              <div className="flex-1 flex flex-col gap-2">
                 <CardTitle className="text-lg/5 truncate">
                   {group.name}{' '}
                   {!!attractionsMap[group.id]?.length && (
