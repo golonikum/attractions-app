@@ -21,7 +21,7 @@ export const MainAttractionWindow: FC<{ item: Attraction; onClose: () => void }>
   }, [onClose]);
 
   return createPortal(
-    <div className="flex absolute top-[74px] bottom-[10px] right-[10px] w-[500px] z-1000">
+    <div className="flex absolute top-[74px] max-h-[calc(100vh_-_84px)] right-[10px] w-[500px] z-1000">
       <AttractionCard attraction={item} isShowOnMapButton={false} />
       <Button variant="ghost" className="absolute left-2 top-2 rounded-[22px] w-10" size="icon" onClick={onClose}>
         <X />
