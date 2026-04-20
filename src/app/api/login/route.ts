@@ -1,11 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { prisma } from '@/lib/db';
+import { sendEmail } from '@/lib/sendEmail';
 import { generateToken, verifyPassword } from '@/lib/serverAuth';
 
 export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json();
+
+    // Send email
+    try {
+      await sendEmail({
+        subject: 'Попытка входа в Attractions App',
+        htmlContent: `<p>Сегодня ${new Date().toLocaleDateString('ru-RU')} в ${new Date().toLocaleTimeString(
+          'ru-RU',
+        )} была совершена попытка входа в аккаунт ${email}.</p>`,
+      });
+    } catch (e) {}
 
     if (!email || !password) {
       return NextResponse.json({ error: 'Электронная почта и пароль обязательны' }, { status: 400 });
