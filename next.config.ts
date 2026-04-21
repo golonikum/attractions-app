@@ -55,6 +55,11 @@ const nextConfig: NextConfig = {
         hostname: '35photo.pro',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 's1.fotokto.ru',
+        port: '',
+      },
     ],
   },
 };
