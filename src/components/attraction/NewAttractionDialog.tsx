@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Star } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -50,10 +50,15 @@ export const NewAttractionDialog = ({
   attraction,
   attractionsCount = 0,
 }: NewAttractionDialogProps) => {
-  const [formData, setFormData] = useState<CreateAttractionRequest>(
-    getInitialAttractionFormState(groupId, attractionsCount),
-  );
+  const [formUserData, setFormUserData] = useState<CreateAttractionRequest>({} as CreateAttractionRequest);
   const { groups } = useData();
+
+  /* Паттерн User Interaction State (состояние взаимодействия) */
+  const formData = {
+    ...getInitialAttractionFormState(groupId, attractionsCount),
+    ...attraction,
+    ...formUserData,
+  };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,44 +68,12 @@ export const NewAttractionDialog = ({
       await handleSubmit?.(formData);
       toast.success(`Объект успешно ${attraction ? 'обновлен' : 'создан'}`);
       setIsOpen(false);
-
-      // Сброс формы
-      setFormData(getInitialAttractionFormState(groupId, attractionsCount));
     } catch (error) {
       toast.error(`Не удалось ${attraction ? 'обновить' : 'создать'} объект`);
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  useEffect(() => {
-    if (attraction) {
-      // Заполнение формы данными объекта в режиме редактирования
-      setFormData({
-        groupId: attraction.groupId,
-        name: attraction.name,
-        category: attraction.category,
-        description: attraction.description || '',
-        imageUrl: attraction.imageUrl || '',
-        yaMapUrl: attraction.yaMapUrl || '',
-        isVisited: attraction.isVisited || false,
-        isFavorite: attraction.isFavorite || false,
-        coordinates: attraction.coordinates,
-        order: attraction.order || 1,
-        notes: attraction.notes || [],
-      });
-    }
-  }, [attraction]);
-
-  useEffect(() => {
-    if (isOpen && !attraction && groupId) {
-      setFormData((data) => ({
-        ...data,
-        order: attractionsCount + 1,
-        groupId,
-      }));
-    }
-  }, [isOpen, attraction, attractionsCount]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -122,7 +95,7 @@ export const NewAttractionDialog = ({
                   const newId = groups.find(({ name }) => name === value[0])?.id;
 
                   if (newId) {
-                    setFormData((val) => ({ ...val, groupId: newId }));
+                    setFormUserData((val) => ({ ...val, groupId: newId }));
                   }
                 }}
                 options={groups.map(({ name }) => name)}
@@ -134,8 +107,9 @@ export const NewAttractionDialog = ({
               <Input
                 id="name"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) => setFormUserData({ ...formUserData, name: e.target.value })}
                 required
+                autoFocus
               />
             </div>
             <div className="space-y-2">
@@ -143,7 +117,7 @@ export const NewAttractionDialog = ({
               <Input
                 id="category"
                 value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                onChange={(e) => setFormUserData({ ...formUserData, category: e.target.value })}
               />
             </div>
             <div className="space-y-2">
@@ -152,7 +126,7 @@ export const NewAttractionDialog = ({
                 id="imageUrl"
                 type="url"
                 value={formData.imageUrl}
-                onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                onChange={(e) => setFormUserData({ ...formUserData, imageUrl: e.target.value })}
                 placeholder="https://example.com/image.jpg"
               />
             </div>
@@ -162,13 +136,13 @@ export const NewAttractionDialog = ({
                 id="yaMapUrl"
                 type="url"
                 value={formData.yaMapUrl}
-                onChange={(e) => setFormData({ ...formData, yaMapUrl: e.target.value })}
+                onChange={(e) => setFormUserData({ ...formUserData, yaMapUrl: e.target.value })}
                 placeholder="https://yandex.ru/maps/-/CDgBC~cD"
               />
             </div>
             <CoordinatesInput
               value={formData.coordinates}
-              onChange={(coordinates) => setFormData({ ...formData, coordinates })}
+              onChange={(coordinates) => setFormUserData({ ...formUserData, coordinates })}
               required
             />
             <div className="flex items-center gap-8">
@@ -179,8 +153,8 @@ export const NewAttractionDialog = ({
                   type="number"
                   value={formData.order || 1}
                   onChange={(e) =>
-                    setFormData({
-                      ...formData,
+                    setFormUserData({
+                      ...formUserData,
                       order: parseInt(e.target.value) || 1,
                     })
                   }
@@ -190,7 +164,7 @@ export const NewAttractionDialog = ({
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => setFormData({ ...formData, isVisited: !formData.isVisited })}
+                  onClick={() => setFormUserData({ ...formUserData, isVisited: !formData.isVisited })}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
                     formData.isVisited ? 'bg-green-500' : 'bg-gray-200'
                   }`}
@@ -207,8 +181,8 @@ export const NewAttractionDialog = ({
                 <button
                   type="button"
                   onClick={() =>
-                    setFormData({
-                      ...formData,
+                    setFormUserData({
+                      ...formUserData,
                       isFavorite: !formData.isFavorite,
                     })
                   }
@@ -228,7 +202,7 @@ export const NewAttractionDialog = ({
             <Textarea
               id="description"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) => setFormUserData({ ...formUserData, description: e.target.value })}
               placeholder="Добавьте описание объекта..."
               rows={5}
             />
@@ -236,7 +210,10 @@ export const NewAttractionDialog = ({
 
           <div className="space-y-2">
             <Label>Заметки</Label>
-            <NotesManager notes={formData.notes || []} onChange={(notes) => setFormData({ ...formData, notes })} />
+            <NotesManager
+              notes={formData.notes || []}
+              onChange={(notes) => setFormUserData({ ...formUserData, notes })}
+            />
           </div>
 
           <div className="flex justify-end space-x-2">

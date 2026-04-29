@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { DEFAULT_COORDINATES } from '@/lib/constants';
@@ -11,7 +11,7 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
 
-const initialGroupFormState = {
+const initialGroupFormState: CreateGroupRequest = {
   name: '',
   description: '',
   tag: '',
@@ -30,13 +30,21 @@ export const NewGroupDialog = ({
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  handleSubmit: (formData: CreateGroupRequest) => Promise<void>;
+  handleSubmit: (formUserData: CreateGroupRequest) => Promise<void>;
   isSubmitting: boolean;
   setIsSubmitting: (isSubmitting: boolean) => void;
   groupData?: Group;
   selectedTag?: string;
 }) => {
-  const [formData, setFormData] = useState<CreateGroupRequest>(initialGroupFormState);
+  const [formUserData, setFormUserData] = useState<CreateGroupRequest>({} as CreateGroupRequest);
+
+  /* Паттерн User Interaction State (состояние взаимодействия) */
+  const formData = {
+    ...initialGroupFormState,
+    tag: selectedTag,
+    ...groupData,
+    ...formUserData,
+  };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,38 +54,12 @@ export const NewGroupDialog = ({
       await handleSubmit(formData);
       toast.success(`Группа успешно ${groupData ? 'обновлена' : 'создана'}`);
       setIsOpen(false);
-
-      // Сброс формы
-      if (!groupData) {
-        setFormData(initialGroupFormState);
-      }
     } catch (error) {
       toast.error(`Не удалось ${groupData ? 'обновить' : 'создать'} группу`);
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  useEffect(() => {
-    if (groupData) {
-      setFormData({
-        name: groupData.name,
-        description: groupData.description,
-        tag: groupData.tag || '',
-        coordinates: groupData.coordinates,
-        zoom: groupData.zoom,
-      });
-    }
-  }, [groupData]);
-
-  useEffect(() => {
-    if (isOpen && !groupData && selectedTag) {
-      setFormData((data) => ({
-        ...data,
-        tag: selectedTag,
-      }));
-    }
-  }, [isOpen, selectedTag, groupData]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -95,8 +77,9 @@ export const NewGroupDialog = ({
             <Input
               id="name"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) => setFormUserData({ ...formUserData, name: e.target.value })}
               required
+              autoFocus
             />
           </div>
           <div className="space-y-2">
@@ -104,7 +87,7 @@ export const NewGroupDialog = ({
             <Textarea
               id="description"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) => setFormUserData({ ...formUserData, description: e.target.value })}
               required
             />
           </div>
@@ -112,13 +95,13 @@ export const NewGroupDialog = ({
             <Label htmlFor="tag">Регион (необязательно)</Label>
             <Input
               id="tag"
-              value={formData.tag || selectedTag}
-              onChange={(e) => setFormData({ ...formData, tag: e.target.value })}
+              value={formData.tag}
+              onChange={(e) => setFormUserData({ ...formUserData, tag: e.target.value })}
             />
           </div>
           <CoordinatesInput
             value={formData.coordinates}
-            onChange={(coordinates) => setFormData({ ...formData, coordinates })}
+            onChange={(coordinates) => setFormUserData({ ...formUserData, coordinates })}
             required
           />
           <div className="space-y-2">
@@ -128,8 +111,8 @@ export const NewGroupDialog = ({
               type="number"
               value={formData.zoom}
               onChange={(e) =>
-                setFormData({
-                  ...formData,
+                setFormUserData({
+                  ...formUserData,
                   zoom: parseInt(e.target.value),
                 })
               }
