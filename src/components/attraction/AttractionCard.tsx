@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 import { locateItemOnMainMapHref } from '@/lib/locateItemOnMainMapHref';
+import { cn } from '@/lib/utils';
 import { Attraction, CreateAttractionRequest } from '@/types/attraction';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,9 +19,16 @@ interface AttractionCardProps {
   onDelete?: (id: string) => void;
   onUpdate?: (data: CreateAttractionRequest) => Promise<void>;
   isShowOnMapButton?: boolean;
+  className?: string;
 }
 
-export function AttractionCard({ attraction, onDelete, onUpdate, isShowOnMapButton = true }: AttractionCardProps) {
+export function AttractionCard({
+  attraction,
+  onDelete,
+  onUpdate,
+  isShowOnMapButton = true,
+  className,
+}: AttractionCardProps) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,7 +44,11 @@ export function AttractionCard({ attraction, onDelete, onUpdate, isShowOnMapButt
   }, [attraction.id]);
 
   return (
-    <Card isFavorite={attraction.isFavorite} isVisited={attraction.isVisited} className="overflow-y-auto w-full">
+    <Card
+      isFavorite={attraction.isFavorite}
+      isVisited={attraction.isVisited}
+      className={cn('overflow-y-auto w-full', className)}
+    >
       <div className="aspect-video bg-gray-100 flex items-center justify-center">
         <Link href={`/attractions/${attraction.id}`} className="cursor-pointer relative h-96 w-full flex-shrink-0">
           <AttractionImage attraction={attraction} />

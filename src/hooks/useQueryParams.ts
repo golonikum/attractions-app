@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { capitalizeFirstLetter } from '@/lib/utils';
+
+import { useDebounceCallback } from './useDebounceCallback';
 
 type FieldsAndSetters<T extends string[]> = T extends (infer Name extends string)[]
   ? {
@@ -57,6 +59,10 @@ export const useQueryParams = <T extends string[]>(names: string[]): FieldsAndSe
     window.history.replaceState({}, '', newUrl);
   }, [state, names]);
 
+  const search = useCallback((value: string) => setState((val) => ({ ...val, search: value ? [value] : [] })), []);
+
+  const setSearchQuery = useDebounceCallback(search, 300);
+
   return {
     ...names.reduce(
       (res, name) => ({
@@ -69,6 +75,6 @@ export const useQueryParams = <T extends string[]>(names: string[]): FieldsAndSe
       {} as FieldsAndSetters<T>,
     ),
     searchQuery: state.search?.length ? state.search[0] : '',
-    setSearchQuery: (value: string) => setState((val) => ({ ...val, search: value ? [value] : [] })),
+    setSearchQuery,
   };
 };

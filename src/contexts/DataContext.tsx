@@ -35,7 +35,7 @@ const initialState: DataProviderState = {
 
 export const DataProviderContext = createContext<DataProviderState>(initialState);
 
-export function DataProvider({ children, ...props }: DataProviderProps) {
+export function DataProvider({ children }: DataProviderProps) {
   const {
     attractions,
     setAttractions,
@@ -80,11 +80,7 @@ export function DataProvider({ children, ...props }: DataProviderProps) {
     attractionsMap,
   };
 
-  return (
-    <DataProviderContext.Provider {...props} value={value}>
-      {children}
-    </DataProviderContext.Provider>
-  );
+  return <DataProviderContext.Provider value={value}>{children}</DataProviderContext.Provider>;
 }
 
 export const useData = () => {

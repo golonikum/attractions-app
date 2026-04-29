@@ -187,8 +187,8 @@ export default function GroupDetailContainer() {
                   getLink={(id) => `/attractions/${id}`}
                 />
               </Pane>
-              <Pane size={sizes[1]} minSize="600px">
-                <div className="flex flex-1 flex-col gap-4 overflow-x-hidden h-full w-[calc(100%_-_16px)]">
+              <Pane minSize="600px">
+                <div className="flex flex-1 flex-col gap-4 overflow-x-hidden h-full">
                   <GroupInfoCard group={group} attractions={attractions} />
 
                   <div className="overflow-x-auto">
@@ -208,33 +208,6 @@ export default function GroupDetailContainer() {
                 </div>
               </Pane>
             </SplitPane>
-
-            {/* <div className="h-full min-w-[600px]">
-              <Map
-                location={location}
-                setLocation={setLocation}
-                items={attractions}
-                getLink={(id) => `/attractions/${id}`}
-              />
-            </div>
-            <div className="flex flex-1 flex-col gap-4 overflow-x-hidden">
-              <GroupInfoCard group={group} attractions={attractions} />
-
-              <div className="overflow-x-auto">
-                {attractions.length === 0 ? (
-                  emptyState
-                ) : (
-                  <AttractionTable
-                    attractions={attractions}
-                    isDisabled={isUpdating}
-                    onOrderChanged={handleUpdateOrder}
-                    onDelete={handleDeleteAttraction}
-                    onUpdate={handleUpdateAttraction}
-                    onLocate={handleLocateAttraction}
-                  />
-                )}
-              </div>
-            </div> */}
           </div>
         ) : (
           <>

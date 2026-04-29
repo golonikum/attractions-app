@@ -172,7 +172,7 @@ export default function GroupsContainer() {
                 getLink={(id) => `/groups/${id}`}
               />
             </Pane>
-            <Pane size={sizes[1]} minSize="600px">
+            <Pane minSize="600px">
               <div className="h-full w-[calc(100%_-_16px)]">
                 {filteredGroups.length === 0 ? (
                   emptyState
