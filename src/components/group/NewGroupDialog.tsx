@@ -64,69 +64,71 @@ export const NewGroupDialog = ({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{groupData ? <EditButton /> : <AddButton title="Добавить новую группу" />}</DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{groupData ? 'Изменить группу' : 'Создать новую группу'}</DialogTitle>
-          <DialogDescription>
-            {groupData ? 'Измените информацию о группе' : 'Создайте новую группу для организации ваших объектов'}
-          </DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleFormSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="name">Название</Label>
-            <Input
-              id="name"
-              value={formData.name}
-              onChange={(e) => setFormUserData({ ...formUserData, name: e.target.value })}
-              required
-              autoFocus
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="description">Описание</Label>
-            <Textarea
-              id="description"
-              value={formData.description}
-              onChange={(e) => setFormUserData({ ...formUserData, description: e.target.value })}
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="tag">Регион (необязательно)</Label>
-            <Input
-              id="tag"
-              value={formData.tag}
-              onChange={(e) => setFormUserData({ ...formUserData, tag: e.target.value })}
-            />
-          </div>
-          <CoordinatesInput
-            value={formData.coordinates}
-            onChange={(coordinates) => setFormUserData({ ...formUserData, coordinates })}
-            required
-          />
-          <div className="space-y-2">
-            <Label htmlFor="zoom">Масштаб карты</Label>
-            <Input
-              id="zoom"
-              type="number"
-              value={formData.zoom}
-              onChange={(e) =>
-                setFormUserData({
-                  ...formUserData,
-                  zoom: parseInt(e.target.value),
-                })
-              }
-              min="1"
-              max="20"
+      {isOpen && (
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{groupData ? 'Изменить группу' : 'Создать новую группу'}</DialogTitle>
+            <DialogDescription>
+              {groupData ? 'Измените информацию о группе' : 'Создайте новую группу для организации ваших объектов'}
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleFormSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Название</Label>
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={(e) => setFormUserData({ ...formUserData, name: e.target.value })}
+                required
+                autoFocus
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="description">Описание</Label>
+              <Textarea
+                id="description"
+                value={formData.description}
+                onChange={(e) => setFormUserData({ ...formUserData, description: e.target.value })}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="tag">Регион (необязательно)</Label>
+              <Input
+                id="tag"
+                value={formData.tag}
+                onChange={(e) => setFormUserData({ ...formUserData, tag: e.target.value })}
+              />
+            </div>
+            <CoordinatesInput
+              value={formData.coordinates}
+              onChange={(coordinates) => setFormUserData({ ...formUserData, coordinates })}
               required
             />
-          </div>
-          <div className="flex justify-end space-x-2">
-            <CancelFormButton onClick={() => setIsOpen(false)} />
-            <SubmitFormButton isSubmitting={isSubmitting} id={groupData?.id} />
-          </div>
-        </form>
-      </DialogContent>
+            <div className="space-y-2">
+              <Label htmlFor="zoom">Масштаб карты</Label>
+              <Input
+                id="zoom"
+                type="number"
+                value={formData.zoom}
+                onChange={(e) =>
+                  setFormUserData({
+                    ...formUserData,
+                    zoom: parseInt(e.target.value),
+                  })
+                }
+                min="1"
+                max="20"
+                required
+              />
+            </div>
+            <div className="flex justify-end space-x-2">
+              <CancelFormButton onClick={() => setIsOpen(false)} />
+              <SubmitFormButton isSubmitting={isSubmitting} id={groupData?.id} />
+            </div>
+          </form>
+        </DialogContent>
+      )}
     </Dialog>
   );
 };

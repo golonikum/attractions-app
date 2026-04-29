@@ -30,7 +30,7 @@ export const CoordinatesInput = ({
             type="number"
             step="any"
             value={value[0]}
-            onChange={(e) => onChange([parseFloat(e.target.value), value[1]])}
+            onChange={(e) => onChange([Number.parseFloat(e.target.value), value[1]])}
             required={required}
           />
         </div>
@@ -41,7 +41,7 @@ export const CoordinatesInput = ({
             type="number"
             step="any"
             value={value[1]}
-            onChange={(e) => onChange([value[0], parseFloat(e.target.value)])}
+            onChange={(e) => onChange([value[0], Number.parseFloat(e.target.value)])}
             required={required}
           />
         </div>
@@ -55,17 +55,13 @@ export const CoordinatesInput = ({
       <Input
         id="coordinates"
         type="text"
-        value={`${value[0]}, ${value[1]}`}
-        onChange={(e) => {
-          const parts = e.target.value.split(',');
+        defaultValue={`${value[0]}, ${value[1]}`}
+        onBlur={(e) => {
+          const [latitude, longitude] = e.target.value.split(',').map((item) => Number.parseFloat(item.trim()));
 
-          if (parts.length === 2) {
-            const latitude = parseFloat(parts[0].trim());
-            const longitude = parseFloat(parts[1].trim());
-
-            if (!isNaN(longitude) && !isNaN(latitude)) {
-              onChange([latitude, longitude]);
-            }
+          if (!isNaN(longitude) && !isNaN(latitude)) {
+            onChange([latitude, longitude]);
+            e.target.value = `${latitude}, ${longitude}`;
           }
         }}
         placeholder={placeholder}
