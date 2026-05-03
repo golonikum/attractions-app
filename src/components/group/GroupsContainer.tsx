@@ -139,7 +139,7 @@ export default function GroupsContainer() {
               type="text"
               placeholder="Поиск..."
               className="w-full h-10 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={searchQuery}
+              defaultValue={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>

@@ -123,7 +123,7 @@ export default function NotesContainer() {
               type="text"
               placeholder="Поиск..."
               className="w-full min-w-80 h-10 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={searchQuery}
+              defaultValue={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
