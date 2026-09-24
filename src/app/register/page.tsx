@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { useAuth } from '@/contexts/AuthContext';
 
+import LoginBackground from '@/components/login/LoginBackground';
 import { Button } from '@/components/ui/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -64,59 +65,62 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <Card className="w-full max-w-md p-8">
-        <CardHeader>
-          <CardTitle className="text-center">Регистрация</CardTitle>
-        </CardHeader>
+    <>
+      <LoginBackground />
+      <div className="flex min-h-screen items-center justify-center font-sans dark:bg-black">
+        <Card className="w-full max-w-md p-8">
+          <CardHeader>
+            <CardTitle className="text-center">Регистрация</CardTitle>
+          </CardHeader>
 
-        {error && <div className="mb-4 p-3 text-red-500 bg-red-50 dark:bg-red-900/20 rounded-md">{error}</div>}
+          {error && <div className="mb-4 p-3 text-red-500 bg-red-50 dark:bg-red-900/20 rounded-md">{error}</div>}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="email">Электронная почта</Label>
-            <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="email">Электронная почта</Label>
+              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="password">Пароль</Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Пароль</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Повторите пароль</Label>
-            <Input
-              id="confirmPassword"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-          </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Повторите пароль</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+            </div>
 
-          <Button type="submit" disabled={isLoading} className="w-full">
-            {isLoading ? 'Создание аккаунта...' : 'Зарегистрироваться'}
-          </Button>
+            <Button type="submit" disabled={isLoading} className="w-full">
+              {isLoading ? 'Создание аккаунта...' : 'Зарегистрироваться'}
+            </Button>
 
-          <CardFooter className="flex justify-center">
-            <p className="text-sm text-zinc-600 dark:text-zinc-400">
-              Уже есть аккаунт?{' '}
-              <a
-                href="/login"
-                className="font-medium text-zinc-900 hover:text-zinc-700 dark:text-zinc-50 dark:hover:text-zinc-300"
-              >
-                Войти
-              </a>
-            </p>
-          </CardFooter>
-        </form>
-      </Card>
-    </div>
+            <CardFooter className="flex justify-center">
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                Уже есть аккаунт?{' '}
+                <a
+                  href="/login"
+                  className="font-medium text-zinc-900 hover:text-zinc-700 dark:text-zinc-50 dark:hover:text-zinc-300"
+                >
+                  Войти
+                </a>
+              </p>
+            </CardFooter>
+          </form>
+        </Card>
+      </div>
+    </>
   );
 }
