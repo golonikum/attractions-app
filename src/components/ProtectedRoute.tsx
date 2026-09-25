@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { useAuth } from '@/contexts/AuthContext';
 
-import { Loader } from './ui/Loader';
+import { LoadingStub } from './ui/stubs';
 import { Navigation } from './Navigation';
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -19,7 +19,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }, [user, isLoading, router]);
 
   if (isLoading) {
-    return <Loader />;
+    return <LoadingStub />;
   }
 
   if (!user) {

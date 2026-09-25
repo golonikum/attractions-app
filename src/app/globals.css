@@ -43,6 +43,43 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  --animate-spinner-rotate: spinner-rotate 1.6s linear infinite;
+  --animate-spinner-arc: spinner-arc-dash 1.4s ease-in-out infinite, spinner-arc-color 4.2s ease-in-out infinite;
+
+  @keyframes spinner-rotate {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spinner-arc-dash {
+    0% {
+      stroke-dasharray: 1 150;
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dasharray: 90 150;
+      stroke-dashoffset: -35;
+    }
+    100% {
+      stroke-dasharray: 90 150;
+      stroke-dashoffset: -124;
+    }
+  }
+
+  @keyframes spinner-arc-color {
+    0%,
+    100% {
+      stroke: var(--primary);
+    }
+    33% {
+      stroke: oklch(0.6 0.25 300);
+    }
+    66% {
+      stroke: oklch(0.68 0.24 350);
+    }
+  }
 }
 
 :root {
