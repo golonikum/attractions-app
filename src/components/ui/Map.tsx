@@ -16,7 +16,6 @@ import {
   YMapDefaultSchemeLayer,
   YMapGeolocationControl,
   YMapListener,
-  YMapScaleControl,
 } from '@/lib/ymaps';
 import { Attraction } from '@/types/attraction';
 import { GroupWithAttractions } from '@/types/group';
@@ -29,9 +28,17 @@ type MapPropsType = {
   setLocation: React.Dispatch<React.SetStateAction<YMapCenterLocation & YMapZoomLocation>>;
   getLink: (id: string) => string;
   onClick?: (id: string) => void;
+  controls?: React.ReactNode;
 };
 
-export const Map: FC<MapPropsType> = ({ items, location = DEFAULT_LOCATION, setLocation, getLink, onClick }) => {
+export const Map: FC<MapPropsType> = ({
+  items,
+  controls,
+  location = DEFAULT_LOCATION,
+  setLocation,
+  getLink,
+  onClick,
+}) => {
   const { isMapReady } = useMapReady();
   const { theme } = useContext(ThemeProviderContext);
   const setLocationDebounced = useDebounceCallback(setLocation, 500);
@@ -63,7 +70,14 @@ export const Map: FC<MapPropsType> = ({ items, location = DEFAULT_LOCATION, setL
   );
 
   return isMapReady ? (
-    <YMap location={{ ...location }} mode="raster" zoomStrategy="zoomToCenter" theme={theme}>
+    <YMap
+      location={{ ...location }}
+      copyrightsPosition="bottom right"
+      mode="raster"
+      zoomStrategy="zoomToCenter"
+      theme={theme}
+      showScaleInCopyrights
+    >
       <YMapDefaultSchemeLayer />
       <YMapDefaultFeaturesLayer />
       <YMapListener
@@ -71,12 +85,10 @@ export const Map: FC<MapPropsType> = ({ items, location = DEFAULT_LOCATION, setL
           setLocationDebounced(args.location);
         }}
       />
-      <YMapControls position="left bottom">
-        <YMapScaleControl />
-      </YMapControls>
       <YMapControls position="left top">
         <YMapGeolocationControl />
       </YMapControls>
+      <YMapControls position="left bottom">{controls}</YMapControls>
       <YMapControls position="left" orientation="vertical">
         <YMapControlButton onClick={onClickZoom('plus')} disabled={location.zoom === 20}>
           <Plus />

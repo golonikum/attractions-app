@@ -163,3 +163,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.ymaps3--control:has(.ymaps3--open-maps-button) {
+  display: none;
+}

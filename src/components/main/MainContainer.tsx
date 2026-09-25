@@ -12,14 +12,19 @@ import { Map } from '@/components/ui/Map';
 import { LoadingStub } from '@/components/ui/stubs';
 
 import { MainAttractionWindow } from './MainAttractionWindow';
+import { VisitedFilterControl } from './VisitedFilterControl';
 
 export default function MainContainer() {
   const { isWideScreen } = useIsMobile();
   const { attractions, isAttractionsLoading } = useData();
-  const { selectedZoom, setSelectedZoom, selectedCoordinates, setSelectedCoordinates } = useQueryParams([
-    'zoom',
-    'coordinates',
-  ]);
+  const {
+    selectedZoom,
+    setSelectedZoom,
+    selectedCoordinates,
+    setSelectedCoordinates,
+    selectedVisited,
+    setSelectedVisited,
+  } = useQueryParams(['zoom', 'coordinates', 'visited']);
   const { location, setLocation } = useLocation({
     selectedZoom,
     setSelectedZoom,
@@ -27,6 +32,9 @@ export default function MainContainer() {
     setSelectedCoordinates,
   });
   const [selectedAttraction, setSelectedAttraction] = useState<Attraction | undefined>(undefined);
+  const visitedFilter = selectedVisited[0] || 'all';
+  const filteredAttractions =
+    visitedFilter === 'all' ? attractions : attractions.filter((a) => !!a.isVisited === (visitedFilter === 'visited'));
 
   return isAttractionsLoading ? (
     <LoadingStub />
@@ -35,7 +43,7 @@ export default function MainContainer() {
       <div className="flex flex-col gap-4 justify-between items-center h-full">
         <div className="w-full flex-1">
           <Map
-            items={attractions}
+            items={filteredAttractions}
             getLink={(id) => `/attractions/${id}`}
             location={location}
             setLocation={setLocation}
@@ -46,6 +54,12 @@ export default function MainContainer() {
                     setSelectedAttraction(attractions.find((attraction) => attraction.id === id));
                   }
                 : undefined
+            }
+            controls={
+              <VisitedFilterControl
+                value={visitedFilter as any}
+                onChange={(val) => setSelectedVisited(val === 'all' ? [] : [val])}
+              />
             }
           />
         </div>
