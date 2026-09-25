@@ -71,8 +71,8 @@ export default function LoginForm() {
   return (
     <>
       <LoginBackground />
-      <div className="flex min-h-screen items-center justify-center font-sans dark:bg-black">
-        <Card className="w-full max-w-md p-8">
+      <div className="flex min-h-dvh items-stretch justify-center font-sans sm:items-center dark:bg-black">
+        <Card className="flex flex-col w-full justify-center rounded-none border-0 p-8 sm:max-w-md sm:rounded-xl sm:border bg-zinc-50">
           <CardHeader>
             <CardTitle className="text-center">Вход</CardTitle>
           </CardHeader>
