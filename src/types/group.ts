@@ -25,3 +25,5 @@ export interface CreateGroupRequest {
 }
 
 export type UpdateGroupRequest = Partial<CreateGroupRequest>;
+
+export type GroupAutofillResponse = Pick<CreateGroupRequest, 'description' | 'tag' | 'coordinates' | 'zoom'>;

@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import { Loader2, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { DEFAULT_COORDINATES } from '@/lib/constants';
+import { autofillGroup } from '@/services/groupService';
 import { CreateGroupRequest, Group } from '@/types/group';
 
+import { Button } from '../ui/button';
 import { AddButton, CancelFormButton, EditButton, SubmitFormButton } from '../ui/buttons';
 import { CoordinatesInput } from '../ui/CoordinatesInput';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
@@ -46,6 +49,22 @@ export const NewGroupDialog = ({
     ...formUserData,
   };
 
+  const [isAutofilling, setIsAutofilling] = useState(false);
+
+  const handleAutofill = async () => {
+    setIsAutofilling(true);
+
+    try {
+      const { data } = await autofillGroup(formData.name);
+      setFormUserData({ ...formUserData, ...data.autofill });
+      toast.success('Поля заполнены — проверьте данные');
+    } catch (error) {
+      toast.error('Не удалось получить данные о населённом пункте');
+    } finally {
+      setIsAutofilling(false);
+    }
+  };
+
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -75,13 +94,29 @@ export const NewGroupDialog = ({
           <form onSubmit={handleFormSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="name">Название</Label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormUserData({ ...formUserData, name: e.target.value })}
-                required
-                autoFocus
-              />
+              <div className="flex gap-2">
+                <Input
+                  id="name"
+                  value={formData.name}
+                  onChange={(e) => setFormUserData({ ...formUserData, name: e.target.value })}
+                  required
+                  autoFocus
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleAutofill}
+                  disabled={!formData.name.trim() || isAutofilling}
+                  title="Заполнить поля с помощью ИИ"
+                >
+                  {isAutofilling ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Sparkles className="mr-2 h-4 w-4" />
+                  )}
+                  Автозаполнение
+                </Button>
+              </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="description">Описание</Label>
@@ -101,6 +136,7 @@ export const NewGroupDialog = ({
               />
             </div>
             <CoordinatesInput
+              key={formData.coordinates.join(',')}
               value={formData.coordinates}
               onChange={(coordinates) => setFormUserData({ ...formUserData, coordinates })}
               required

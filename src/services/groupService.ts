@@ -1,4 +1,4 @@
-import { CreateGroupRequest, Group, UpdateGroupRequest } from '@/types/group';
+import { CreateGroupRequest, Group, GroupAutofillResponse, UpdateGroupRequest } from '@/types/group';
 
 import { request } from './request';
 
@@ -11,5 +11,8 @@ export const createGroup = async (groupData: CreateGroupRequest) =>
 
 export const updateGroup = async (id: string, groupData: UpdateGroupRequest) =>
   request.put<{ group: Group | null }>(`${GROUPS_API_URL}/${id}`, groupData);
+
+export const autofillGroup = async (name: string) =>
+  request.post<{ autofill: GroupAutofillResponse }>(`${GROUPS_API_URL}/autofill`, { name });
 
 export const deleteGroup = async (id: string) => request.delete<void>(`${GROUPS_API_URL}/${id}`);
