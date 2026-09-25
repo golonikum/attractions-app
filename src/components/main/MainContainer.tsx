@@ -50,7 +50,6 @@ export default function MainContainer() {
             onClick={
               isWideScreen
                 ? (id) => {
-                    console.log(id);
                     setSelectedAttraction(attractions.find((attraction) => attraction.id === id));
                   }
                 : undefined

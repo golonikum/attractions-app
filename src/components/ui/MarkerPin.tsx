@@ -5,13 +5,18 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import { cn } from '@/lib/utils';
 import { YMapMarker } from '@/lib/ymaps';
 
+export const MARKER_PIN_STYLES = {
+  visited: 'text-muted-foreground fill-green-100',
+  unvisited: 'text-red-500 fill-red-200',
+};
+
 const getMapPinClassNames = (isActive: boolean, visited: boolean) => {
   if (isActive) {
     return 'text-blue-500 fill-blue-200';
   } else if (visited) {
-    return 'text-muted-foreground fill-green-100';
+    return MARKER_PIN_STYLES.visited;
   } else {
-    return 'text-red-500 fill-red-200';
+    return MARKER_PIN_STYLES.unvisited;
   }
 };
 
