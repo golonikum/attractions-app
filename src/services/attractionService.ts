@@ -1,4 +1,9 @@
-import { Attraction, CreateAttractionRequest, UpdateAttractionRequest } from '@/types/attraction';
+import {
+  Attraction,
+  AttractionAutofillResponse,
+  CreateAttractionRequest,
+  UpdateAttractionRequest,
+} from '@/types/attraction';
 
 import { request } from './request';
 
@@ -11,6 +16,12 @@ export const createAttraction = async (attractionData: CreateAttractionRequest) 
 
 export const updateAttraction = async (id: string, updateData: UpdateAttractionRequest) =>
   request.put<{ attraction: Attraction | null }>(`${ATTRACTIONS_API_URL}/${id}`, updateData);
+
+export const autofillAttraction = async (params: { name: string; groupId: string; yaMapUrl: string }) =>
+  request.post<{ autofill: AttractionAutofillResponse; approximateCoordinates: boolean }>(
+    `${ATTRACTIONS_API_URL}/autofill`,
+    params,
+  );
 
 export const deleteAttraction = async (id: string) => request.delete<void>(`${ATTRACTIONS_API_URL}/${id}`);
 

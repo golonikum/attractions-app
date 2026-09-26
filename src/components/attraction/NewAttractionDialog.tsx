@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import { Star } from 'lucide-react';
+import { isAxiosError } from 'axios';
+import { Loader2, Sparkles, Star } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { useData } from '@/contexts/DataContext';
 import { DEFAULT_COORDINATES } from '@/lib/constants';
+import { autofillAttraction } from '@/services/attractionService';
 import { Attraction, CreateAttractionRequest } from '@/types/attraction';
 
+import { Button } from '../ui/button';
 import { AddButton, CancelFormButton, EditButton, SubmitFormButton } from '../ui/buttons';
 import { CoordinatesInput } from '../ui/CoordinatesInput';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
@@ -58,6 +61,37 @@ export const NewAttractionDialog = ({
     ...getInitialAttractionFormState(groupId, attractionsCount),
     ...attraction,
     ...formUserData,
+  };
+
+  const [isAutofilling, setIsAutofilling] = useState(false);
+  const canAutofill = Boolean(formData.name.trim() && formData.groupId && formData.yaMapUrl?.trim());
+
+  const handleAutofill = async () => {
+    setIsAutofilling(true);
+
+    try {
+      const { data } = await autofillAttraction({
+        name: formData.name,
+        groupId: formData.groupId,
+        yaMapUrl: formData.yaMapUrl!,
+      });
+      setFormUserData({ ...formUserData, ...data.autofill });
+
+      const warnings = [
+        !data.autofill.imageUrl && 'фото найти не удалось — добавьте его вручную',
+        data.approximateCoordinates && 'координаты взяты по центру карты — проверьте их',
+      ].filter(Boolean);
+
+      if (warnings.length) {
+        toast.warning(`Поля заполнены, но ${warnings.join('; ')}`);
+      } else {
+        toast.success('Поля заполнены — проверьте данные');
+      }
+    } catch (error) {
+      toast.error((isAxiosError(error) && error.response?.data?.error) || 'Не удалось получить данные об объекте');
+    } finally {
+      setIsAutofilling(false);
+    }
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
@@ -133,15 +167,29 @@ export const NewAttractionDialog = ({
               </div>
               <div className="space-y-2">
                 <Label htmlFor="yaMapUrl">URL Яндекс.Карты</Label>
-                <Input
-                  id="yaMapUrl"
-                  type="url"
-                  value={formData.yaMapUrl}
-                  onChange={(e) => setFormUserData({ ...formUserData, yaMapUrl: e.target.value })}
-                  placeholder="https://yandex.ru/maps/-/CDgBC~cD"
-                />
+                <div className="flex gap-2">
+                  <Input
+                    id="yaMapUrl"
+                    type="url"
+                    value={formData.yaMapUrl}
+                    onChange={(e) => setFormUserData({ ...formUserData, yaMapUrl: e.target.value })}
+                    placeholder="https://yandex.ru/maps/-/CDgBC~cD"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    className="shrink-0"
+                    onClick={handleAutofill}
+                    disabled={!canAutofill || isAutofilling}
+                    title="Автозаполнение: укажите город, название и ссылку на Яндекс Карты"
+                  >
+                    {isAutofilling ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                  </Button>
+                </div>
               </div>
               <CoordinatesInput
+                key={formData.coordinates.join(',')}
                 value={formData.coordinates}
                 onChange={(coordinates) => setFormUserData({ ...formUserData, coordinates })}
                 required

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { autofillGroupByName, AutofillRefusalError, AutofillServiceError } from '@/lib/ai/groupAutofill';
+import { AutofillRefusalError, AutofillServiceError } from '@/lib/ai';
+import { autofillGroupByName } from '@/lib/ai/groupAutofill';
 import { withAuth } from '@/lib/serverAuth';
 
 const MAX_NAME_LENGTH = 100;

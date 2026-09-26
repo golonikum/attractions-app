@@ -30,6 +30,11 @@ export interface CreateAttractionRequest {
   notes?: Array<NoteType>;
 }
 
+export type AttractionAutofillResponse = Pick<
+  CreateAttractionRequest,
+  'category' | 'description' | 'coordinates' | 'yaMapUrl' | 'imageUrl'
+>;
+
 export type UpdateAttractionRequest = Partial<Omit<CreateAttractionRequest, 'groupId'>>;
 
 export interface NoteType {

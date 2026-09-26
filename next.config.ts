@@ -62,6 +62,16 @@ const nextConfig: NextConfig = {
         hostname: 's1.fotokto.ru',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'a1.drive-data.ru',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'pic.rutubelist.ru',
+        port: '',
+      },
     ],
   },
 };
