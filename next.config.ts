@@ -72,6 +72,11 @@ const nextConfig: NextConfig = {
         hostname: 'pic.rutubelist.ru',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'vladimirtravel.ru',
+        port: '',
+      },
     ],
   },
 };
