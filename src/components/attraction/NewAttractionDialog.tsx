@@ -109,8 +109,16 @@ export const NewAttractionDialog = ({
     }
   };
 
+  const handleOpenChange = (open: boolean) => {
+    if (open) {
+      setFormUserData({} as CreateAttractionRequest);
+    }
+
+    setIsOpen(open);
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{attraction ? <EditButton /> : <AddButton title="Добавить новый объект" />}</DialogTrigger>
       {isOpen && (
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">

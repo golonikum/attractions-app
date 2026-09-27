@@ -80,8 +80,16 @@ export const NewGroupDialog = ({
     }
   };
 
+  const handleOpenChange = (open: boolean) => {
+    if (open) {
+      setFormUserData({} as CreateGroupRequest);
+    }
+
+    setIsOpen(open);
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{groupData ? <EditButton /> : <AddButton title="Добавить новую группу" />}</DialogTrigger>
       {isOpen && (
         <DialogContent>
