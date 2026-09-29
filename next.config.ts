@@ -77,6 +77,11 @@ const nextConfig: NextConfig = {
         hostname: 'vladimirtravel.ru',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'vatravel.ru',
+        port: '',
+      },
     ],
   },
 };
