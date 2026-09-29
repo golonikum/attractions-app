@@ -87,6 +87,11 @@ const nextConfig: NextConfig = {
         hostname: 's4.fotokto.ru',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'citytraffic.ru',
+        port: '',
+      },
     ],
   },
 };
