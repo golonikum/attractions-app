@@ -82,6 +82,11 @@ const nextConfig: NextConfig = {
         hostname: 'vatravel.ru',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 's4.fotokto.ru',
+        port: '',
+      },
     ],
   },
 };
