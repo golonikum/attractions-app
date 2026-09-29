@@ -92,6 +92,11 @@ const nextConfig: NextConfig = {
         hostname: 'citytraffic.ru',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'indieview.ru',
+        port: '',
+      },
     ],
   },
 };
