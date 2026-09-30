@@ -97,6 +97,11 @@ const nextConfig: NextConfig = {
         hostname: 'indieview.ru',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'pitiskra.ru',
+        port: '',
+      },
     ],
   },
 };
