@@ -102,6 +102,11 @@ const nextConfig: NextConfig = {
         hostname: 'pitiskra.ru',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'saratovregion.ucoz.ru',
+        port: '',
+      },
     ],
   },
 };
