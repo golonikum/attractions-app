@@ -110,13 +110,13 @@ export default function NotesContainer() {
             options={allTags}
             selectedOptions={selectedTag}
             onSelectionChange={setSelectedTag}
-            placeholder="Фильтровать по регионам"
+            placeholder="Все регионы"
           />
           <MultiSelect
             options={allGroups}
             selectedOptions={selectedGroup}
             onSelectionChange={setSelectedGroup}
-            placeholder="Фильтровать по городам"
+            placeholder="Все города"
           />
           <div className="flex-1 shrink-0">
             <input

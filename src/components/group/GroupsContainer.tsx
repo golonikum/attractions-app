@@ -147,7 +147,7 @@ export default function GroupsContainer() {
             options={allTags}
             selectedOptions={selectedTag}
             onSelectionChange={setSelectedTag}
-            placeholder="Фильтровать по регионам"
+            placeholder="Все регионы"
           />
           <FoundCountStub count={filteredGroups.length} hasFilters={selectedTag.length > 0 || !!searchQuery.trim()} />
         </div>
