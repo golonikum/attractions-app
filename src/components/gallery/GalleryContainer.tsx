@@ -68,19 +68,19 @@ export default function GalleryContainer() {
             options={allTags}
             selectedOptions={selectedTag}
             onSelectionChange={setSelectedTag}
-            placeholder="Фильтровать по регионам"
+            placeholder="Все регионы"
           />
           <MultiSelect
             options={allGroups}
             selectedOptions={selectedGroup}
             onSelectionChange={setSelectedGroup}
-            placeholder="Фильтровать по городам"
+            placeholder="Все города"
           />
           <MultiSelect
             options={allCategories}
             selectedOptions={selectedCategory}
             onSelectionChange={setSelectedCategory}
-            placeholder="Фильтровать по категориям"
+            placeholder="Все категории"
           />
           <FoundCountStub
             count={photos.length}
