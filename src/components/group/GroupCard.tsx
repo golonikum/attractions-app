@@ -65,8 +65,8 @@ export function GroupCard({ groups, onDelete, onUpdate, style, index }: RowCompo
               isOpen={isDeleteDialogOpen}
               onClose={() => setIsDeleteDialogOpen(false)}
               onConfirm={() => onDelete(group.id)}
-              title="Удалить группу?"
-              description="Вы уверены, что хотите удалить эту группу? Все связанные объекта также будут удалены."
+              title="Удалить населенный пункт?"
+              description="Вы уверены, что хотите удалить? Все связанные объекты также будут удалены."
               confirmText="Удалить"
               cancelText="Отмена"
               variant="destructive"
