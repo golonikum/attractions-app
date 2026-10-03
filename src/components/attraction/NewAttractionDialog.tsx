@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { isAxiosError } from 'axios';
-import { Loader2, Sparkles, Star } from 'lucide-react';
+import { ChevronDown, Loader2, Sparkles, Star } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { useData } from '@/contexts/DataContext';
 import { DEFAULT_COORDINATES } from '@/lib/constants';
+import { cn } from '@/lib/utils';
 import { autofillAttraction } from '@/services/attractionService';
 import { Attraction, CreateAttractionRequest } from '@/types/attraction';
 
@@ -63,6 +64,9 @@ export const NewAttractionDialog = ({
     ...formUserData,
   };
 
+  const [isNotesOpen, setIsNotesOpen] = useState(false);
+  const notesCount = formData.notes?.length ?? 0;
+
   const [isAutofilling, setIsAutofilling] = useState(false);
   const canAutofill = Boolean(formData.name.trim() && formData.groupId && formData.yaMapUrl?.trim());
 
@@ -112,6 +116,7 @@ export const NewAttractionDialog = ({
   const handleOpenChange = (open: boolean) => {
     if (open) {
       setFormUserData({} as CreateAttractionRequest);
+      setIsNotesOpen(Boolean(attraction?.notes?.length));
     }
 
     setIsOpen(open);
@@ -129,7 +134,7 @@ export const NewAttractionDialog = ({
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleFormSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 m-0">
               <div className="space-y-2">
                 <Label htmlFor="name">Город</Label>
                 <MultiSelect
@@ -202,58 +207,10 @@ export const NewAttractionDialog = ({
                 onChange={(coordinates) => setFormUserData({ ...formUserData, coordinates })}
                 required
               />
-              <div className="flex items-center gap-8">
-                <div className="flex items-center gap-2 w-fit">
-                  <Label htmlFor="order">Порядок</Label>
-                  <Input
-                    id="order"
-                    type="number"
-                    value={formData.order || 1}
-                    onChange={(e) =>
-                      setFormUserData({
-                        ...formUserData,
-                        order: parseInt(e.target.value) || 1,
-                      })
-                    }
-                    className="w-20"
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setFormUserData({ ...formUserData, isVisited: !formData.isVisited })}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
-                      formData.isVisited ? 'bg-green-500' : 'bg-gray-200'
-                    }`}
-                  >
-                    <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        formData.isVisited ? 'translate-x-6' : 'translate-x-1'
-                      }`}
-                    />
-                  </button>
-                  <Label>Посещено</Label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setFormUserData({
-                        ...formUserData,
-                        isFavorite: !formData.isFavorite,
-                      })
-                    }
-                    className="p-1 rounded-full hover:bg-gray-100 focus:outline-none"
-                  >
-                    <Star
-                      className={`h-5 w-5 ${formData.isFavorite ? 'text-yellow-500 fill-current' : 'text-gray-300'}`}
-                    />
-                  </button>
-                  <Label>Избранное</Label>
-                </div>
-              </div>
+
               <div className="flex items-center gap-4"></div>
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="description">Описание (необязательно)</Label>
               <Textarea
@@ -265,12 +222,73 @@ export const NewAttractionDialog = ({
               />
             </div>
 
+            <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-8">
+              <div className="flex items-center gap-2 w-fit">
+                <Label htmlFor="order">Порядок</Label>
+                <Input
+                  id="order"
+                  type="number"
+                  value={formData.order || 1}
+                  onChange={(e) =>
+                    setFormUserData({
+                      ...formUserData,
+                      order: parseInt(e.target.value) || 1,
+                    })
+                  }
+                  className="w-20"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setFormUserData({ ...formUserData, isVisited: !formData.isVisited })}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                    formData.isVisited ? 'bg-green-500' : 'bg-gray-200'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      formData.isVisited ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
+                <Label>Посещено</Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormUserData({
+                      ...formUserData,
+                      isFavorite: !formData.isFavorite,
+                    })
+                  }
+                  className="p-1 rounded-full hover:bg-gray-100 focus:outline-none"
+                >
+                  <Star
+                    className={`h-5 w-5 ${formData.isFavorite ? 'text-yellow-500 fill-current' : 'text-gray-300'}`}
+                  />
+                </button>
+                <Label>Избранное</Label>
+              </div>
+            </div>
+
             <div className="space-y-2">
-              <Label>Заметки</Label>
-              <NotesManager
-                notes={formData.notes || []}
-                onChange={(notes) => setFormUserData({ ...formUserData, notes })}
-              />
+              <button
+                type="button"
+                onClick={() => setIsNotesOpen(!isNotesOpen)}
+                aria-expanded={isNotesOpen}
+                className="flex items-center gap-1 text-sm font-medium leading-none"
+              >
+                Заметки{notesCount > 0 && ` (${notesCount})`}
+                <ChevronDown className={cn('h-4 w-4 transition-transform', isNotesOpen && 'rotate-180')} />
+              </button>
+              <div hidden={!isNotesOpen}>
+                <NotesManager
+                  notes={formData.notes || []}
+                  onChange={(notes) => setFormUserData({ ...formUserData, notes })}
+                />
+              </div>
             </div>
 
             <div className="flex justify-end space-x-2">
