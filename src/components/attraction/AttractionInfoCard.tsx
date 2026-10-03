@@ -71,7 +71,7 @@ export function AttractionInfoCard({ attraction, group }: AttractionInfoCardProp
           )}
 
           {!isWideScreen && (
-            <div className="flex gap-2 *:min-w-0 *:flex-1">
+            <div className="flex gap-4 *:min-w-0 *:flex-1">
               <OpenInYandexMapButton attraction={attraction} />
               <ShowOnMapButton href={locateItemOnMainMapHref(attraction)} />
             </div>

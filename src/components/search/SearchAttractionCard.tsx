@@ -40,7 +40,7 @@ export function SearchAttractionCard({ attractions, index, style }: RowComponent
           </div>
         </CardHeader>
         <CardContent className="flex flex-col gap-6 justify-between">
-          <div className="flex gap-2 *:min-w-0 *:flex-1">
+          <div className="flex gap-4 *:min-w-0 *:flex-1">
             <OpenInYandexMapButton attraction={attraction} />
             <ShowOnMapButton href={locateItemOnMainMapHref(attraction)} />
           </div>
