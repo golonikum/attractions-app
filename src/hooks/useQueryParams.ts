@@ -35,6 +35,8 @@ const getInitStateFromUrl = <T extends string[]>(names: T) => {
 
 export const useQueryParams = <T extends string[]>(names: string[]): FieldsAndSetters<T> & SearchQuerySetters => {
   const [state, setState] = useState<Record<string, string[]>>(getInitStateFromUrl(names));
+  // names обычно передаётся литералом и меняет ссылку на каждом рендере — зависим от стабильного ключа
+  const namesKey = names.join(',');
 
   // Обновляем URL при изменении фильтров
   useEffect(() => {
@@ -55,9 +57,15 @@ export const useQueryParams = <T extends string[]>(names: string[]): FieldsAndSe
       params.delete('search');
     }
 
-    const newUrl = `${window.location.pathname}${params.toString() ? '?' : ''}${params.toString()}`;
-    window.history.replaceState({}, '', newUrl);
-  }, [state, names]);
+    const query = params.toString();
+    const newUrl = `${window.location.pathname}${query ? '?' : ''}${query}`;
+
+    // Next.js патчит replaceState и перерисовывает дерево на каждый вызов, а Firefox бросает SecurityError
+    // при слишком частых вызовах History API — поэтому не трогаем историю, если URL не изменился
+    if (newUrl !== `${window.location.pathname}${window.location.search}`) {
+      window.history.replaceState(null, '', newUrl);
+    }
+  }, [state, namesKey]);
 
   const search = useCallback((value: string) => setState((val) => ({ ...val, search: value ? [value] : [] })), []);
 

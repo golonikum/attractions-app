@@ -23,6 +23,9 @@ export const autofillAttraction = async (params: { name: string; groupId: string
     params,
   );
 
+export const autoaddAttractions = async (groupId: string) =>
+  request.post<{ attractions: Attraction[] }>(`${ATTRACTIONS_API_URL}/autoadd`, { groupId });
+
 export const deleteAttraction = async (id: string) => request.delete<void>(`${ATTRACTIONS_API_URL}/${id}`);
 
 export const updateOrder = async (groupId: string, attractions: { id: string; order: number }[]) =>
