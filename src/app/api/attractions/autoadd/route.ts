@@ -53,6 +53,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ attractions }, { status: 201 });
     } catch (error) {
       if (error instanceof AutofillRefusalError) {
+        console.error('Autoadd refusal:', error.message);
+
         return NextResponse.json({ error: 'Не удалось найти достопримечательности' }, { status: 422 });
       }
 

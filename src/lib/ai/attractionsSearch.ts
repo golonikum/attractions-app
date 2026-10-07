@@ -9,22 +9,27 @@ const MAX_RESULTS = 10;
 /** Отбрасываем объекты дальше этого расстояния от центра населённого пункта — скорее всего, модель ошиблась */
 const MAX_DISTANCE_KM = 30;
 
+// Схема намеренно нестрогая: на длинном списке YandexGPT не всегда держит enum и типы,
+// и из-за одного объекта не должен пропадать весь ответ — категорию нормализуем ниже
 const AttractionsSearchSchema = z.object({
   attractions: z.array(
     z.object({
       name: z.string(),
-      category: z.enum(ATTRACTION_CATEGORIES),
+      category: z.string().describe(ATTRACTION_CATEGORIES.join(' | ')),
       description: z.string(),
-      latitude: z.number(),
-      longitude: z.number(),
+      latitude: z.coerce.number(),
+      longitude: z.coerce.number(),
     }),
   ),
 });
 
+const normalizeCategory = (category: string) =>
+  ATTRACTION_CATEGORIES.find((item) => item.toLowerCase() === category.trim().toLowerCase()) ?? 'Культура';
+
 const SYSTEM_PROMPT = `Ты — справочник по достопримечательностям. По населённому пункту и координатам его центра верни список attractions — до ${MAX_RESULTS} самых интересных для туриста достопримечательностей в этом населённом пункте и в его ближайших окрестностях. Для каждой:
 - name: общепринятое название на русском, как на Яндекс Картах;
 - category: одно из значений «Церковь» (храмы, монастыри, часовни и другие религиозные объекты), «Природа» (парки, озёра, реки, горы, заповедники и другие природные объекты), «Культура» (музеи, усадьбы, крепости, памятники, архитектура и всё остальное);
-- description: описание на русском языке, от 3 до 8 предложений: история, архитектура или природные особенности, чем интересен для посещения, если это храм или монастырь — какие святыни там есть;
+- description: описание на русском языке, от 3 до 5 предложений: история, архитектура или природные особенности, чем интересен для посещения, если это храм или монастырь — какие святыни там есть;
 - latitude, longitude: точные координаты объекта в десятичных градусах.
 Не включай объекты из списка уже добавленных (в том числе под другими названиями). Включай только реально существующие объекты, в существовании и местоположении которых ты уверен; лучше вернуть меньше объектов или пустой список, чем выдумать.`;
 
@@ -71,7 +76,7 @@ export const searchAttractions = async ({
       `Уже добавлены: ${existingNames.length ? existingNames.join('; ') : 'нет'}`,
     ].join('\n'),
     schema: AttractionsSearchSchema,
-    maxTokens: 12000,
+    maxTokens: 8000,
   });
 
   const seen = new Set(existingNames.map(normalizeName));
@@ -80,7 +85,13 @@ export const searchAttractions = async ({
     .filter(({ name, latitude, longitude }) => {
       const key = normalizeName(name);
 
-      if (!key || seen.has(key) || distanceKm(groupCoordinates, [latitude, longitude]) > MAX_DISTANCE_KM) {
+      if (
+        !key ||
+        seen.has(key) ||
+        !Number.isFinite(latitude) ||
+        !Number.isFinite(longitude) ||
+        distanceKm(groupCoordinates, [latitude, longitude]) > MAX_DISTANCE_KM
+      ) {
         return false;
       }
 
@@ -102,7 +113,7 @@ export const searchAttractions = async ({
 
     return {
       name: name.trim(),
-      category,
+      category: normalizeCategory(category),
       description,
       coordinates,
       yaMapUrl: getYandexMapsSearchUrl(`${name}, ${groupName}`, coordinates),

@@ -44,10 +44,21 @@ export const createYandexGptProvider = (): LlmProvider => ({
       throw new AutofillRefusalError(`YandexGPT не вернул данные: ${alternative?.status}`);
     }
 
+    // Несмотря на jsonSchema, YandexGPT иногда оборачивает JSON в markdown-блок ```json ... ```
+    const text = alternative.message.text
+      .trim()
+      .replace(/^```(?:json)?\s*/i, '')
+      .replace(/\s*```$/, '');
+
     try {
-      return schema.parse(JSON.parse(alternative.message.text));
-    } catch {
-      throw new AutofillRefusalError('Ответ YandexGPT не соответствует схеме');
+      return schema.parse(JSON.parse(text));
+    } catch (error) {
+      const reason =
+        error instanceof z.ZodError
+          ? error.issues.map(({ path, message }) => `${path.join('.')}: ${message}`).join('; ')
+          : String(error);
+
+      throw new AutofillRefusalError(`Ответ YandexGPT не соответствует схеме: ${reason}\n${text.slice(0, 1000)}`);
     }
   },
 });
