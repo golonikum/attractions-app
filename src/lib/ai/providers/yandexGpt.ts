@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { getYandexCredentials, yandexFetch } from '@/lib/yandex/api';
 
+import { extractJson } from '../extractJson';
 import { AutofillRefusalError, LlmProvider, StructuredRequest } from '../types';
 
 const YANDEX_GPT_URL = 'https://llm.api.cloud.yandex.net/foundationModels/v1/completion';
@@ -44,14 +45,11 @@ export const createYandexGptProvider = (): LlmProvider => ({
       throw new AutofillRefusalError(`YandexGPT не вернул данные: ${alternative?.status}`);
     }
 
-    // Несмотря на jsonSchema, YandexGPT иногда оборачивает JSON в markdown-блок ```json ... ```
-    const text = alternative.message.text
-      .trim()
-      .replace(/^```(?:json)?\s*/i, '')
-      .replace(/\s*```$/, '');
+    // Несмотря на jsonSchema, YandexGPT иногда оборачивает JSON в ```json ... ``` — extractJson это переживает
+    const { text } = alternative.message;
 
     try {
-      return schema.parse(JSON.parse(text));
+      return schema.parse(extractJson(text).value);
     } catch (error) {
       const reason =
         error instanceof z.ZodError
