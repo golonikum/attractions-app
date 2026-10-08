@@ -82,7 +82,7 @@ export const NewAttractionDialog = ({
       setFormUserData({ ...formUserData, ...data.autofill });
 
       const warnings = [
-        !data.autofill.imageUrl && 'фото найти не удалось — добавьте его вручную',
+        !data.autofill.imageUrl && 'фото на Яндекс Картах не нашлось — добавьте его вручную',
         data.approximateCoordinates && 'координаты взяты по центру карты — проверьте их',
       ].filter(Boolean);
 

@@ -2,23 +2,25 @@ import { z } from 'zod';
 
 import { getLlmProvider } from '@/lib/ai';
 import { ATTRACTION_CATEGORIES } from '@/lib/ai/attractionAutofill';
+import { distanceKm, normalizeName } from '@/lib/geo';
+import { fetchOsmPlaces } from '@/lib/osm/overpass';
 import { searchImage } from '@/lib/yandexImageSearch';
 import { CreateAttractionRequest } from '@/types/attraction';
 
 const MAX_RESULTS = 10;
-/** Отбрасываем объекты дальше этого расстояния от центра населённого пункта — скорее всего, модель ошиблась */
-const MAX_DISTANCE_KM = 30;
+/** Сколько кандидатов из OSM показываем ИИ — ограничение размера промпта */
+const MAX_CANDIDATES = 150;
+/** Объект OSM ближе этого расстояния к уже добавленному считаем тем же самым */
+const SAME_PLACE_DISTANCE_KM = 0.1;
 
 // Схема намеренно нестрогая: на длинном списке YandexGPT не всегда держит enum и типы,
 // и из-за одного объекта не должен пропадать весь ответ — категорию нормализуем ниже
-const AttractionsSearchSchema = z.object({
+const AttractionsSelectionSchema = z.object({
   attractions: z.array(
     z.object({
-      name: z.string(),
+      id: z.string(),
       category: z.string().describe(ATTRACTION_CATEGORIES.join(' | ')),
       description: z.string(),
-      latitude: z.coerce.number(),
-      longitude: z.coerce.number(),
     }),
   ),
 });
@@ -26,30 +28,19 @@ const AttractionsSearchSchema = z.object({
 const normalizeCategory = (category: string) =>
   ATTRACTION_CATEGORIES.find((item) => item.toLowerCase() === category.trim().toLowerCase()) ?? 'Культура';
 
-const SYSTEM_PROMPT = `Ты — справочник по достопримечательностям. По населённому пункту и координатам его центра верни список attractions — до ${MAX_RESULTS} самых интересных для туриста достопримечательностей в этом населённом пункте и в его ближайших окрестностях. Для каждой:
-- name: общепринятое название на русском, как на Яндекс Картах;
+const SYSTEM_PROMPT = `Ты — справочник по достопримечательностям. Тебе дан населённый пункт и список объектов из OpenStreetMap в его окрестностях в формате «id | название | теги OSM». Выбери из списка до ${MAX_RESULTS} самых интересных для туриста достопримечательностей и верни их в attractions. Для каждой:
+- id: id объекта ровно как в списке; объектов не из списка не добавляй;
 - category: одно из значений «Церковь» (храмы, монастыри, часовни и другие религиозные объекты), «Природа» (парки, озёра, реки, горы, заповедники и другие природные объекты), «Культура» (музеи, усадьбы, крепости, памятники, архитектура и всё остальное);
-- description: описание на русском языке, от 3 до 5 предложений: история, архитектура или природные особенности, чем интересен для посещения, если это храм или монастырь — какие святыни там есть;
-- latitude, longitude: точные координаты объекта в десятичных градусах.
-Не включай объекты из списка уже добавленных (в том числе под другими названиями). Включай только реально существующие объекты, в существовании и местоположении которых ты уверен; лучше вернуть меньше объектов или пустой список, чем выдумать.`;
+- description: описание на русском языке, от 3 до 5 предложений: история, архитектура или природные особенности, чем интересен для посещения, если это храм или монастырь — какие святыни там есть.
+Предпочитай известные и значимые объекты; малозначимые (типовые скверы, небольшие часовни, мемориальные доски) пропускай. Не выдумывай факты: если об объекте мало известно, опиши только то, в чём уверен.`;
 
-const normalizeName = (name: string) =>
-  name
-    .toLowerCase()
-    .replace(/ё/g, 'е')
-    .replace(/[«»"'„“”.,()]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim();
+/** Радиус поиска в метрах по масштабу карты населённого пункта: чем крупнее город, тем меньше zoom */
+const getSearchRadiusM = (zoom: number) => {
+  if (zoom >= 14) {
+    return 5000;
+  }
 
-const toRad = (deg: number) => (deg * Math.PI) / 180;
-
-/** Расстояние между точками [latitude, longitude] в километрах */
-const distanceKm = ([lat1, lng1]: [number, number], [lat2, lng2]: [number, number]) => {
-  const a =
-    Math.sin(toRad(lat2 - lat1) / 2) ** 2 +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(toRad(lng2 - lng1) / 2) ** 2;
-
-  return 2 * 6371 * Math.asin(Math.sqrt(a));
+  return zoom >= 12 ? 10000 : 20000;
 };
 
 const getYandexMapsSearchUrl = (text: string, [latitude, longitude]: [number, number]) =>
@@ -59,60 +50,69 @@ export const searchAttractions = async ({
   groupName,
   groupTag,
   groupCoordinates,
-  existingNames,
+  groupZoom,
+  existing,
 }: {
   groupName: string;
   groupTag?: string | null;
   groupCoordinates: [number, number];
-  existingNames: string[];
+  groupZoom: number;
+  existing: { name: string; coordinates: [number, number] }[];
 }): Promise<Omit<CreateAttractionRequest, 'groupId'>[]> => {
-  const place = [groupName, groupTag].filter(Boolean).join(', ');
+  const existingNames = new Set(existing.map(({ name }) => normalizeName(name)));
+
+  const candidates = (await fetchOsmPlaces({ center: groupCoordinates, radiusM: getSearchRadiusM(groupZoom) }))
+    .filter(
+      (place) =>
+        !existingNames.has(normalizeName(place.name)) &&
+        !existing.some(({ coordinates }) => distanceKm(coordinates, place.coordinates) < SAME_PLACE_DISTANCE_KM),
+    )
+    .slice(0, MAX_CANDIDATES);
+
+  if (!candidates.length) {
+    return [];
+  }
 
   const { attractions } = await getLlmProvider().generateStructured({
     system: SYSTEM_PROMPT,
     user: [
-      `Населённый пункт: ${place}`,
-      `Координаты центра: ${groupCoordinates[0]}, ${groupCoordinates[1]}`,
-      `Уже добавлены: ${existingNames.length ? existingNames.join('; ') : 'нет'}`,
+      `Населённый пункт: ${[groupName, groupTag].filter(Boolean).join(', ')}`,
+      'Объекты:',
+      ...candidates.map(({ id, name, kind }) => `${id} | ${name} | ${kind}`),
     ].join('\n'),
-    schema: AttractionsSearchSchema,
+    schema: AttractionsSelectionSchema,
     maxTokens: 8000,
   });
 
-  const seen = new Set(existingNames.map(normalizeName));
+  const candidatesById = new Map(candidates.map((place) => [place.id, place]));
+  const selectedIds = new Set<string>();
 
-  const found = attractions
-    .filter(({ name, latitude, longitude }) => {
-      const key = normalizeName(name);
-
-      if (
-        !key ||
-        seen.has(key) ||
-        !Number.isFinite(latitude) ||
-        !Number.isFinite(longitude) ||
-        distanceKm(groupCoordinates, [latitude, longitude]) > MAX_DISTANCE_KM
-      ) {
+  // Имя и координаты берём из OSM, от ИИ — только выбор, категорию и описание
+  const selected = attractions
+    .map(({ id, ...rest }) => ({ ...rest, place: candidatesById.get(id.trim()) }))
+    .filter(({ place }) => {
+      if (!place || selectedIds.has(place.id)) {
         return false;
       }
 
-      seen.add(key);
+      selectedIds.add(place.id);
 
       return true;
     })
-    .slice(0, MAX_RESULTS);
+    .slice(0, MAX_RESULTS)
+    .map(({ place, category, description }) => ({ ...place!, category, description }));
 
-  const images = await Promise.allSettled(found.map(({ name }) => searchImage(`${name} ${groupName}`)));
+  const images = await Promise.allSettled(selected.map(({ name }) => searchImage(`${name} ${groupName}`)));
 
-  return found.map(({ name, category, description, latitude, longitude }, index) => {
+  return selected.map(({ name, coordinates, category, description }, index) => {
     const image = images[index];
-    const coordinates: [number, number] = [latitude, longitude];
 
     if (image.status === 'rejected') {
       console.error('Image search error:', image.reason);
     }
 
     return {
-      name: name.trim(),
+      name,
       category: normalizeCategory(category),
       description,
       coordinates,

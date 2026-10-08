@@ -31,7 +31,7 @@ export function GroupInfoCard({ group, attractions }: GroupInfoCardProps) {
       if (data.attractions.length) {
         setAttractions((items) => [...items, ...data.attractions]);
         reload({ attractions: true });
-        toast.success(`Добавлено объектов: ${data.attractions.length}. Проверьте координаты и описания`);
+        toast.success(`Добавлено объектов: ${data.attractions.length}. Проверьте описания`);
       } else {
         toast.info('Новых достопримечательностей не найдено');
       }

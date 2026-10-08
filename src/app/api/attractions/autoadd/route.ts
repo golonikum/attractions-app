@@ -5,7 +5,7 @@ import { searchAttractions } from '@/lib/ai/attractionsSearch';
 import { prisma } from '@/lib/db';
 import { withAuth } from '@/lib/serverAuth';
 
-// Поиск списка объектов и фото для каждого может занимать больше минуты
+// Запрос к Overpass, выбор объектов ИИ и поиск фото для каждого могут занимать больше минуты
 export const maxDuration = 300;
 
 // Найти достопримечательности населённого пункта (кроме уже добавленных) и добавить их
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
 
     const existing = await prisma.attraction.findMany({
       where: { groupId, userId },
-      select: { name: true, order: true },
+      select: { name: true, coordinates: true, order: true },
     });
 
     try {
@@ -29,7 +29,8 @@ export async function POST(request: NextRequest) {
         groupName: group.name,
         groupTag: group.tag,
         groupCoordinates: group.coordinates as [number, number],
-        existingNames: existing.map(({ name }) => name),
+        groupZoom: group.zoom,
+        existing: existing.map(({ name, coordinates }) => ({ name, coordinates: coordinates as [number, number] })),
       });
 
       const maxOrder = existing.reduce((max, { order }) => Math.max(max, order ?? 0), 0);

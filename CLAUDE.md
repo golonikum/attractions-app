@@ -56,6 +56,10 @@ Three React Contexts, no external state library:
 
 The SDK (`ymaps3`) attaches to `window.ymaps3` after the root-layout `<Script>` loads. `src/lib/ymaps.ts` (`initYMaps()`) lazily binds it to React via `reactify` and exports typed components (`YMap`, `YMapMarker`, etc.) as mutable `let` bindings — they only exist after `initYMaps()` resolves. Any component that renders a map must gate rendering on `useMapReady().isMapReady` (see `src/components/ui/Map.tsx`) before importing/using those exports.
 
+### Attractions auto-add: coordinates come from OSM, never from the LLM
+
+`POST /api/attractions/autoadd` (`src/lib/ai/attractionsSearch.ts`) fetches real places with exact coordinates from OpenStreetMap via Overpass (`src/lib/osm/overpass.ts`, endpoint overridable with `OVERPASS_API_URL`), then the LLM only picks ids from that list and writes category/description. LLMs can't produce accurate coordinates (they hallucinate digits past ~1–2 decimals), so don't add coordinate fields to LLM schemas. Yandex Places API is not an option (paid). OSM data is ODbL — attribution "© участники OpenStreetMap" is required wherever it's shown.
+
 ### UI components
 
 `src/components/ui` follows shadcn/ui conventions (`components.json`, style "new-york", Tailwind, `class-variance-authority`) — prefer generating/matching that pattern for new primitives rather than hand-rolling. `next.config.ts` has `reactCompiler: true` (React Compiler / babel-plugin-react-compiler), so manual `useMemo`/`useCallback` for render-perf reasons is generally unnecessary for components under compiler coverage.

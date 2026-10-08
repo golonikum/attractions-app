@@ -11,7 +11,8 @@ export const getYandexCredentials = () => {
   return { apiKey, folderId };
 };
 
-export const yandexFetch = async (serviceName: string, url: string, init: RequestInit) => {
+/** fetch внешнего сервиса: сетевые ошибки и не-2xx ответы превращаются в AutofillServiceError */
+export const serviceFetch = async (serviceName: string, url: string, init: RequestInit) => {
   let response: Response;
 
   try {
@@ -26,3 +27,5 @@ export const yandexFetch = async (serviceName: string, url: string, init: Reques
 
   return response;
 };
+
+export const yandexFetch = serviceFetch;
