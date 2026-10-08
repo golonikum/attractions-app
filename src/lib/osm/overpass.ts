@@ -1,7 +1,6 @@
 import { distanceKm, normalizeName } from '@/lib/geo';
 import { serviceFetch } from '@/lib/yandex/api';
 
-const DEFAULT_OVERPASS_URL = 'https://overpass-api.de/api/interpreter';
 /** Объекты с одинаковым названием ближе этого расстояния считаем одним (узел храма + контур здания) */
 const DUPLICATE_DISTANCE_KM = 0.2;
 
@@ -40,13 +39,61 @@ export interface OsmPlace {
   rank: number;
 }
 
-const buildQuery = ([lat, lng]: [number, number], radiusM: number) => {
-  const around = `(around:${Math.round(radiusM)},${lat},${lng})`;
-  const filters = ATTRACTION_TAGS.map(
-    ([key, value]) => `nwr${around}["name"]["${key}"~"${value}"]["memorial"!="plaque"];`,
-  );
+/** Публичные серверы Overpass попеременно перегружены (504/500/429) — при ошибке пробуем следующий */
+const DEFAULT_OVERPASS_URLS = [
+  'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
+  'https://overpass-api.de/api/interpreter',
+  'https://overpass.private.coffee/api/interpreter',
+];
+/** Таймаут выполнения запроса на сервере Overpass, секунды; клиентский — чуть больше */
+const QUERY_TIMEOUT_S = 25;
 
-  return `[out:json][timeout:60];(${filters.join('')});out center tags;`;
+/** Прямоугольник [south, west, north, east], описанный вокруг круга радиусом radiusM */
+const getBbox = ([lat, lng]: [number, number], radiusM: number) => {
+  const dLat = radiusM / 111_320;
+  const dLng = radiusM / (111_320 * Math.cos((lat * Math.PI) / 180));
+
+  return [lat - dLat, lng - dLng, lat + dLat, lng + dLng].map((value) => value.toFixed(5)).join(',');
+};
+
+// bbox заметно дешевле для Overpass, чем around: лишнее за пределами круга отсекаем уже в fetchOsmPlaces
+const buildQuery = (center: [number, number], radiusM: number) => {
+  const filters = ATTRACTION_TAGS.map(([key, value]) => `nwr["name"]["${key}"~"${value}"]["memorial"!="plaque"];`);
+
+  return `[out:json][timeout:${QUERY_TIMEOUT_S}][bbox:${getBbox(center, radiusM)}];(${filters.join(
+    '',
+  )});out center tags;`;
+};
+
+const getOverpassUrls = () => (process.env.OVERPASS_API_URL ? [process.env.OVERPASS_API_URL] : DEFAULT_OVERPASS_URLS);
+
+const queryOverpass = async (query: string) => {
+  let lastError: unknown;
+  const urls = getOverpassUrls();
+  // Отказы перегруженных серверов приходят быстро и случайно — проходим по списку дважды
+  const attempts = [...urls, ...urls];
+
+  for (const url of attempts) {
+    try {
+      const response = await serviceFetch(`Overpass ${new URL(url).host}`, url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Agent': 'attractions-app',
+        },
+        body: new URLSearchParams({ data: query }),
+        signal: AbortSignal.timeout((QUERY_TIMEOUT_S + 10) * 1000),
+      });
+
+      return ((await response.json()) as { elements?: OverpassElement[] }).elements ?? [];
+    } catch (error) {
+      // В тексте ошибки целая HTML-страница 504 — в лог хватит начала
+      console.error((error instanceof Error ? error.message : String(error)).slice(0, 200));
+      lastError = error;
+    }
+  }
+
+  throw lastError;
 };
 
 const getRank = (tags: Record<string, string>) =>
@@ -74,20 +121,11 @@ const toOsmPlace = ({ type, id, lat, lon, center, tags = {} }: OverpassElement):
 
 /** Достопримечательности из OpenStreetMap в радиусе radiusM метров от center ([latitude, longitude]), известные — первыми */
 export const fetchOsmPlaces = async ({ center, radiusM }: { center: [number, number]; radiusM: number }) => {
-  const response = await serviceFetch('Overpass', process.env.OVERPASS_API_URL || DEFAULT_OVERPASS_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'User-Agent': 'attractions-app',
-    },
-    body: new URLSearchParams({ data: buildQuery(center, radiusM) }),
-  });
-
-  const { elements = [] } = (await response.json()) as { elements?: OverpassElement[] };
+  const elements = await queryOverpass(buildQuery(center, radiusM));
 
   const places = elements
     .map(toOsmPlace)
-    .filter((place): place is OsmPlace => Boolean(place))
+    .filter((place): place is OsmPlace => Boolean(place) && distanceKm(center, place!.coordinates) <= radiusM / 1000)
     .sort((a, b) => b.rank - a.rank);
 
   // После сортировки дубль с меньшим rank всегда идёт позже — его и отбрасываем

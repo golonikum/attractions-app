@@ -68,7 +68,7 @@ export function GroupInfoCard({ group, attractions }: GroupInfoCardProps) {
           disabled={isAutoadding}
           title="Найти и добавить достопримечательности, которых ещё нет в списке"
         >
-          {isAutoadding ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+          {isAutoadding ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
           {isAutoadding ? 'Ищем достопримечательности…' : 'Автодобавление'}
         </Button>
       </CardContent>
