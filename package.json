@@ -12,6 +12,8 @@
     "pwa:generate:alt": "node scripts/generate-icons-alt.js",
     "lint": "yarn pretty && eslint src",
     "lint:fix": "yarn pretty:fix && eslint src --fix && yarn pretty:fix",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
     "pretty": "prettier \"./**/*.{js,ts,tsx}\" --ignore-path .eslintignore --check",
     "pretty:fix": "prettier \"./**/*.{js,ts,tsx}\" --ignore-path .eslintignore --write",
     "prepare": "husky install"
@@ -51,6 +53,7 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

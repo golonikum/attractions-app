@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { List } from 'react-window';
+import { List, useDynamicRowHeight } from 'react-window';
 import { useRouter } from 'next/navigation';
 
 import { useData } from '@/contexts/DataContext';
@@ -24,6 +24,9 @@ export default function SearchContainer() {
   const { searchQuery, setSearchQuery } = useQueryParams([]);
   const { attractions, isAttractionsLoading, isGroupsLoading } = useData();
   const [foundAttractions, setFoundAttractions] = useState<Attraction[]>([]);
+  // Высота карточки зависит от длины названия и наличия категории — меряем строки, а не задаём константой.
+  // key сбрасывает кэш высот, когда под теми же индексами оказываются другие объекты
+  const rowHeight = useDynamicRowHeight({ defaultRowHeight: 522, key: searchQuery });
 
   const onSearch = useCallback(() => {
     setFoundAttractions(
@@ -66,12 +69,12 @@ export default function SearchContainer() {
       )}
     >
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div className="w-full space-y-4 md:space-y-0 md:space-x-4 md:flex md:flex-row md:w-auto md:items-center">
+        <div className="w-full space-y-4 md:space-y-0 md:gap-4 md:flex md:flex-row md:flex-wrap md:w-auto md:items-center">
           <div className="flex-1 shrink-0">
             <input
               type="text"
               placeholder="Поиск..."
-              className="w-full min-w-80 h-10 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full md:min-w-80 h-10 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               defaultValue={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -104,7 +107,7 @@ export default function SearchContainer() {
               <List
                 rowComponent={SearchAttractionCard}
                 rowCount={foundAttractions.length}
-                rowHeight={522}
+                rowHeight={rowHeight}
                 rowProps={{ attractions: foundAttractions }}
               />
             </div>

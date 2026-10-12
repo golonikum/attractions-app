@@ -13,7 +13,19 @@ yarn db:migrate       # prisma migrate dev
 yarn db:push          # prisma db push (no migration file)
 ```
 
-There is no test suite configured in this repo (no test script, no Jest/Vitest config).
+### E2E tests (Playwright)
+
+```bash
+yarn test:e2e         # all specs on 5 mobile/tablet devices (Pixel 7, iPhone 13, iPhone SE, 320px, iPad Mini)
+yarn test:e2e:ui      # interactive runner
+npx playwright install chromium webkit   # once, to download browsers
+```
+
+- Layout regression tests for mobile lists live in `e2e/`. API is mocked in the browser via `page.route` (`e2e/fixtures/mockApi.ts`, data in `e2e/fixtures/data.ts`) — no DB, cookies or `.env` keys are needed, the real DB is never touched. Import `test`/`expect` from `e2e/fixtures/mockApi`, not from `@playwright/test`: the fixture also fails a test on any `console.error`/`pageerror`.
+- Reuses a running `yarn dev` on port 3000 (Next 16 refuses a second dev server on the same `.next`); otherwise starts one. Override with `E2E_PORT`.
+- Service Workers are blocked (`serviceWorkers: 'block'`), since SW-handled requests bypass `page.route`. `e2e/pwa.spec.ts` opts back in and runs on WebKit only.
+- Helpers in `e2e/helpers/` measure what users see: card overlaps/uneven gaps (`[data-slot=card]`, set on every `Card`), horizontal overflow, page+list double scroll, reachable list end.
+- Not run by the pre-commit hook. No unit-test runner is configured.
 
 Pre-commit (husky + lint-staged) runs `eslint --fix` + `prettier --write` on staged `src/**/*.{ts,tsx,js}` automatically — don't hand-fix formatting/import-order issues, just commit and let it run.
 
@@ -63,3 +75,7 @@ The SDK (`ymaps3`) attaches to `window.ymaps3` after the root-layout `<Script>` 
 ### UI components
 
 `src/components/ui` follows shadcn/ui conventions (`components.json`, style "new-york", Tailwind, `class-variance-authority`) — prefer generating/matching that pattern for new primitives rather than hand-rolling. `next.config.ts` has `reactCompiler: true` (React Compiler / babel-plugin-react-compiler), so manual `useMemo`/`useCallback` for render-perf reasons is generally unnecessary for components under compiler coverage.
+### Mobile virtual lists and hydration
+
+- Mobile `/groups` and `/search` use `react-window` `List` with `useDynamicRowHeight` — card height depends on content and width, so never go back to a constant `rowHeight`. Spacing between rows is the row's `pb-4`, not a card margin; rows must spread `ariaAttributes`.
+- `ProtectedRoute` renders `LoadingStub` until `useIsHydrated()` is true: on slow devices `/api/auth` resolves before the protected segment hydrates, and rendering content then causes a hydration mismatch and a full client re-render (flicker, lost scroll).

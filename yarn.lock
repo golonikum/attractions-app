@@ -712,6 +712,13 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
+"@playwright/test@^1.64.0":
+  version "1.64.0"
+  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.64.0.tgz#af51c4f1dd5f689b2ff16e6eacf27ac00843f239"
+  integrity sha512-oTN9FNYuN6bqQMwiho6jJKLCG2/QOYCixGXuCjRmzOq23eODeukuY2XiAVoVpAECbuezMt1MHQjAiQxK8F+Y+g==
+  dependencies:
+    playwright "1.64.0"
+
 "@prisma/client@5.6.0":
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/@prisma/client/-/client-5.6.0.tgz#1c15932250d5658fe0127e62faf4ecd96a877259"
@@ -4398,6 +4405,18 @@ pkg-dir@4.2.0:
   integrity sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==
   dependencies:
     find-up "^4.0.0"
+
+playwright-core@1.64.0:
+  version "1.64.0"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.64.0.tgz#a765f91dabd2b2cadd67e87439842c1d6c72c652"
+  integrity sha512-T9r+MZkTECl2+oUcZ26YgZzTrYidTsIhYYkJix+6iDOymOb1FB2RLLSOxRGnZGv5DStt+aduIVbt+E8WygXYpg==
+
+playwright@1.64.0:
+  version "1.64.0"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.64.0.tgz#c105a3ffe174d487a5927a6836a79778b1180742"
+  integrity sha512-kVzTnYFYEyQ9RGzBjNCd2+yEqWmVbxl3AHPynv3qQ6JTjv4a+kwRcnqQwIpuP3NnrnIrE/Q6wWAIAvMfIE2/Yg==
+  dependencies:
+    playwright-core "1.64.0"
 
 possible-typed-array-names@^1.0.0:
   version "1.1.0"

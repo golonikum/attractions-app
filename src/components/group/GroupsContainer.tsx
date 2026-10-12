@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { Pane, SplitPane, usePersistence } from 'react-split-pane';
-import { List } from 'react-window';
+import { List, useDynamicRowHeight } from 'react-window';
 import { toast } from 'sonner';
 
 import { useData } from '@/contexts/DataContext';
@@ -38,6 +38,9 @@ export default function GroupsContainer() {
     setSelectedCoordinates,
   } = useQueryParams(['tag', 'zoom', 'coordinates']);
   const { isWideScreen } = useIsMobile();
+  // Высота карточки зависит от тега, длины названия и ширины экрана — меряем строки, а не задаём константой.
+  // key сбрасывает кэш высот, когда под теми же индексами оказываются другие группы
+  const rowHeight = useDynamicRowHeight({ defaultRowHeight: 216, key: `${selectedTag.join()}|${searchQuery}` });
   const { location, setLocation } = useLocation({
     selectedZoom,
     setSelectedZoom,
@@ -133,7 +136,7 @@ export default function GroupsContainer() {
     >
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         {/* Фильтры по тегам и поиск */}
-        <div className="w-full space-y-4 md:space-y-0 md:space-x-4 md:flex md:flex-row md:w-auto md:items-center">
+        <div className="w-full space-y-4 md:space-y-0 md:gap-4 md:flex md:flex-row md:flex-wrap md:w-auto md:items-center">
           <div className="flex-1 shrink-0">
             <input
               type="text"
@@ -197,7 +200,7 @@ export default function GroupsContainer() {
               <List
                 rowComponent={GroupCard}
                 rowCount={filteredGroups.length}
-                rowHeight={216}
+                rowHeight={rowHeight}
                 rowProps={{ onDelete: handleDeleteGroup, onUpdate: getHandleUpdate, groups: filteredGroups }}
               />
             </div>

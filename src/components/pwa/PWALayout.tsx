@@ -11,6 +11,11 @@ export default function PWALayout({ children }: { children: React.ReactNode }) {
     if (user) {
       // Register service worker
       if ('serviceWorker' in navigator) {
+        // Запоминаем ДО регистрации: sw.js делает skipWaiting + clients.claim, поэтому при самой первой
+        // установке controller появляется ещё до statechange 'installed' (так в Safari/WebKit) — и без этой
+        // проверки первая установка выглядела как обновление и перезагружала страницу посреди работы
+        const hadController = Boolean(navigator.serviceWorker.controller);
+
         navigator.serviceWorker
           .register('/sw.js')
           .then((registration) => {
@@ -22,7 +27,7 @@ export default function PWALayout({ children }: { children: React.ReactNode }) {
 
               if (installingWorker) {
                 installingWorker.addEventListener('statechange', () => {
-                  if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  if (installingWorker.state === 'installed' && hadController) {
                     // New content is available; refresh to get it
                     console.log('New content available, refreshing');
                     window.location.reload();

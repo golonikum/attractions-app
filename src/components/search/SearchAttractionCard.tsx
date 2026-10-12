@@ -15,14 +15,20 @@ interface SearchAttractionCardProps {
   attractions: Attraction[];
 }
 
-export function SearchAttractionCard({ attractions, index, style }: RowComponentProps<SearchAttractionCardProps>) {
+export function SearchAttractionCard({
+  attractions,
+  index,
+  style,
+  ariaAttributes,
+}: RowComponentProps<SearchAttractionCardProps>) {
   const { groups } = useData();
   const attraction = attractions[index];
   const group = groups.find((g) => g.id === attraction.groupId);
 
   return (
-    <div style={style}>
-      <Card isFavorite={attraction.isFavorite} isVisited={attraction.isVisited} className="mb-4">
+    // Высоту строки меряет useDynamicRowHeight, поэтому отступ между карточками — padding строки, а не margin карточки
+    <div style={style} className="pb-4" {...ariaAttributes}>
+      <Card isFavorite={attraction.isFavorite} isVisited={attraction.isVisited}>
         <div className="aspect-video bg-gray-100 flex items-center justify-center">
           <Link href={`/attractions/${attraction.id}`} className="cursor-pointer relative h-64 w-full flex-shrink-0">
             <AttractionImage attraction={attraction} />

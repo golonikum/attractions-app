@@ -105,7 +105,7 @@ export default function NotesContainer() {
       )}
     >
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div className="w-full space-y-4 md:space-y-0 md:space-x-4 md:flex md:flex-row md:w-auto md:items-center">
+        <div className="w-full space-y-4 md:space-y-0 md:gap-4 md:flex md:flex-row md:flex-wrap md:w-auto md:items-center">
           <MultiSelect
             options={allTags}
             selectedOptions={selectedTag}
@@ -122,7 +122,7 @@ export default function NotesContainer() {
             <input
               type="text"
               placeholder="Поиск..."
-              className="w-full min-w-80 h-10 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full md:min-w-80 h-10 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               defaultValue={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />

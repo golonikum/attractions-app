@@ -21,7 +21,14 @@ interface GroupCardProps {
   onUpdate: (id: string) => (formData: CreateGroupRequest) => Promise<void>;
 }
 
-export function GroupCard({ groups, onDelete, onUpdate, style, index }: RowComponentProps<GroupCardProps>) {
+export function GroupCard({
+  groups,
+  onDelete,
+  onUpdate,
+  style,
+  index,
+  ariaAttributes,
+}: RowComponentProps<GroupCardProps>) {
   const group = groups[index];
   const { isWideScreen } = useIsMobile();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -36,8 +43,9 @@ export function GroupCard({ groups, onDelete, onUpdate, style, index }: RowCompo
   };
 
   return (
-    <div style={style}>
-      <Card className="overflow-hidden flex flex-col mb-4">
+    // Высоту строки меряет useDynamicRowHeight, поэтому отступ между карточками — padding строки, а не margin карточки
+    <div style={style} className="pb-4" {...ariaAttributes}>
+      <Card className="overflow-hidden flex flex-col">
         <CardHeader>
           <div className="flex justify-between items-start space-x-1">
             <Link className="flex-1 max-w-[calc(100%_-_80px)]" href={`/groups/${group.id}`}>
