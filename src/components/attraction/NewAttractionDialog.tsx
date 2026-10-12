@@ -13,6 +13,7 @@ import { Button } from '../ui/button';
 import { AddButton, CancelFormButton, EditButton, SubmitFormButton } from '../ui/buttons';
 import { CoordinatesInput } from '../ui/CoordinatesInput';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
+import { ImageUrlPreview } from '../ui/ImageUrlPreview';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { MultiSelect } from '../ui/MultiSelect';
@@ -170,13 +171,16 @@ export const NewAttractionDialog = ({
               </div>
               <div className="space-y-2">
                 <Label htmlFor="imageUrl">URL изображения</Label>
-                <Input
-                  id="imageUrl"
-                  type="url"
-                  value={formData.imageUrl}
-                  onChange={(e) => setFormUserData({ ...formUserData, imageUrl: e.target.value })}
-                  placeholder="https://example.com/image.jpg"
-                />
+                <div className="flex gap-2">
+                  <Input
+                    id="imageUrl"
+                    type="url"
+                    value={formData.imageUrl}
+                    onChange={(e) => setFormUserData({ ...formUserData, imageUrl: e.target.value })}
+                    placeholder="https://example.com/image.jpg"
+                  />
+                  <ImageUrlPreview url={formData.imageUrl} />
+                </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="yaMapUrl">URL Яндекс.Карты</Label>
