@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 import { Attraction } from '@/types/attraction';
 
 import { EmptyListState } from '@/components/group/EmptyListState';
+import { ExportToYandexMapsDialog } from '@/components/ui/ExportToYandexMapsDialog';
 import { FoundCountStub, LoadingStub } from '@/components/ui/stubs';
 
 import { SearchAttractionCard } from './SearchAttractionCard';
@@ -22,7 +23,7 @@ export default function SearchContainer() {
   const router = useRouter();
   const { isWideScreen } = useIsMobile();
   const { searchQuery, setSearchQuery } = useQueryParams([]);
-  const { attractions, isAttractionsLoading, isGroupsLoading } = useData();
+  const { attractions, groups, isAttractionsLoading, isGroupsLoading } = useData();
   const [foundAttractions, setFoundAttractions] = useState<Attraction[]>([]);
   // Высота карточки зависит от длины названия и наличия категории — меряем строки, а не задаём константой.
   // key сбрасывает кэш высот, когда под теми же индексами оказываются другие объекты
@@ -65,7 +66,9 @@ export default function SearchContainer() {
     <div
       className={cn(
         'container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4',
-        isWideScreen && 'overflow-hidden h-screen',
+        // На мобильном страница ровно в высоту экрана, а виртуальный список занимает оставшееся место (flex-1):
+        // иначе любое изменение высоты шапки даёт двойную прокрутку — страницы и списка
+        isWideScreen ? 'overflow-hidden h-screen' : 'h-dvh',
       )}
     >
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -79,7 +82,14 @@ export default function SearchContainer() {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <FoundCountStub count={foundAttractions.length} hasFilters={!!searchQuery} />
+          <div className="flex items-center gap-2">
+            <FoundCountStub count={foundAttractions.length} hasFilters={!!searchQuery} />
+            <ExportToYandexMapsDialog
+              attractions={foundAttractions}
+              groups={groups}
+              mapName={searchQuery.trim() ? `Поиск: ${searchQuery.trim()}` : 'Все объекты'}
+            />
+          </div>
         </div>
       </div>
 
@@ -103,7 +113,7 @@ export default function SearchContainer() {
           {foundAttractions.length === 0 ? (
             emptyState
           ) : (
-            <div className="h-[calc(100vh_-_210px)]">
+            <div className="flex-1 min-h-0">
               <List
                 rowComponent={SearchAttractionCard}
                 rowCount={foundAttractions.length}

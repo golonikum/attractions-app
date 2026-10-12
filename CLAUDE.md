@@ -79,3 +79,7 @@ The SDK (`ymaps3`) attaches to `window.ymaps3` after the root-layout `<Script>` 
 
 - Mobile `/groups` and `/search` use `react-window` `List` with `useDynamicRowHeight` — card height depends on content and width, so never go back to a constant `rowHeight`. Spacing between rows is the row's `pb-4`, not a card margin; rows must spread `ariaAttributes`.
 - `ProtectedRoute` renders `LoadingStub` until `useIsHydrated()` is true: on slow devices `/api/auth` resolves before the protected segment hydrates, and rendering content then causes a hydration mismatch and a full client re-render (flicker, lost scroll).
+
+### Export to Yandex Maps
+
+Yandex Maps bookmarks have no API and no import, so "export to Yandex Maps" produces a GeoJSON file for the Yandex Map Constructor (`src/lib/export/yandexConstructor.ts`, dialog `src/components/ui/ExportToYandexMapsDialog.tsx`; buttons on `/search` and `/groups`, exporting the currently filtered objects). Coordinates in the file are GeoJSON `[lng, lat]` (swapped at the boundary). Properties `iconCaption` / `description` / `marker-color` mirror the Constructor's own export; the Constructor accepts at most 10 000 objects and imports only into an empty map.

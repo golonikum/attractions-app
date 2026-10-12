@@ -18,6 +18,7 @@ import { EmptyListState } from '@/components/group/EmptyListState';
 import { GroupCard } from '@/components/group/GroupCard';
 import { GroupTable } from '@/components/group/GroupTable';
 import { NewGroupDialog } from '@/components/group/NewGroupDialog';
+import { ExportToYandexMapsDialog } from '@/components/ui/ExportToYandexMapsDialog';
 import { Map } from '@/components/ui/Map';
 import { MultiSelect } from '@/components/ui/MultiSelect';
 import { FoundCountStub } from '@/components/ui/stubs';
@@ -114,6 +115,10 @@ export default function GroupsContainer() {
   }, [groups, selectedTag, searchQuery, attractions]);
 
   const hasFilters = selectedTag.length > 0 || searchQuery.trim();
+  const exportMapName =
+    [selectedTag.length && `Регионы: ${selectedTag.join(', ')}`, searchQuery.trim() && `Поиск: ${searchQuery.trim()}`]
+      .filter(Boolean)
+      .join('; ') || 'Все города';
 
   const emptyState = (
     <EmptyListState
@@ -131,7 +136,9 @@ export default function GroupsContainer() {
   return (
     <div
       className={`container lg:max-w-full mx-auto pt-20 px-4 pb-8 flex flex-col gap-4 ${
-        isWideScreen ? 'overflow-hidden h-screen' : ''
+        // На мобильном страница ровно в высоту экрана, а виртуальный список занимает оставшееся место (flex-1):
+        // иначе любое изменение высоты шапки даёт двойную прокрутку — страницы и списка
+        isWideScreen ? 'overflow-hidden h-screen' : 'h-dvh'
       }`}
     >
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -154,14 +161,21 @@ export default function GroupsContainer() {
           />
           <FoundCountStub count={filteredGroups.length} hasFilters={selectedTag.length > 0 || !!searchQuery.trim()} />
         </div>
-        <NewGroupDialog
-          handleSubmit={handleSubmit}
-          isOpen={isCreateDialogOpen}
-          setIsOpen={setIsCreateDialogOpen}
-          isSubmitting={isSubmitting}
-          setIsSubmitting={setIsSubmitting}
-          selectedTag={selectedTag.length === 1 ? selectedTag[0] : undefined}
-        />
+        <div className="flex space-x-1">
+          <ExportToYandexMapsDialog
+            attractions={filteredGroups.flatMap((group) => group.attractions)}
+            groups={filteredGroups}
+            mapName={exportMapName}
+          />
+          <NewGroupDialog
+            handleSubmit={handleSubmit}
+            isOpen={isCreateDialogOpen}
+            setIsOpen={setIsCreateDialogOpen}
+            isSubmitting={isSubmitting}
+            setIsSubmitting={setIsSubmitting}
+            selectedTag={selectedTag.length === 1 ? selectedTag[0] : undefined}
+          />
+        </div>
       </div>
 
       {isWideScreen ? (
@@ -196,7 +210,7 @@ export default function GroupsContainer() {
           {filteredGroups.length === 0 ? (
             emptyState
           ) : (
-            <div className="h-[calc(100vh_-_320px)]">
+            <div className="flex-1 min-h-0">
               <List
                 rowComponent={GroupCard}
                 rowCount={filteredGroups.length}
