@@ -18,7 +18,6 @@ import { EmptyListState } from '@/components/group/EmptyListState';
 import { GroupCard } from '@/components/group/GroupCard';
 import { GroupTable } from '@/components/group/GroupTable';
 import { NewGroupDialog } from '@/components/group/NewGroupDialog';
-import { ExportToYandexMapsDialog } from '@/components/ui/ExportToYandexMapsDialog';
 import { Map } from '@/components/ui/Map';
 import { MultiSelect } from '@/components/ui/MultiSelect';
 import { FoundCountStub } from '@/components/ui/stubs';
@@ -115,10 +114,6 @@ export default function GroupsContainer() {
   }, [groups, selectedTag, searchQuery, attractions]);
 
   const hasFilters = selectedTag.length > 0 || searchQuery.trim();
-  const exportMapName =
-    [selectedTag.length && `Регионы: ${selectedTag.join(', ')}`, searchQuery.trim() && `Поиск: ${searchQuery.trim()}`]
-      .filter(Boolean)
-      .join('; ') || 'Все города';
 
   const emptyState = (
     <EmptyListState
@@ -161,21 +156,14 @@ export default function GroupsContainer() {
           />
           <FoundCountStub count={filteredGroups.length} hasFilters={selectedTag.length > 0 || !!searchQuery.trim()} />
         </div>
-        <div className="flex space-x-1">
-          <ExportToYandexMapsDialog
-            attractions={filteredGroups.flatMap((group) => group.attractions)}
-            groups={filteredGroups}
-            mapName={exportMapName}
-          />
-          <NewGroupDialog
-            handleSubmit={handleSubmit}
-            isOpen={isCreateDialogOpen}
-            setIsOpen={setIsCreateDialogOpen}
-            isSubmitting={isSubmitting}
-            setIsSubmitting={setIsSubmitting}
-            selectedTag={selectedTag.length === 1 ? selectedTag[0] : undefined}
-          />
-        </div>
+        <NewGroupDialog
+          handleSubmit={handleSubmit}
+          isOpen={isCreateDialogOpen}
+          setIsOpen={setIsCreateDialogOpen}
+          isSubmitting={isSubmitting}
+          setIsSubmitting={setIsSubmitting}
+          selectedTag={selectedTag.length === 1 ? selectedTag[0] : undefined}
+        />
       </div>
 
       {isWideScreen ? (

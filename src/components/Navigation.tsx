@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { cn } from '@/lib/utils';
 
+import { BackupDialog } from '@/components/backup/BackupDialog';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
@@ -58,6 +59,7 @@ export function Navigation() {
             </div>
           )}
           <div className="flex h-16 items-center space-x-4">
+            <BackupDialog />
             <ThemeToggle />
             <Button onClick={() => logout()} variant="outline">
               Выйти

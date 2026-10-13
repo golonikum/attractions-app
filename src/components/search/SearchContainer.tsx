@@ -13,7 +13,6 @@ import { cn } from '@/lib/utils';
 import { Attraction } from '@/types/attraction';
 
 import { EmptyListState } from '@/components/group/EmptyListState';
-import { ExportToYandexMapsDialog } from '@/components/ui/ExportToYandexMapsDialog';
 import { FoundCountStub, LoadingStub } from '@/components/ui/stubs';
 
 import { SearchAttractionCard } from './SearchAttractionCard';
@@ -23,7 +22,7 @@ export default function SearchContainer() {
   const router = useRouter();
   const { isWideScreen } = useIsMobile();
   const { searchQuery, setSearchQuery } = useQueryParams([]);
-  const { attractions, groups, isAttractionsLoading, isGroupsLoading } = useData();
+  const { attractions, isAttractionsLoading, isGroupsLoading } = useData();
   const [foundAttractions, setFoundAttractions] = useState<Attraction[]>([]);
   // Высота карточки зависит от длины названия и наличия категории — меряем строки, а не задаём константой.
   // key сбрасывает кэш высот, когда под теми же индексами оказываются другие объекты
@@ -82,14 +81,7 @@ export default function SearchContainer() {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <div className="flex items-center gap-2">
-            <FoundCountStub count={foundAttractions.length} hasFilters={!!searchQuery} />
-            <ExportToYandexMapsDialog
-              attractions={foundAttractions}
-              groups={groups}
-              mapName={searchQuery.trim() ? `Поиск: ${searchQuery.trim()}` : 'Все объекты'}
-            />
-          </div>
+          <FoundCountStub count={foundAttractions.length} hasFilters={!!searchQuery} />
         </div>
       </div>
 
