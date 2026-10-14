@@ -17,6 +17,8 @@ const IGNORED_CONSOLE_ERRORS = [
   /net::ERR_FAILED/i,
   /ymaps3/i,
   /api-maps\.yandex/i,
+  // На десктопной раскладке карта пытается инициализироваться, но SDK Яндекс Карт заблокирован
+  /Ошибка при инициализации Yandex Maps/i,
   /Service Worker registration failed/i,
 ];
 

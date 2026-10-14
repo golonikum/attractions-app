@@ -16,7 +16,7 @@ yarn db:push          # prisma db push (no migration file)
 ### E2E tests (Playwright)
 
 ```bash
-yarn test:e2e         # all specs on 5 mobile/tablet devices (Pixel 7, iPhone 13, iPhone SE, 320px, iPad Mini)
+yarn test:e2e         # mobile/tablet projects (Pixel 7, iPhone 13, iPhone SE, 320px, iPad Mini) + desktop (Chrome, Safari)
 yarn test:e2e:ui      # interactive runner
 npx playwright install chromium webkit   # once, to download browsers
 ```
@@ -25,6 +25,8 @@ npx playwright install chromium webkit   # once, to download browsers
 - Reuses a running `yarn dev` on port 3000 (Next 16 refuses a second dev server on the same `.next`); otherwise starts one. Override with `E2E_PORT`.
 - Service Workers are blocked (`serviceWorkers: 'block'`), since SW-handled requests bypass `page.route`. `e2e/pwa.spec.ts` opts back in and runs on WebKit only.
 - Helpers in `e2e/helpers/` measure what users see: card overlaps/uneven gaps (`[data-slot=card]`, set on every `Card`), horizontal overflow, page+list double scroll, reachable list end.
+- Desktop layout (>= 1024px: map + tables) is tested only by `*.desktop.spec.ts` on the `desktop-chrome`/`desktop-safari` projects; mobile projects ignore those files and desktop projects run only them.
+- Pages under `(protected)/groups/[id]` work with two lists: the group-filtered `attractions` and the global `DataContext` list — never write the filtered list into `setAttractions` (that wiped other cities' objects; covered by `e2e/group-detail-data.desktop.spec.ts`).
 - Not run by the pre-commit hook. No unit-test runner is configured.
 
 Pre-commit (husky + lint-staged) runs `eslint --fix` + `prettier --write` on staged `src/**/*.{ts,tsx,js}` automatically — don't hand-fix formatting/import-order issues, just commit and let it run.

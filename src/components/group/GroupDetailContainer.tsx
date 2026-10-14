@@ -87,14 +87,9 @@ export default function GroupDetailContainer() {
   };
 
   // Обработчик добавления объекта
+  // createAttraction сам добавляет объект в общий список DataContext и перезагружает его
   const handleAddAttraction = async (formData: CreateAttractionRequest) => {
-    const newAttraction = await createAttraction({
-      ...formData,
-    });
-
-    if (newAttraction) {
-      setAttractions([...attractions, newAttraction]);
-    }
+    await createAttraction(formData);
   };
 
   // Обработчик обновления объекта
@@ -117,7 +112,8 @@ export default function GroupDetailContainer() {
   };
 
   const handleUpdateOrder = async (items: Attraction[]) => {
-    setAttractions(items);
+    // items — объекты только этого города: в общем списке заменяем их, объекты других городов не трогаем
+    setAttractions((all) => [...all.filter((attraction) => attraction.groupId !== groupId), ...items]);
 
     try {
       setIsUpdating(true);
