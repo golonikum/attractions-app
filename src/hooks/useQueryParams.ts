@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 import { capitalizeFirstLetter } from '@/lib/utils';
 
@@ -17,8 +18,7 @@ type SearchQuerySetters = {
   setSearchQuery: (value: string) => void;
 };
 
-const getInitStateFromUrl = <T extends string[]>(names: T) => {
-  const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : { get: () => '' };
+const getInitStateFromUrl = <T extends string[]>(names: T, params: Pick<URLSearchParams, 'get'>) => {
   const newState: Record<string, string[]> = {};
   const searchParam = params.get('search');
 
@@ -34,7 +34,11 @@ const getInitStateFromUrl = <T extends string[]>(names: T) => {
 };
 
 export const useQueryParams = <T extends string[]>(names: string[]): FieldsAndSetters<T> & SearchQuerySetters => {
-  const [state, setState] = useState<Record<string, string[]>>(getInitStateFromUrl(names));
+  // Параметры берём из useSearchParams, а не из window.location: при клиентском переходе Next.js рендерит
+  // новую страницу ДО смены адреса, и window.location ещё содержит параметры предыдущей страницы —
+  // из-за этого «На карте» открывало /main с координатами со страницы, с которой перешли
+  const searchParams = useSearchParams();
+  const [state, setState] = useState<Record<string, string[]>>(() => getInitStateFromUrl(names, searchParams));
   // names обычно передаётся литералом и меняет ссылку на каждом рендере — зависим от стабильного ключа
   const namesKey = names.join(',');
 
