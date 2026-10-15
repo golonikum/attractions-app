@@ -48,7 +48,7 @@ export function AttractionCard({
       isVisited={attraction.isVisited}
       className={cn('overflow-y-auto w-full', className)}
     >
-      <div className="aspect-video bg-gray-100 flex items-center justify-center">
+      <div className="aspect-video bg-muted flex items-center justify-center">
         <Link href={`/attractions/${attraction.id}`} className="cursor-pointer relative h-96 w-full flex-shrink-0">
           <AttractionImage attraction={attraction} />
         </Link>

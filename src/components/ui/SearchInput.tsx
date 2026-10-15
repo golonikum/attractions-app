@@ -14,7 +14,7 @@ export const SearchInput = ({
     type="text"
     placeholder="Поиск..."
     className={cn(
-      'w-full h-10 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500',
+      'w-full h-10 px-3 py-2 rounded-md border border-input bg-card text-sm placeholder:text-muted-foreground outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-ring/60',
       className,
     )}
     defaultValue={defaultValue}

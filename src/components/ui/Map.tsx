@@ -116,7 +116,7 @@ export const Map: FC<MapPropsType> = ({
       })}
     </YMap>
   ) : (
-    <div className="flex items-center justify-center h-full bg-gray-100 rounded-lg">
+    <div className="flex items-center justify-center h-full bg-muted rounded-lg">
       <p>Загрузка карты...</p>
     </div>
   );

@@ -43,12 +43,12 @@ export function NotesManager({ notes, onChange }: NotesManagerProps) {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        {notes.length === 0 && <p className="text-sm text-gray-500">Нет заметок</p>}
+        {notes.length === 0 && <p className="text-sm text-muted-foreground">Нет заметок</p>}
         {notes.map((note, index) => (
           <div key={index} className="flex items-start space-x-2 p-3 border rounded-md">
             <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2">
               <div className="flex items-center space-x-1">
-                <Calendar className="h-4 w-4 text-gray-500" />
+                <Calendar className="h-4 w-4 text-muted-foreground" />
                 <Input
                   type="date"
                   value={note.date}
@@ -69,10 +69,10 @@ export function NotesManager({ notes, onChange }: NotesManagerProps) {
         ))}
       </div>
 
-      <div className="flex items-start space-x-2 p-3 border rounded-md bg-gray-50">
+      <div className="flex items-start space-x-2 p-3 border rounded-md bg-muted/60">
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2">
           <div className="flex items-center space-x-1">
-            <Calendar className="h-4 w-4 text-gray-500" />
+            <Calendar className="h-4 w-4 text-muted-foreground" />
             <Input
               type="date"
               value={newNote.date}

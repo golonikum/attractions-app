@@ -48,7 +48,7 @@ export function GroupInfoCard({ group, attractions }: GroupInfoCardProps) {
         <div className="flex gap-4 justify-between items-start">
           <CardTitle>
             {group.name}{' '}
-            {!!attractions.length && <span className="font-normal text-gray-400">({attractions.length})</span>}
+            {!!attractions.length && <span className="font-normal text-muted-foreground">({attractions.length})</span>}
           </CardTitle>
           {group.tag && (
             <Link href={`/groups?tag=${group.tag?.replace(' ', '+')}`}>

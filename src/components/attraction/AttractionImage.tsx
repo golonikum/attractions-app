@@ -26,6 +26,9 @@ export const AttractionImage = ({
       {favorite && <Star className="h-5 w-5 text-yellow-500 fill-current absolute top-1 left-1" />}
     </>
   ) : (
-    <ImageIcon className="h-full w-full text-gray-400" />
+    // Заглушка «нет фото»: треть контейнера, но не больше 48px — и в миниатюре таблицы, и в большой карточке
+    <div className={cn('flex h-full w-full items-center justify-center bg-muted', className)}>
+      <ImageIcon className="h-1/3 max-h-12 w-1/3 max-w-12 text-muted-foreground/60" strokeWidth={1.5} />
+    </div>
   );
 };

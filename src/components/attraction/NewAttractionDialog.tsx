@@ -267,7 +267,7 @@ export const NewAttractionDialog = ({
                       isFavorite: !formData.isFavorite,
                     })
                   }
-                  className="p-1 rounded-full hover:bg-gray-100 focus:outline-none"
+                  className="p-1 rounded-full hover:bg-muted focus:outline-none"
                 >
                   <Star
                     className={`h-5 w-5 ${formData.isFavorite ? 'text-yellow-500 fill-current' : 'text-gray-300'}`}

@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Geist_Mono, Onest, Unbounded } from 'next/font/google';
 import Script from 'next/script';
 import { Toaster } from 'sonner';
 
@@ -13,9 +13,18 @@ import { LoadingStub } from '@/components/ui/stubs';
 
 import './globals.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+// Onest — основной текст, Unbounded — заголовки; оба рисовались с прицелом на кириллицу
+const onest = Onest({
+  variable: '--font-onest',
   subsets: ['latin', 'cyrillic'],
+  display: 'swap',
+});
+
+const unbounded = Unbounded({
+  variable: '--font-unbounded',
+  subsets: ['latin', 'cyrillic'],
+  weight: ['500', '600'],
+  display: 'swap',
 });
 
 const geistMono = Geist_Mono({
@@ -72,7 +81,7 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${onest.variable} ${unbounded.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider defaultTheme="light">
           <Suspense fallback={<LoadingStub />}>
             <AuthContextProvider>

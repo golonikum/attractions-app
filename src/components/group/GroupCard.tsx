@@ -45,7 +45,7 @@ export function GroupCard({
                 <CardTitle className="text-lg/5 truncate">
                   {group.name}{' '}
                   {!!attractionsMap[group.id]?.length && (
-                    <span className="font-normal text-gray-400">({attractionsMap[group.id].length})</span>
+                    <span className="font-normal text-muted-foreground">({attractionsMap[group.id].length})</span>
                   )}
                 </CardTitle>
                 {group.tag && <Tag text={group.tag} className="truncate" />}

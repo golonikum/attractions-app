@@ -62,7 +62,7 @@ export function AttractionInfoCard({ attraction, group }: AttractionInfoCardProp
               <div className="space-y-2">
                 {attraction.notes.map((note, index) => (
                   <div key={index} className="border-l-4 border-blue-500 pl-3 py-1">
-                    <div className="text-sm text-gray-500">{note.date}</div>
+                    <div className="text-sm text-muted-foreground">{note.date}</div>
                     <p className="text-sm">{note.note}</p>
                   </div>
                 ))}

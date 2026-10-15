@@ -7,7 +7,7 @@ export const TableRow: FC<PropsWithChildren<DetailedHTMLProps<HTMLAttributes<HTM
   children,
   ...rest
 }) => (
-  <div className={cn('flex border-b-1 border-gray-200', className)} {...rest}>
+  <div className={cn('flex border-b-1 border-border', className)} {...rest}>
     {children}
   </div>
 );

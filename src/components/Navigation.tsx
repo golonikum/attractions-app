@@ -35,7 +35,7 @@ export function Navigation() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-1001 border-b bg-background">
+    <nav className="fixed top-0 left-0 right-0 z-1001 border-b border-border/70 bg-background/80 backdrop-blur-md">
       <div className="container lg:max-w-full mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {isMobile ? (
@@ -50,7 +50,7 @@ export function Navigation() {
                   href={item.href}
                   className={cn(
                     'text-sm font-medium transition-colors hover:text-primary',
-                    pathname === item.href ? 'text-foreground' : 'text-muted-foreground',
+                    pathname === item.href ? 'text-primary font-semibold' : 'text-muted-foreground',
                   )}
                 >
                   {item.label}

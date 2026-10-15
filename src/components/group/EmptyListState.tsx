@@ -17,9 +17,9 @@ export function EmptyListState({
 }: EmptyGroupsStateProps) {
   return (
     <div className="text-center py-12">
-      <MapPin className="mx-auto h-12 w-12 text-gray-400" />
+      <MapPin className="mx-auto h-12 w-12 text-muted-foreground" />
       <h3 className="mt-2 text-sm font-semibold">{message}</h3>
-      <p className="mt-1 text-sm text-gray-500">{description}</p>
+      <p className="mt-1 text-sm text-muted-foreground">{description}</p>
       {onButtonClick ? (
         <div className="mt-6">
           <Button onClick={onButtonClick}>
