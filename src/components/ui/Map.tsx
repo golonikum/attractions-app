@@ -7,6 +7,7 @@ import { ThemeProviderContext } from '@/contexts/ThemeContext';
 import { useDebounceCallback } from '@/hooks/useDebounceCallback';
 import { useMapReady } from '@/hooks/useMapReady';
 import { DEFAULT_LOCATION } from '@/lib/constants';
+import { toLngLat } from '@/lib/geo';
 import { isAttraction } from '@/lib/utils';
 import {
   YMap,
@@ -61,7 +62,7 @@ export const Map: FC<MapPropsType> = ({
   }) => (
     <MarkerPin
       key={item.id}
-      coordinates={[item.coordinates[1], item.coordinates[0]]}
+      coordinates={toLngLat(item.coordinates)}
       visited={isVisited}
       title={item.name}
       isActive={isActive}
@@ -98,9 +99,8 @@ export const Map: FC<MapPropsType> = ({
         </YMapControlButton>
       </YMapControls>
       {items?.map((item) => {
-        const isActive =
-          Math.abs(location.center[0] - item.coordinates[1]) < 0.00001 &&
-          Math.abs(location.center[1] - item.coordinates[0]) < 0.00001;
+        const [lng, lat] = toLngLat(item.coordinates);
+        const isActive = Math.abs(location.center[0] - lng) < 0.00001 && Math.abs(location.center[1] - lat) < 0.00001;
 
         const isVisited = isAttraction(item)
           ? item.isVisited

@@ -1,146 +1,79 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { invalidCoordinates, isCoordinatesPair, notFound, pickDefined } from '@/lib/api/routeHelpers';
 import { prisma } from '@/lib/db';
 import { withAuth } from '@/lib/serverAuth';
 
-// Get a specific attraction by ID
-export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  return withAuth(request, async (userId) => {
-    // Fetch the attraction
-    const { id } = await params;
-    const attraction = await prisma.attraction.findFirst({
-      where: {
-        id,
-        userId,
-      },
-    });
+type Params = { params: Promise<{ id: string }> };
 
-    if (!attraction) {
-      return NextResponse.json({ error: 'Объект не найден' }, { status: 404 });
+const NOT_FOUND = 'Объект не найден';
+const UPDATABLE_FIELDS = [
+  'groupId',
+  'name',
+  'category',
+  'description',
+  'imageUrl',
+  'yaMapUrl',
+  'coordinates',
+  'isVisited',
+  'isFavorite',
+  'order',
+  'notes',
+] as const;
+
+const findOwnAttraction = (id: string, userId: string) => prisma.attraction.findFirst({ where: { id, userId } });
+
+// Get a specific attraction by ID
+export async function GET(request: NextRequest, { params }: Params) {
+  return withAuth(request, async (userId) => {
+    const attraction = await findOwnAttraction((await params).id, userId);
+
+    return attraction ? NextResponse.json({ attraction }) : notFound(NOT_FOUND);
+  });
+}
+
+// Update a specific attraction by ID (only fields present in the body)
+export async function PUT(request: NextRequest, { params }: Params) {
+  return withAuth(request, async (userId) => {
+    const body = await request.json();
+    const { id } = await params;
+
+    const existing = await findOwnAttraction(id, userId);
+
+    if (!existing) {
+      return notFound(NOT_FOUND);
     }
+
+    if (body.coordinates && !isCoordinatesPair(body.coordinates)) {
+      return invalidCoordinates();
+    }
+
+    // Перенести объект можно только в свой город
+    if (
+      body.groupId !== undefined &&
+      body.groupId !== existing.groupId &&
+      !(await prisma.group.findFirst({ where: { id: body.groupId, userId }, select: { id: true } }))
+    ) {
+      return notFound('Группа не найдена');
+    }
+
+    const attraction = await prisma.attraction.update({ where: { id }, data: pickDefined(body, UPDATABLE_FIELDS) });
 
     return NextResponse.json({ attraction });
   });
 }
 
-// Update a specific attraction by ID
-export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  return withAuth(request, async (userId) => {
-    // Parse request body
-    const {
-      groupId,
-      name,
-      category,
-      description,
-      imageUrl,
-      yaMapUrl,
-      coordinates,
-      isVisited,
-      isFavorite,
-      order,
-      notes,
-    } = await request.json();
-
-    // Check if the attraction exists and belongs to the user
-    const { id } = await params;
-    const existingAttraction = await prisma.attraction.findFirst({
-      where: {
-        id,
-        userId,
-      },
-    });
-
-    if (!existingAttraction) {
-      return NextResponse.json({ error: 'Объект не найдена' }, { status: 404 });
-    }
-
-    // Validate coordinates if provided
-    if (coordinates && (!Array.isArray(coordinates) || coordinates.length !== 2)) {
-      return NextResponse.json(
-        {
-          error: 'Неверный формат координат. Ожидается массив [долгота, широта]',
-        },
-        { status: 400 },
-      );
-    }
-
-    // Update the attraction
-    const updateData: any = {};
-
-    if (groupId !== undefined) {
-      updateData.groupId = groupId;
-    }
-
-    if (name !== undefined) {
-      updateData.name = name;
-    }
-
-    if (category !== undefined) {
-      updateData.category = category;
-    }
-
-    if (description !== undefined) {
-      updateData.description = description;
-    }
-
-    if (imageUrl !== undefined) {
-      updateData.imageUrl = imageUrl;
-    }
-
-    if (yaMapUrl !== undefined) {
-      updateData.yaMapUrl = yaMapUrl;
-    }
-
-    if (coordinates !== undefined) {
-      updateData.coordinates = coordinates;
-    }
-
-    if (isVisited !== undefined) {
-      updateData.isVisited = isVisited;
-    }
-
-    if (isFavorite !== undefined) {
-      updateData.isFavorite = isFavorite;
-    }
-
-    if (order !== undefined) {
-      updateData.order = order;
-    }
-
-    if (notes !== undefined) {
-      updateData.notes = notes;
-    }
-
-    const updatedAttraction = await prisma.attraction.update({
-      where: { id },
-      data: updateData,
-    });
-
-    return NextResponse.json({ attraction: updatedAttraction });
-  });
-}
-
 // Delete a specific attraction by ID
-export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: NextRequest, { params }: Params) {
   return withAuth(request, async (userId) => {
-    // Check if the attraction exists and belongs to the user
     const { id } = await params;
-    const existingAttraction = await prisma.attraction.findFirst({
-      where: {
-        id,
-        userId,
-      },
-    });
 
-    if (!existingAttraction) {
-      return NextResponse.json({ error: 'Объект не найдена' }, { status: 404 });
+    if (!(await findOwnAttraction(id, userId))) {
+      return notFound(NOT_FOUND);
     }
 
-    // Delete the attraction
-    await prisma.attraction.delete({
-      where: { id },
-    });
+    await prisma.attraction.delete({ where: { id } });
 
-    return NextResponse.json({ message: 'Объект успешно удалена' });
+    return NextResponse.json({ message: 'Объект успешно удалён' });
   });
 }

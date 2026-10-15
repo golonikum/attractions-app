@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { notFound } from '@/lib/api/routeHelpers';
 import { prisma } from '@/lib/db';
 import { withAuth } from '@/lib/serverAuth';
 
 export async function PUT(request: NextRequest) {
-  return withAuth(request, async () => {
+  return withAuth(request, async (userId) => {
     const { groupId, attractions } = await request.json();
 
     // Валидация входных данных
@@ -18,6 +19,20 @@ export async function PUT(request: NextRequest) {
 
     if (hasDuplicates) {
       return NextResponse.json({ error: 'ID элементов должны быть уникальными' }, { status: 400 });
+    }
+
+    // Менять порядок (и привязку к городу) можно только у своих объектов и только в своём городе
+    const [group, ownCount] = await Promise.all([
+      prisma.group.findFirst({ where: { id: groupId, userId }, select: { id: true } }),
+      prisma.attraction.count({ where: { id: { in: ids }, userId } }),
+    ]);
+
+    if (!group) {
+      return notFound('Группа не найдена');
+    }
+
+    if (ownCount !== ids.length) {
+      return notFound('Объект не найден');
     }
 
     // Транзакция для атомарного обновления

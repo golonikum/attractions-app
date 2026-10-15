@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { isAxiosError } from 'axios';
 import { Loader2, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 
 import { useData } from '@/contexts/DataContext';
 import { autoaddAttractions } from '@/services/attractionService';
+import { getApiErrorMessage } from '@/services/request';
 import { Attraction } from '@/types/attraction';
 import { Group } from '@/types/group';
 
@@ -36,7 +36,7 @@ export function GroupInfoCard({ group, attractions }: GroupInfoCardProps) {
         toast.info('Новых достопримечательностей не найдено');
       }
     } catch (error) {
-      toast.error((isAxiosError(error) && error.response?.data?.error) || 'Не удалось найти достопримечательности');
+      toast.error(getApiErrorMessage(error, 'Не удалось найти достопримечательности'));
     } finally {
       setIsAutoadding(false);
     }

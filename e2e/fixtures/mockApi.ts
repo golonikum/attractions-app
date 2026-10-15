@@ -2,12 +2,6 @@ import { expect, test as base } from '@playwright/test';
 
 import { ATTRACTIONS, GROUPS, USER } from './data';
 
-// Прозрачный PNG 1×1 вместо картинок: тесты не ходят в интернет
-const PIXEL_PNG = Buffer.from(
-  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
-  'base64',
-);
-
 /**
  * Шум, который появляется из-за того, что в тестах внешние запросы обрываются, а Service Worker
  * заблокирован (serviceWorkers: 'block' в playwright.config.ts) — register() тогда возвращает undefined
@@ -26,6 +20,12 @@ type Fixtures = {
   /** console.error и необработанные исключения страницы — после теста проверяется, что их нет */
   pageErrors: string[];
 };
+
+/** Прозрачный PNG 1×1 вместо картинок: тесты не ходят в интернет */
+export const PIXEL_PNG = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+  'base64',
+);
 
 /**
  * test с подменённым API: авторизованный пользователь и данные из ./data.

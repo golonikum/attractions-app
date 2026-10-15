@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { isCoordinatesPair, notFound } from '@/lib/api/routeHelpers';
 import { prisma } from '@/lib/db';
 import { withAuth } from '@/lib/serverAuth';
 
@@ -46,7 +47,7 @@ export async function POST(request: NextRequest) {
     } = await request.json();
 
     // Validate required fields
-    if (!groupId || !name || !coordinates || !Array.isArray(coordinates) || coordinates.length !== 2) {
+    if (!groupId || !name || !isCoordinatesPair(coordinates)) {
       return NextResponse.json(
         {
           error: 'Неверные данные. Убедитесь, что groupId, name и coordinates [lat, long] указаны правильно',
@@ -64,7 +65,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!group) {
-      return NextResponse.json({ error: 'Группа не найдена' }, { status: 404 });
+      return notFound('Группа не найдена');
     }
 
     // Create the attraction

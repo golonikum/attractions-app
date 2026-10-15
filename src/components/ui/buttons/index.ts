@@ -4,6 +4,7 @@ export * from './CancelFormButton';
 export * from './EditButton';
 export * from './OpenInYandexMapButton';
 export * from './RemoveButton';
+export * from './RemoveWithConfirmButton';
 export * from './ShowDescriptionButton';
 export * from './ShowOnMapButton';
 export * from './SubmitFormButton';

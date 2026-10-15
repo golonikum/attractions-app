@@ -10,6 +10,7 @@ import { useLocation } from '@/hooks/useLocation';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { useUpdateRequests } from '@/hooks/useUpdateRequests';
 import { DEFAULT_ATTRACTION_ZOOM } from '@/lib/constants';
+import { toLngLat } from '@/lib/geo';
 import { locateItemOnMainMapHref } from '@/lib/locateItemOnMainMapHref';
 import { updateOrder } from '@/services/attractionService';
 import { Attraction, CreateAttractionRequest } from '@/types/attraction';
@@ -62,7 +63,7 @@ export default function GroupDetailContainer() {
       if (foundGroup) {
         setGroup(foundGroup);
         setLocation({
-          center: [foundGroup.coordinates[1], foundGroup.coordinates[0]],
+          center: toLngLat(foundGroup.coordinates),
           zoom: foundGroup.zoom,
         });
       }
@@ -106,7 +107,7 @@ export default function GroupDetailContainer() {
 
   const handleLocateAttraction = (attraction: Attraction) => {
     setLocation({
-      center: [attraction.coordinates[1], attraction.coordinates[0]],
+      center: toLngLat(attraction.coordinates),
       zoom: DEFAULT_ATTRACTION_ZOOM,
     });
   };

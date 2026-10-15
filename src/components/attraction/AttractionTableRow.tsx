@@ -6,8 +6,7 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Attraction, CreateAttractionRequest } from '@/types/attraction';
 
-import { OpenInYandexMapButton, RemoveButton, ShowOnMapButton } from '../ui/buttons';
-import { ConfirmDialog } from '../ui/ConfirmDialog';
+import { DELETE_CONFIRM_TEXTS, OpenInYandexMapButton, RemoveWithConfirmButton, ShowOnMapButton } from '../ui/buttons';
 import { TableCell, TableRow } from '../ui/table';
 import { Tag } from '../ui/Tag';
 
@@ -37,7 +36,6 @@ export const AttractionTableRow = ({
   onLocate,
   hasDnd = true,
 }: AttractionTableRowProps) => {
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: attraction.id });
@@ -47,12 +45,6 @@ export const AttractionTableRow = ({
     transition,
     opacity: isDragging ? 0.8 : 1,
     zIndex: isDragging ? 1 : 0,
-  };
-
-  const handleDeleteClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setIsDeleteDialogOpen(true);
   };
 
   const onLocateAttractionClick = () => {
@@ -104,20 +96,13 @@ export const AttractionTableRow = ({
               attraction={attraction}
             />
           )}
-          {!!onDelete && <RemoveButton onClick={handleDeleteClick} />}
+          {!!onDelete && (
+            <RemoveWithConfirmButton
+              {...DELETE_CONFIRM_TEXTS.attraction(attraction.name)}
+              onConfirm={() => onDelete(attraction.id)}
+            />
+          )}
         </div>
-        {!!onDelete && (
-          <ConfirmDialog
-            isOpen={isDeleteDialogOpen}
-            onClose={() => setIsDeleteDialogOpen(false)}
-            onConfirm={() => onDelete(attraction.id)}
-            title="Удалить объект?"
-            description={`Вы уверены, что хотите удалить "${attraction.name}"?`}
-            confirmText="Удалить"
-            cancelText="Отмена"
-            variant="destructive"
-          />
-        )}
       </TableCell>
     </TableRow>
   );

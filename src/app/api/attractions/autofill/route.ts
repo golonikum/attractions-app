@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { AutofillRefusalError, AutofillServiceError } from '@/lib/ai';
 import { autofillAttraction } from '@/lib/ai/attractionAutofill';
+import { aiErrorResponse } from '@/lib/ai/errorResponse';
 import { prisma } from '@/lib/db';
 import { InvalidMapUrlError } from '@/lib/parseYandexMapsUrl';
 import { withAuth } from '@/lib/serverAuth';
@@ -40,21 +40,10 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: error.message }, { status: 400 });
       }
 
-      if (error instanceof AutofillRefusalError) {
-        return NextResponse.json({ error: 'Не удалось получить данные об объекте' }, { status: 422 });
-      }
-
-      if (error instanceof AutofillServiceError) {
-        console.error('Autofill service error:', error.message);
-
-        if (error.status === 429) {
-          return NextResponse.json({ error: 'Слишком много запросов, попробуйте позже' }, { status: 429 });
-        }
-
-        return NextResponse.json({ error: 'Сервис автозаполнения недоступен' }, { status: 502 });
-      }
-
-      throw error;
+      return aiErrorResponse(error, {
+        label: 'Attraction autofill',
+        refusalMessage: 'Не удалось получить данные об объекте',
+      });
     }
   });
 }

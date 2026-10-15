@@ -28,6 +28,7 @@ export const SearchAttractionTableRow = ({
   onLocate,
   index,
   style,
+  ariaAttributes,
 }: RowComponentProps<SearchAttractionTableRowProps>) => {
   const attraction = attractions[index];
   const { groups } = useData();
@@ -39,7 +40,7 @@ export const SearchAttractionTableRow = ({
   };
 
   return (
-    <TableRow className={cn(attraction.isVisited && 'bg-green-50')} style={style}>
+    <TableRow className={cn(attraction.isVisited && 'bg-green-50')} style={style} {...ariaAttributes}>
       <TableCell column={SEARCH_ATTRACTIONS_TABLE_COLUMNS[0]}>
         <Link href={`/attractions/${attraction.id}`}>
           <div className="relative h-24 w-24 flex-shrink-0">

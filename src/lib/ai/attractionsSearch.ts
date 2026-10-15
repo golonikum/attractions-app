@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { getLlmProvider } from '@/lib/ai';
 import { ATTRACTION_CATEGORIES } from '@/lib/ai/attractionAutofill';
-import { distanceKm, normalizeName } from '@/lib/geo';
+import { distanceKm, normalizeName, toLngLat } from '@/lib/geo';
 import { fetchOsmPlaces } from '@/lib/osm/overpass';
 import { searchImage } from '@/lib/yandexImageSearch';
 import { CreateAttractionRequest } from '@/types/attraction';
@@ -43,8 +43,8 @@ const getSearchRadiusM = (zoom: number) => {
   return zoom >= 12 ? 10000 : 20000;
 };
 
-const getYandexMapsSearchUrl = (text: string, [latitude, longitude]: [number, number]) =>
-  `https://yandex.ru/maps/?${new URLSearchParams({ text, ll: `${longitude},${latitude}`, z: '17' })}`;
+const getYandexMapsSearchUrl = (text: string, coordinates: [number, number]) =>
+  `https://yandex.ru/maps/?${new URLSearchParams({ text, ll: toLngLat(coordinates).join(','), z: '17' })}`;
 
 export const searchAttractions = async ({
   groupName,

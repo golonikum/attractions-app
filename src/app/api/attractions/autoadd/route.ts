@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { AutofillRefusalError, AutofillServiceError } from '@/lib/ai';
 import { searchAttractions } from '@/lib/ai/attractionsSearch';
+import { aiErrorResponse } from '@/lib/ai/errorResponse';
 import { prisma } from '@/lib/db';
 import { withAuth } from '@/lib/serverAuth';
 
@@ -53,23 +53,11 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({ attractions }, { status: 201 });
     } catch (error) {
-      if (error instanceof AutofillRefusalError) {
-        console.error('Autoadd refusal:', error.message);
-
-        return NextResponse.json({ error: 'Не удалось найти достопримечательности' }, { status: 422 });
-      }
-
-      if (error instanceof AutofillServiceError) {
-        console.error('Autoadd service error:', error.message);
-
-        if (error.status === 429) {
-          return NextResponse.json({ error: 'Слишком много запросов, попробуйте позже' }, { status: 429 });
-        }
-
-        return NextResponse.json({ error: 'Сервис автодобавления недоступен' }, { status: 502 });
-      }
-
-      throw error;
+      return aiErrorResponse(error, {
+        label: 'Autoadd',
+        refusalMessage: 'Не удалось найти достопримечательности',
+        unavailableMessage: 'Сервис автодобавления недоступен',
+      });
     }
   });
 }

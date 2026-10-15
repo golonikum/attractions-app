@@ -7,8 +7,13 @@ import { Attraction, CreateAttractionRequest } from '@/types/attraction';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-import { OpenInYandexMapButton, RemoveButton, ShowDescriptionButton, ShowOnMapButton } from '../ui/buttons';
-import { ConfirmDialog } from '../ui/ConfirmDialog';
+import {
+  DELETE_CONFIRM_TEXTS,
+  OpenInYandexMapButton,
+  RemoveWithConfirmButton,
+  ShowDescriptionButton,
+  ShowOnMapButton,
+} from '../ui/buttons';
 import { Tag } from '../ui/Tag';
 
 import { AttractionImage } from './AttractionImage';
@@ -29,15 +34,9 @@ export function AttractionCard({
   isShowOnMapButton = true,
   className,
 }: AttractionCardProps) {
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDescriptionHidden, setIsDescriptionHidden] = useState(true);
-
-  const handleDeleteClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsDeleteDialogOpen(true);
-  };
 
   useEffect(() => {
     setIsDescriptionHidden(true);
@@ -74,20 +73,13 @@ export function AttractionCard({
                 isSubmitting={isSubmitting}
                 setIsSubmitting={setIsSubmitting}
               />
-              {!!onDelete && <RemoveButton onClick={handleDeleteClick} />}
+              {!!onDelete && (
+                <RemoveWithConfirmButton
+                  {...DELETE_CONFIRM_TEXTS.attraction(attraction.name)}
+                  onConfirm={() => onDelete(attraction.id)}
+                />
+              )}
             </div>
-          )}
-          {!!onDelete && (
-            <ConfirmDialog
-              isOpen={isDeleteDialogOpen}
-              onClose={() => setIsDeleteDialogOpen(false)}
-              onConfirm={() => onDelete(attraction.id)}
-              title="Удалить объект?"
-              description="Вы уверены, что хотите удалить эту объект?"
-              confirmText="Удалить"
-              cancelText="Отмена"
-              variant="destructive"
-            />
           )}
         </div>
       </CardHeader>

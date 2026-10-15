@@ -14,6 +14,7 @@ import { EmptyListState } from '@/components/group/EmptyListState';
 import { NoteCard } from '@/components/note/NoteCard';
 import { NotesTable } from '@/components/note/NotesTable';
 import { MultiSelect } from '@/components/ui/MultiSelect';
+import { SearchInput } from '@/components/ui/SearchInput';
 import { FoundCountStub, LoadingStub } from '@/components/ui/stubs';
 
 const extractNotesFromAttractions = (attractions: Attraction[], searchQuery?: string) => {
@@ -119,13 +120,7 @@ export default function NotesContainer() {
             placeholder="Все города"
           />
           <div className="flex-1 shrink-0">
-            <input
-              type="text"
-              placeholder="Поиск..."
-              className="w-full md:min-w-80 h-10 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              defaultValue={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+            <SearchInput defaultValue={searchQuery} onChange={setSearchQuery} className="md:min-w-80" />
           </div>
           <FoundCountStub count={foundNotes.length} hasFilters={hasFilters} />
         </div>

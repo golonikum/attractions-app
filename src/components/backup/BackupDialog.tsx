@@ -1,13 +1,13 @@
 'use client';
 
 import { ChangeEvent, useRef, useState } from 'react';
-import { isAxiosError } from 'axios';
 import { DatabaseBackup, Download, Loader2, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { useData } from '@/contexts/DataContext';
 import { Backup, ImportMode, ImportStats, parseBackup } from '@/lib/backup/format';
 import { exportBackup, importBackup } from '@/services/backupService';
+import { getApiErrorMessage } from '@/services/request';
 
 import { Button } from '@/components/ui/button';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
@@ -134,7 +134,7 @@ export function BackupDialog() {
       toast.success(`Импорт завершён. ${formatStats(data.stats)}`);
       handleOpenChange(false);
     } catch (error) {
-      toast.error((isAxiosError(error) && error.response?.data?.error) || 'Не удалось импортировать данные');
+      toast.error(getApiErrorMessage(error, 'Не удалось импортировать данные'));
     } finally {
       setIsImporting(false);
     }

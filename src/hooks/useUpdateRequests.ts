@@ -4,6 +4,10 @@ import { createGroup, deleteGroup, updateGroup } from '@/services/groupService';
 import { CreateAttractionRequest, UpdateAttractionRequest } from '@/types/attraction';
 import { CreateGroupRequest, UpdateGroupRequest } from '@/types/group';
 
+/** Заменить элемент с тем же id; если его нет — список не меняется */
+const replaceById = <T extends { id: string }>(items: T[], updated: T) =>
+  items.map((item) => (item.id === updated.id ? updated : item));
+
 export const useUpdateRequests = () => {
   const { setGroups, setAttractions, reload } = useData();
 
@@ -25,16 +29,7 @@ export const useUpdateRequests = () => {
       const updatedGroup = data.group;
 
       if (updatedGroup) {
-        setGroups((groups) => {
-          const newGroups = [...groups];
-          const index = groups.findIndex((item) => item.id === id);
-
-          if (index !== -1) {
-            newGroups.splice(index, 1, updatedGroup);
-          }
-
-          return newGroups;
-        });
+        setGroups((groups) => replaceById(groups, updatedGroup));
         reload({ groups: true });
       }
 
@@ -43,7 +38,9 @@ export const useUpdateRequests = () => {
     deleteGroup: async (id: string) => {
       await deleteGroup(id);
       setGroups((groups) => groups.filter((group) => group.id !== id));
-      reload({ groups: true });
+      // Сервер удаляет объекты города каскадом — убираем их и из общего списка на клиенте
+      setAttractions((attractions) => attractions.filter((attraction) => attraction.groupId !== id));
+      reload({ groups: true, attractions: true });
     },
     // Attractions
     createAttraction: async (attractionData: CreateAttractionRequest) => {
@@ -62,16 +59,7 @@ export const useUpdateRequests = () => {
       const updatedAttraction = data.attraction;
 
       if (updatedAttraction) {
-        setAttractions((attractions) => {
-          const newAttractions = [...attractions];
-          const index = attractions.findIndex((item) => item.id === id);
-
-          if (index !== -1) {
-            newAttractions.splice(index, 1, updatedAttraction);
-          }
-
-          return newAttractions;
-        });
+        setAttractions((attractions) => replaceById(attractions, updatedAttraction));
         reload({ attractions: true });
       }
 

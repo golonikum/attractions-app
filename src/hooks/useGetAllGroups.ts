@@ -1,38 +1,11 @@
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
-
-import { useAuth } from '@/contexts/AuthContext';
 import { getAllGroups } from '@/services/groupService';
-import { Group } from '@/types/group';
+
+import { useFetchList } from './useFetchList';
+
+const loadGroups = async () => (await getAllGroups()).data.groups;
 
 export const useGetAllGroups = () => {
-  const { user } = useAuth();
-  const [groups, setGroups] = useState<Group[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const { items, setItems, isLoading, fetchData } = useFetchList(loadGroups, 'Не удалось загрузить данные городов');
 
-  const fetchData = async (silent?: boolean) => {
-    setIsLoading(!silent && true);
-
-    try {
-      const { data } = await getAllGroups();
-      setGroups(data.groups);
-    } catch (error) {
-      toast.error('Не удалось загрузить данные городов');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (user) {
-      fetchData();
-    }
-  }, [user?.id]);
-
-  return {
-    isLoading,
-    setGroups,
-    groups,
-    fetchData,
-  };
+  return { groups: items, setGroups: setItems, isLoading, fetchData };
 };

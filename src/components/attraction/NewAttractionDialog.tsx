@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { isAxiosError } from 'axios';
 import { ChevronDown, Loader2, Sparkles, Star } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -7,6 +6,7 @@ import { useData } from '@/contexts/DataContext';
 import { DEFAULT_COORDINATES } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { autofillAttraction } from '@/services/attractionService';
+import { getApiErrorMessage } from '@/services/request';
 import { Attraction, CreateAttractionRequest } from '@/types/attraction';
 
 import { Button } from '../ui/button';
@@ -93,7 +93,7 @@ export const NewAttractionDialog = ({
         toast.success('Поля заполнены — проверьте данные');
       }
     } catch (error) {
-      toast.error((isAxiosError(error) && error.response?.data?.error) || 'Не удалось получить данные об объекте');
+      toast.error(getApiErrorMessage(error, 'Не удалось получить данные об объекте'));
     } finally {
       setIsAutofilling(false);
     }

@@ -1,6 +1,7 @@
 import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 
+import { isCoordinatesPair } from '@/lib/api/routeHelpers';
 import { prisma } from '@/lib/db';
 import { withAuth } from '@/lib/serverAuth';
 
@@ -24,14 +25,7 @@ export async function POST(request: NextRequest) {
     const { name, description, tag, coordinates, zoom } = await request.json();
 
     // Validate required fields
-    if (
-      !name ||
-      !description ||
-      !coordinates ||
-      !Array.isArray(coordinates) ||
-      coordinates.length !== 2 ||
-      typeof zoom !== 'number'
-    ) {
+    if (!name || !description || !isCoordinatesPair(coordinates) || typeof zoom !== 'number') {
       return NextResponse.json(
         {
           error: 'Неверные данные. Убедитесь, что name, description, coordinates [long, lat] и zoom указаны правильно',

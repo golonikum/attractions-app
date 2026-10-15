@@ -8,9 +8,8 @@ import { locateItemOnMainMapHref } from '@/lib/locateItemOnMainMapHref';
 import { CreateGroupRequest, Group } from '@/types/group';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 
-import { RemoveButton, ShowOnMapButton } from '../ui/buttons';
+import { DELETE_CONFIRM_TEXTS, RemoveWithConfirmButton, ShowOnMapButton } from '../ui/buttons';
 import { Tag } from '../ui/Tag';
 
 import { NewGroupDialog } from './NewGroupDialog';
@@ -31,16 +30,9 @@ export function GroupCard({
 }: RowComponentProps<GroupCardProps>) {
   const group = groups[index];
   const { isWideScreen } = useIsMobile();
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { attractionsMap } = useData();
-
-  const handleDeleteClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setIsDeleteDialogOpen(true);
-  };
 
   return (
     // Высоту строки меряет useDynamicRowHeight, поэтому отступ между карточками — padding строки, а не margin карточки
@@ -67,18 +59,7 @@ export function GroupCard({
               isSubmitting={isSubmitting}
               setIsSubmitting={setIsSubmitting}
             />
-            <RemoveButton onClick={handleDeleteClick} />
-
-            <ConfirmDialog
-              isOpen={isDeleteDialogOpen}
-              onClose={() => setIsDeleteDialogOpen(false)}
-              onConfirm={() => onDelete(group.id)}
-              title="Удалить населенный пункт?"
-              description="Вы уверены, что хотите удалить? Все связанные объекты также будут удалены."
-              confirmText="Удалить"
-              cancelText="Отмена"
-              variant="destructive"
-            />
+            <RemoveWithConfirmButton {...DELETE_CONFIRM_TEXTS.group(group.name)} onConfirm={() => onDelete(group.id)} />
           </div>
         </CardHeader>
 

@@ -5,8 +5,7 @@ import Link from 'next/link';
 import { useData } from '@/contexts/DataContext';
 import { CreateGroupRequest, Group } from '@/types/group';
 
-import { RemoveButton, ShowOnMapButton } from '../ui/buttons';
-import { ConfirmDialog } from '../ui/ConfirmDialog';
+import { DELETE_CONFIRM_TEXTS, RemoveWithConfirmButton, ShowOnMapButton } from '../ui/buttons';
 import { TableCell, TableRow } from '../ui/table';
 import { Tag } from '../ui/Tag';
 
@@ -34,25 +33,19 @@ export const GroupTableRow = ({
   index,
   groups,
   style,
+  ariaAttributes,
 }: RowComponentProps<GroupTableRowProps>) => {
   const group = groups[index];
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { attractionsMap } = useData();
-
-  const handleDeleteClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setIsDeleteDialogOpen(true);
-  };
 
   const onLocateClick = () => {
     onLocate(group);
   };
 
   return (
-    <TableRow style={style}>
+    <TableRow style={style} {...ariaAttributes}>
       <TableCell column={GROUP_TABLE_COLUMNS[0]}>
         <Link href={`/groups/${group.id}`}>
           <div className="text-sm font-medium">
@@ -81,18 +74,8 @@ export const GroupTableRow = ({
             setIsSubmitting={setIsSubmitting}
             groupData={group}
           />
-          <RemoveButton onClick={handleDeleteClick} />
+          <RemoveWithConfirmButton {...DELETE_CONFIRM_TEXTS.group(group.name)} onConfirm={() => onDelete(group.id)} />
         </div>
-        <ConfirmDialog
-          isOpen={isDeleteDialogOpen}
-          onClose={() => setIsDeleteDialogOpen(false)}
-          onConfirm={() => onDelete(group.id)}
-          title="Удалить объект?"
-          description={`Вы уверены, что хотите удалить "${group.name}"?`}
-          confirmText="Удалить"
-          cancelText="Отмена"
-          variant="destructive"
-        />
       </TableCell>
     </TableRow>
   );

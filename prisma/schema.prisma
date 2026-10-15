@@ -25,7 +25,7 @@ model Group {
   name        String
   description String
   tag         String?
-  coordinates Json // Хранит координаты в формате [долгота, широта]
+  coordinates Json // Хранит координаты в формате [широта, долгота]
   zoom        Int
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
@@ -45,7 +45,7 @@ model Attraction {
   description String?
   isVisited   Boolean?
   isFavorite  Boolean?
-  coordinates Json // Хранит координаты в формате [долгота, широта]
+  coordinates Json // Хранит координаты в формате [широта, долгота]
   order       Int?
   notes       Json? // Хранит дополнительные заметки в формате [{date: "2023-01-01", note: "Заметка 1"}]
   createdAt   DateTime @default(now())

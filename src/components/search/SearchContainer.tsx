@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 import { Attraction } from '@/types/attraction';
 
 import { EmptyListState } from '@/components/group/EmptyListState';
+import { SearchInput } from '@/components/ui/SearchInput';
 import { FoundCountStub, LoadingStub } from '@/components/ui/stubs';
 
 import { SearchAttractionCard } from './SearchAttractionCard';
@@ -73,13 +74,7 @@ export default function SearchContainer() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div className="w-full space-y-4 md:space-y-0 md:gap-4 md:flex md:flex-row md:flex-wrap md:w-auto md:items-center">
           <div className="flex-1 shrink-0">
-            <input
-              type="text"
-              placeholder="Поиск..."
-              className="w-full md:min-w-80 h-10 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              defaultValue={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+            <SearchInput defaultValue={searchQuery} onChange={setSearchQuery} className="md:min-w-80" />
           </div>
           <FoundCountStub count={foundAttractions.length} hasFilters={!!searchQuery} />
         </div>

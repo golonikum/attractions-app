@@ -17,3 +17,9 @@ export const normalizeName = (name: string) =>
     .replace(/[«»"'„“”.,()]/g, '')
     .replace(/\s+/g, ' ')
     .trim();
+
+/**
+ * Координаты в проекте хранятся как [latitude, longitude], а Яндекс Карты (LngLat) и GeoJSON
+ * ждут [longitude, latitude] — переставляем только на этой границе
+ */
+export const toLngLat = ([latitude, longitude]: [number, number]): [number, number] => [longitude, latitude];

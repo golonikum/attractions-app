@@ -13,8 +13,13 @@ import { Group } from '@/types/group';
 
 import { AttractionInfoCard } from '@/components/attraction/AttractionInfoCard';
 import { NewAttractionDialog } from '@/components/attraction/NewAttractionDialog';
-import { BackButton, OpenInYandexMapButton, RemoveButton, ShowOnMapButton } from '@/components/ui/buttons';
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import {
+  BackButton,
+  DELETE_CONFIRM_TEXTS,
+  OpenInYandexMapButton,
+  RemoveWithConfirmButton,
+  ShowOnMapButton,
+} from '@/components/ui/buttons';
 import { LoadingStub, NotFoundStub } from '@/components/ui/stubs';
 
 export default function AttractionDetailContainer() {
@@ -72,18 +77,6 @@ export default function AttractionDetailContainer() {
     }
   }, [group, attractionId, router]);
 
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-
-  const handleDeleteClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsDeleteDialogOpen(true);
-  };
-
-  const handleConfirmDelete = () => {
-    handleDeleteAttraction();
-    setIsDeleteDialogOpen(false);
-  };
-
   if (isAttractionsLoading || isGroupsLoading) {
     return <LoadingStub />;
   }
@@ -112,22 +105,14 @@ export default function AttractionDetailContainer() {
             isSubmitting={isSubmitting}
             setIsSubmitting={setIsSubmitting}
           />
-          <RemoveButton onClick={handleDeleteClick} />
+          <RemoveWithConfirmButton
+            {...DELETE_CONFIRM_TEXTS.attraction(attraction.name)}
+            onConfirm={handleDeleteAttraction}
+          />
         </div>
       </div>
 
       <AttractionInfoCard attraction={attraction} group={group} />
-
-      <ConfirmDialog
-        isOpen={isDeleteDialogOpen}
-        onClose={() => setIsDeleteDialogOpen(false)}
-        onConfirm={handleConfirmDelete}
-        title="Удалить объект?"
-        description="Вы уверены, что хотите удалить этот объект?"
-        confirmText="Удалить"
-        cancelText="Отмена"
-        variant="destructive"
-      />
     </div>
   );
 }

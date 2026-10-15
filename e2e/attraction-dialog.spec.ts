@@ -1,13 +1,9 @@
 import { BIG_GROUP_ID } from './fixtures/data';
-import { expect, test } from './fixtures/mockApi';
+import { expect, PIXEL_PNG, test } from './fixtures/mockApi';
 
 // Внешние хосты в mockApi обрываются; маршрут, зарегистрированный позже, срабатывает раньше
 const IMAGE_URL = 'https://images.test/photo.png';
 const BROKEN_URL = 'https://images.test/missing.png';
-const PIXEL_PNG = Buffer.from(
-  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
-  'base64',
-);
 
 test.describe('Превью изображения в диалоге объекта', () => {
   test.beforeEach(async ({ page }) => {

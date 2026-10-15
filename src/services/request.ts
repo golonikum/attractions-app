@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, isCancel } from 'axios';
+import axios, { AxiosInstance, isAxiosError, isCancel } from 'axios';
 
 import { getAuthHeaders } from '@/lib/getAuthHeaders';
 
@@ -32,3 +32,7 @@ const instance = axios.create({
 });
 
 export const request = addApiAuthInterceptors(instance);
+
+/** Текст ошибки из ответа API ({ error: '...' }), иначе fallback */
+export const getApiErrorMessage = (error: unknown, fallback: string): string =>
+  (isAxiosError(error) && typeof error.response?.data?.error === 'string' && error.response.data.error) || fallback;

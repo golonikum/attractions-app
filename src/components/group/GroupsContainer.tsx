@@ -12,6 +12,7 @@ import { useLocation } from '@/hooks/useLocation';
 import { useQueryParams } from '@/hooks/useQueryParams';
 import { useUpdateRequests } from '@/hooks/useUpdateRequests';
 import { DEFAULT_GROUP_ZOOM } from '@/lib/constants';
+import { toLngLat } from '@/lib/geo';
 import { CreateGroupRequest, Group, GroupWithAttractions } from '@/types/group';
 
 import { EmptyListState } from '@/components/group/EmptyListState';
@@ -20,6 +21,7 @@ import { GroupTable } from '@/components/group/GroupTable';
 import { NewGroupDialog } from '@/components/group/NewGroupDialog';
 import { Map } from '@/components/ui/Map';
 import { MultiSelect } from '@/components/ui/MultiSelect';
+import { SearchInput } from '@/components/ui/SearchInput';
 import { FoundCountStub } from '@/components/ui/stubs';
 import { CustomDivider } from '@/components/ui/table';
 
@@ -80,7 +82,7 @@ export default function GroupsContainer() {
   const handleLocateGroup = (group: Group) => {
     setLocation({
       zoom: DEFAULT_GROUP_ZOOM,
-      center: [group.coordinates[1], group.coordinates[0]],
+      center: toLngLat(group.coordinates),
     });
   };
 
@@ -140,13 +142,7 @@ export default function GroupsContainer() {
         {/* Фильтры по тегам и поиск */}
         <div className="w-full space-y-4 md:space-y-0 md:gap-4 md:flex md:flex-row md:flex-wrap md:w-auto md:items-center">
           <div className="flex-1 shrink-0">
-            <input
-              type="text"
-              placeholder="Поиск..."
-              className="w-full h-10 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              defaultValue={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+            <SearchInput defaultValue={searchQuery} onChange={setSearchQuery} />
           </div>
           <MultiSelect
             options={allTags}

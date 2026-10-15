@@ -64,7 +64,7 @@ Three React Contexts, no external state library:
 
 ### Coordinates: stored order is `[latitude, longitude]` despite comments
 
-`coordinates: [number, number]` fields on `Group`/`Attraction` are commented `// [долгота, широта]` (i.e. `[lng, lat]`) in `src/types/group.ts` and `src/types/attraction.ts` — **this comment is wrong**. The actual convention used everywhere (e.g. `DEFAULT_COORDINATES = [55.755819, 37.617644]` in `src/lib/constants.ts`, which is Moscow as `[lat, lng]`) is `[latitude, longitude]`. Every place that feeds coordinates into Yandex Maps (which wants `LngLat` = `[lng, lat]`) manually swaps them: `[coordinates[1], coordinates[0]]` in `src/components/ui/Map.tsx`, `GroupDetailContainer.tsx`, `GroupsContainer.tsx`, and `src/lib/getLocationSearchParams.ts`. There is no shared conversion helper and no type-level distinction between the two orders — when writing new code that touches `coordinates`, follow the swap-at-the-boundary pattern rather than the type comments, and double check against `DEFAULT_COORDINATES`.
+`coordinates: [number, number]` fields on `Group`/`Attraction` are stored as `[latitude, longitude]` (comments in `src/types/*.ts` and `prisma/schema.prisma` used to say the opposite — they were wrong and have been fixed). The convention used everywhere (e.g. `DEFAULT_COORDINATES = [55.755819, 37.617644]` in `src/lib/constants.ts`, which is Moscow as `[lat, lng]`) is `[latitude, longitude]`. Yandex Maps (`LngLat`), map URLs and GeoJSON want `[lng, lat]`: convert only at that boundary with `toLngLat()` from `src/lib/geo.ts` (used by `Map.tsx`, the group containers, `getLocationSearchParams.ts`, `DEFAULT_LOCATION`). There is no type-level distinction between the two orders, so double check against `DEFAULT_COORDINATES`.
 
 ### Yandex Maps integration
 
@@ -74,12 +74,20 @@ The SDK (`ymaps3`) attaches to `window.ymaps3` after the root-layout `<Script>` 
 
 `POST /api/attractions/autoadd` (`src/lib/ai/attractionsSearch.ts`) fetches real places with exact coordinates from OpenStreetMap via Overpass (`src/lib/osm/overpass.ts`, endpoint overridable with `OVERPASS_API_URL`), then the LLM only picks ids from that list and writes category/description. LLMs can't produce accurate coordinates (they hallucinate digits past ~1–2 decimals), so don't add coordinate fields to LLM schemas. Yandex Places API is not an option (paid). OSM data is ODbL — attribution "© участники OpenStreetMap" is required wherever it's shown.
 
+### Shared helpers (use instead of re-implementing)
+
+- Delete with confirmation: `RemoveWithConfirmButton` + `DELETE_CONFIRM_TEXTS.group/attraction(name)` (`src/components/ui/buttons`).
+- API error text on the client: `getApiErrorMessage(error, fallback)` (`src/services/request.ts`).
+- Loading a user list into a context: `useFetchList` (`src/hooks/useFetchList.ts`), wrapped by `useGetAllGroups`/`useGetAllAttractions`.
+- API routes always scope by owner: look records up with `{ id, userId }`, and check ownership of any *referenced* id too (`groupId` in `PUT /api/attractions/[id]`, every id in `PUT /api/order`). Helpers: `notFound`, `invalidCoordinates`, `isCoordinatesPair`, `pickDefined` (partial updates) in `src/lib/api/routeHelpers.ts`; AI service errors → HTTP via `aiErrorResponse` (`src/lib/ai/errorResponse.ts`).
+- List search field: `SearchInput` (`src/components/ui/SearchInput.tsx`).
+
 ### UI components
 
 `src/components/ui` follows shadcn/ui conventions (`components.json`, style "new-york", Tailwind, `class-variance-authority`) — prefer generating/matching that pattern for new primitives rather than hand-rolling. `next.config.ts` has `reactCompiler: true` (React Compiler / babel-plugin-react-compiler), so manual `useMemo`/`useCallback` for render-perf reasons is generally unnecessary for components under compiler coverage.
 ### Mobile virtual lists and hydration
 
-- Mobile `/groups` and `/search` use `react-window` `List` with `useDynamicRowHeight` — card height depends on content and width, so never go back to a constant `rowHeight`. Spacing between rows is the row's `pb-4`, not a card margin; rows must spread `ariaAttributes`.
+- Every `react-window` `List` (mobile cards on `/groups`/`/search` and the desktop `GroupTable`/`SearchAttractionTable`) uses `useDynamicRowHeight` — row height depends on content and width, so never go back to a constant `rowHeight` (fixed heights made long rows overlap neighbours and swallow their clicks; covered by `e2e/tables.desktop.spec.ts`). Spacing between rows is the row's `pb-4`, not a card margin; rows must spread `ariaAttributes`.
 - `ProtectedRoute` renders `LoadingStub` until `useIsHydrated()` is true: on slow devices `/api/auth` resolves before the protected segment hydrates, and rendering content then causes a hydration mismatch and a full client re-render (flicker, lost scroll).
 
 ### Backup / restore

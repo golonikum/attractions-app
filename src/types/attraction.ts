@@ -9,7 +9,7 @@ export interface Attraction {
   description?: string;
   isVisited?: boolean;
   isFavorite?: boolean;
-  coordinates: [number, number]; // [долгота, широта]
+  coordinates: [number, number]; // [широта, долгота]
   order?: number;
   notes?: Array<NoteType>;
   createdAt: string;
@@ -25,7 +25,7 @@ export interface CreateAttractionRequest {
   description?: string;
   isVisited?: boolean;
   isFavorite?: boolean;
-  coordinates: [number, number]; // [долгота, широта]
+  coordinates: [number, number]; // [широта, долгота]
   order?: number;
   notes?: Array<NoteType>;
 }
