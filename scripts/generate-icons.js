@@ -47,3 +47,24 @@ for (const size of sizes) {
       console.error(`Error generating icon-${size}x${size}.png:`, err)
     );
 }
+
+// Maskable icon for Android (splash screen, launcher): white background up to the edges,
+// drawing inside the safe zone — the visible circle is 80% of the size, the square drawing
+// must fit into it, so its side is ~0.8 / √2 ≈ 0.57 of the icon
+const MASKABLE_SIZE = 512;
+const MASKABLE_DRAWING = Math.round(MASKABLE_SIZE * 0.57);
+
+sharp(Buffer.from(svgIcon))
+  .resize(MASKABLE_DRAWING, MASKABLE_DRAWING)
+  .png()
+  .toBuffer()
+  .then((drawing) =>
+    sharp({
+      create: { width: MASKABLE_SIZE, height: MASKABLE_SIZE, channels: 4, background: "#ffffff" },
+    })
+      .composite([{ input: drawing, gravity: "center" }])
+      .png()
+      .toFile(`public/icon-maskable-${MASKABLE_SIZE}x${MASKABLE_SIZE}.png`),
+  )
+  .then(() => console.log(`Generated icon-maskable-${MASKABLE_SIZE}x${MASKABLE_SIZE}.png`))
+  .catch((err) => console.error("Error generating maskable icon:", err));
