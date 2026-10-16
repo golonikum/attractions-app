@@ -1,3 +1,5 @@
+'use client';
+
 import { Image as ImageIcon, Star } from 'lucide-react';
 import Image from 'next/image';
 
@@ -17,11 +19,21 @@ export const AttractionImage = ({
 
   return attraction.imageUrl ? (
     <>
+      {/* key: при смене фото создаём новый <img> — иначе браузер показывает старое, пока грузится новое.
+          Пока фото не загрузилось, оно прозрачно и виден фон контейнера */}
       <Image
+        key={attraction.imageUrl}
         fill
         src={attraction.imageUrl}
         alt={attraction.name}
-        className={cn('object-cover', className, favorite && 'outline outline-2 outline-yellow-500')}
+        onLoad={(e) => {
+          e.currentTarget.dataset.loaded = 'true';
+        }}
+        className={cn(
+          'object-cover bg-muted opacity-0 transition-opacity duration-300 data-[loaded=true]:opacity-100',
+          className,
+          favorite && 'outline outline-2 outline-yellow-500',
+        )}
       />
       {favorite && <Star className="h-5 w-5 text-yellow-500 fill-current absolute top-1 left-1" />}
     </>

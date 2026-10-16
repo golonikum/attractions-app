@@ -39,9 +39,10 @@ export default function MainContainer() {
   return isAttractionsLoading ? (
     <LoadingStub />
   ) : (
-    <div className="max-w-full pt-[65px] h-full h-screen">
+    // Страница с картой никогда не прокручивается: ровно видимая высота экрана, лишнее обрезается
+    <div className="max-w-full pt-[65px] h-dvh overflow-hidden">
       <div className="flex flex-col gap-4 justify-between items-center h-full">
-        <div className="w-full flex-1">
+        <div className="w-full flex-1 min-h-0">
           <Map
             items={filteredAttractions}
             getLink={(id) => `/attractions/${id}`}
