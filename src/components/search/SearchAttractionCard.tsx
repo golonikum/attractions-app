@@ -26,8 +26,9 @@ export function SearchAttractionCard({
   const group = groups.find((g) => g.id === attraction.groupId);
 
   return (
-    // Высоту строки меряет useDynamicRowHeight, поэтому отступ между карточками — padding строки, а не margin карточки
-    <div style={style} className="pb-4" {...ariaAttributes}>
+    // Высоту строки меряет useDynamicRowHeight, поэтому отступ между карточками — padding строки, а не margin карточки.
+    // px-4 (при -mx-4 у контейнера списка) оставляет место для боковых теней: overflow списка их обрезает
+    <div style={style} className="px-4 pb-4" {...ariaAttributes}>
       <Card isFavorite={attraction.isFavorite} isVisited={attraction.isVisited}>
         <div className="aspect-video bg-muted flex items-center justify-center">
           <Link href={`/attractions/${attraction.id}`} className="cursor-pointer relative h-64 w-full flex-shrink-0">

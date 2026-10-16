@@ -100,7 +100,7 @@ export default function SearchContainer() {
           {foundAttractions.length === 0 ? (
             emptyState
           ) : (
-            <div className="flex-1 min-h-0">
+            <div className="flex-1 min-h-0 -mx-4">
               <List
                 rowComponent={SearchAttractionCard}
                 rowCount={foundAttractions.length}

@@ -69,7 +69,7 @@ export function NotesManager({ notes, onChange }: NotesManagerProps) {
         ))}
       </div>
 
-      <div className="flex items-start space-x-2 p-3 border rounded-md bg-muted/60">
+      <div className="flex items-start space-x-2 p-3 border rounded-md bg-muted">
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2">
           <div className="flex items-center space-x-1">
             <Calendar className="h-4 w-4 text-muted-foreground" />

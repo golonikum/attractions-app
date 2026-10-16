@@ -35,8 +35,9 @@ export function GroupCard({
   const { attractionsMap } = useData();
 
   return (
-    // Высоту строки меряет useDynamicRowHeight, поэтому отступ между карточками — padding строки, а не margin карточки
-    <div style={style} className="pb-4" {...ariaAttributes}>
+    // Высоту строки меряет useDynamicRowHeight, поэтому отступ между карточками — padding строки, а не margin карточки.
+    // px-4 (при -mx-4 у контейнера списка) оставляет место для боковых теней: overflow списка их обрезает
+    <div style={style} className="px-4 pb-4" {...ariaAttributes}>
       <Card className="overflow-hidden flex flex-col">
         <CardHeader>
           <div className="flex justify-between items-start space-x-1">

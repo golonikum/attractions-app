@@ -43,7 +43,8 @@ export function GroupInfoCard({ group, attractions }: GroupInfoCardProps) {
   };
 
   return (
-    <Card className="shrink-0">
+    // Без тени: карточка стоит вплотную к краям панели (overflow), и тень там обрезается
+    <Card className="shrink-0 shadow-none hover:shadow-none">
       <CardHeader>
         <div className="flex gap-4 justify-between items-start">
           <CardTitle>
